@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0f111a">
+    <meta name="description" content="Tecnología de última generación en Colombia. Celulares, laptops y tablets con garantía real. Atención personalizada por Albeiro López.">
+    <title>Innovación Digital JRTech | El Futuro de tu Tecnología</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Configuración privada (Ignorada en Git para seguridad) -->
+    <script src="config_private.js"></script>
+    <script src="textos.js"></script>
+</head>
+
+    <header class="header">
+        <div class="header-content header-content-flex">
+            <div class="header-text-block">
+                <h1 id="hero-title">TECNOLOGÍA DE UNA <br> SIN TANTO CUENTO</h1>
+                <p id="hero-subtitle">¿Busca calidad y buen precio? Aquí no somos robots ni empresas frías. Habla directo con Albeiro, el dueño, y llévese lo mejor sin intermediarios.</p>
+                <div style="margin-top: 40px;">
+                    <a href="#beneficios" class="btn-wa hero-btn-custom" id="hero-btn-beneficios">
+                        <i class="fas fa-arrow-down"></i> Pille por qué comprar acá
+                    </a>
+                </div>
+            </div>
+            
+            <div id="random-product-container" class="random-prod-card">
+                <div class="loader-card-inner">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Buscando equipo estrella...
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <!-- Brand removed from here to avoid clutter -->
+            <div class="menu">
+                <button type="button" id="nav-btn-bondades" onclick="mostrar('beneficios')">
+                    <i class="fas fa-sparkles"></i> Bondades
+                </button>
+
+            <button type="button" id="nav-btn-testimonios" onclick="mostrar('testimonios')">
+                <i class="fas fa-star"></i> Opiniones
+            </button>
+
+            <button type="button" id="nav-btn-faq" onclick="mostrar('faq')">
+                <i class="fas fa-question-circle"></i> Dudas
+            </button>
+
+            <button type="button" id="nav-btn-perfil" onclick="mostrar('perfil')">
+                <i class="fas fa-user-astronaut"></i> ¿Quién soy?
+            </button>
+        </div>
+
+        <!-- Fila 2: Categorías de Catálogo (Aparece dinámicamente) -->
+        <div class="menu-catalog" id="catalog-nav-row">
+            <button class="hub-btn" onclick="cargarCatalogo('celulares')">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Celulares</span>
+            </button>
+            <button class="hub-btn" onclick="cargarCatalogo('tablets')">
+                <i class="fas fa-tablet-alt"></i>
+                <span>Tablets</span>
+            </button>
+            <button class="hub-btn" onclick="cargarCatalogo('portatiles')">
+                <i class="fas fa-laptop"></i>
+                <span>Portátiles</span>
+            </button>
+        </div>
+        </div> <!-- End .nav-container -->
+    </nav>
+
+    <main class="container">
+
+        <section id="beneficios">
+            <h2 id="bondades-title">POR QUÉ NO SOMOS IGUAL A LOS DEMÁS</h2>
+            <div class="beneficios-grid">
+                <div class="beneficio-card">
+                    <i id="bondad-1-icon" class="fas fa-coins"></i>
+                    <h3 id="bondad-1-title">Le atiende el dueño</h3>
+                    <p id="bondad-1-desc">Hable con Albeiro. Sin grabaciones ni esperas eternas, soluciones de una.</p>
+                </div>
+                <div class="beneficio-card">
+                    <i id="bondad-2-icon" class="fas fa-tag"></i>
+                    <h3 id="bondad-2-title">Envío todo rincón</h3>
+                    <p id="bondad-2-desc">Llegamos hasta donde el diablo perdió la cobija. Rápido y seguro.</p>
+                </div>
+                <div class="beneficio-card">
+                    <i id="bondad-3-icon" class="fas fa-truck-fast"></i>
+                    <h3 id="bondad-3-title">Garantía de un año</h3>
+                    <p id="bondad-3-desc">Tranquilidad total por 365 días. Nosotros le respondemos sin peros.</p>
+                </div>
+                <div class="beneficio-card">
+                    <i id="bondad-4-icon" class="fas fa-piggy-bank"></i>
+                    <h3 id="bondad-4-title">Del importador a su casa</h3>
+                    <p id="bondad-4-desc">Quitamos los intermediarios para que a usted le salga más barato.</p>
+                </div>
+                <div class="beneficio-card">
+                    <i id="bondad-5-icon" class="fas fa-key"></i>
+                    <h3 id="bondad-5-title">Configurados y listos</h3>
+                    <p id="bondad-5-desc">Ojo que de fábrica llegan limpios, aquí se los entregamos listos para camellar.</p>
+                </div>
+                <div class="beneficio-card">
+                    <i id="bondad-6-icon" class="fas fa-headset"></i>
+                    <h3 id="bondad-6-title">Soporte pa' toda la vida</h3>
+                    <p id="bondad-6-desc">¿Alguna duda o enredo? Le ayudamos por remoto sin cobrarle un peso más.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="testimonios">
+            <h2 id="testimonios-title">LO QUE DICEN MIS CLIENTES</h2>
+            <div id="google-reviews-container" class="testimonios-grid">
+                <!-- Se cargan dinámicamente desde Google Business -->
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                    <p style="margin-top: 15px;">Cargando reseñas verificadas...</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn-secundario" onclick="abrirModalResenas()">
+                    <i class="fab fa-google"></i> Ver todas las reseñas
+                </button>
+            </div>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-dim);">
+                <i class="fab fa-google"></i> Reseñas en vivo desde Google Business
+            </p>
+        </section>
+
+        <section id="faq">
+            <h2 id="faq-title">PREGUNTAS FRECUENTES</h2>
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3 id="faq-1-q">¿Tienen tienda física?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p id="faq-1-a">Somos 100% virtuales. Eso nos permite ahorrar en arriendos costosos y pasarte ese ahorro a ti en el precio final.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3 id="faq-2-q">¿Cómo es el proceso de compra?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p id="faq-2-a">Eliges tu equipo, llenas el formulario o me escribes al WhatsApp. Coordinamos el pago (Contraentrega o transferencia) y te lo envío asegurado.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3 id="faq-3-q">¿Qué pasa si falla el equipo?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p id="faq-3-a">Tienes garantía real de 1 año. Me escribes y yo mismo gestiono la solución, sin que tengas que pelear con marcas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="perfil">
+            <h2 id="perfil-title">LA PERSONA DETRÁS DE JRTECH</h2>
+            <div class="perfil-content">
+                <div class="perfil-img">
+                    <img src="albeiro_real_office_portrait.png" alt="Albeiro López" style="border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--sombra-premium);">
+                </div>
+                <div>
+                    <h3 id="perfil-nombre" style="font-size: 2.5rem; margin-bottom: 10px;">Albeiro López</h3>
+                    <p id="perfil-rol" style="color: var(--primary); font-weight: 600; font-size: 1.2rem; margin-bottom: 20px;">El que te asesora de verdad</p>
+                    <p id="perfil-cita" style="font-size: 1.1rem; margin-bottom: 30px;">
+                        <i>"En este mundo de robots, yo prefiero el contacto humano. Mi meta es que te llevés un equipazo a excelente precio y quedés con un amigo más."</i>
+                    </p>
+                    <div class="perfil-contacto">
+                        <a href="#" id="perfil-contacto" onclick="window.open('https://wa.me/'+CONFIG.TEL_WHATSAPP, '_blank')">
+                            <i class="fab fa-whatsapp"></i> Háblame de una
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA FINAL PARA EL CATÁLOGO -->
+        <section id="catalog-cta" class="catalog-cta-section" style="text-align: center; background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(188, 19, 254, 0.1)); border: 2px solid var(--primary);">
+            <h2 id="catalog-cta-title">¿LISTO PARA TU PRÓXIMO EQUIPAZO?</h2>
+            <p id="catalog-cta-subtitle" style="font-size: 1.2rem; margin-bottom: 40px; color: var(--text-dim);">Después de conocer cómo trabajamos, pilla lo que tenemos disponible para entrega inmediata.</p>
+            <div class="cta-buttons-grid">
+                <button class="btn-wa" onclick="cargarCatalogo('celulares')">
+                    <i class="fas fa-mobile-alt"></i> Ver Celulares
+                </button>
+                <button class="btn-wa" onclick="cargarCatalogo('tablets')">
+                    <i class="fas fa-tablet-alt"></i> Ver Tablets
+                </button>
+                <button class="btn-wa" onclick="cargarCatalogo('portatiles')">
+                    <i class="fas fa-laptop"></i> Ver Portátiles
+                </button>
+            </div>
+        </section>
+
+        <section id="catalogo" style="display:none">
+            <h2 id="catalogo-title">EL CATÁLOGO</h2>
+            
+            <div id="catalogo-loader" style="display:none; text-align:center; padding: 40px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
+                <p style="margin-top: 15px; font-weight: 600;">Cargando inventario desde la bodega...</p>
+            </div>
+
+            <!-- Controles Superiores -->
+            <div id="catalogo-controls" style="display:none; max-width: 1000px; margin: 0 auto 30px auto; background: var(--glass-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--sombra-premium);">
+                
+                <!-- Buscador y Ordenar -->
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="flex: 1; min-width: 250px; position: relative;">
+                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-dim);"></i>
+                        <input type="text" id="catalogo-search" placeholder="Buscar por marca, modelo o especificación..." style="width: 100%; padding: 12px 15px 12px 40px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-accent); font-family: 'Outfit'; font-size: 1rem; color: var(--text-main); outline: none;" oninput="aplicarFiltros()">
+                        <!-- Sugerencias rápidas -->
+                        <div id="search-suggestions" style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
+                    </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <label style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;"><i class="fas fa-sort-amount-down"></i> Ordenar:</label>
+                        <select id="catalogo-sort" style="padding: 10px 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-accent); font-family: 'Outfit'; outline: none; cursor: pointer;" onchange="aplicarFiltros()">
+                            <option value="precio-asc">Precio: Menor a Mayor</option>
+                            <option value="precio-desc">Precio: Mayor a Menor</option>
+                            <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
+                            <option value="marca-asc">Marca (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Rango de Precio -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; margin-bottom: 10px;">
+                        <span><i class="fas fa-wallet"></i> Presupuesto Máximo</span>
+                        <span id="precio-valor-label" style="color: var(--primary);">Cualquiera</span>
+                    </label>
+                    <input type="range" id="catalogo-price" min="0" max="10000000" step="50000" value="10000000" style="width: 100%; accent-color: var(--primary);" oninput="actualizarLabelPrecio(); aplicarFiltros()">
+                </div>
+
+                <!-- Filtros Clickeables (Marcas) -->
+                <div id="catalogo-filtros-marcas" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+
+                <!-- Botón Avanzado y Mago -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                    <button class="wizard-trigger-btn" onclick="abrirWizard()" style="background: linear-gradient(135deg, var(--secondary), var(--accent)); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 20px rgba(176, 38, 255, 0.3); transition: var(--transition);">
+                        <i class="fas fa-magic"></i> ¿Andas perdido? Ayúdame a elegir
+                    </button>
+                    <button class="filtro-btn" onclick="toggleFiltrosAvanzados()" style="font-size: 0.8rem;"><i class="fas fa-sliders-h"></i> Filtros Técnicos</button>
+                </div>
+                
+                <!-- Filtros Avanzados Dropdowns -->
+                <div id="filtros-avanzados" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); gap: 15px; flex-wrap: wrap;">
+                    <!-- Se inyectan en JS -->
+                </div>
+
+            </div>
+
+            <div id="catalogo-grid" class="catalogo-grid">
+                <!-- Products will be injected here -->
+            </div>
+            
+            <div id="catalogo-error" style="display:none; text-align:center; padding: 40px; color: red;">
+            </div>
+        </section>
+
+        <!-- Comparador Flotante (Drawer) -->
+        <div id="comparar-drawer" class="comparar-drawer">
+            <div class="comparar-drawer-content">
+                <div class="comparar-count">
+                    <i class="fas fa-layer-group"></i>
+                    <span id="comparar-num">0</span> equipos seleccionados
+                </div>
+                <div class="comparar-actions">
+                    <button class="btn-comparar-limpiar" onclick="limpiarComparativa()"><i class="fas fa-trash-alt"></i> Limpiar</button>
+                    <button class="btn-comparar-ver" onclick="abrirModalComparar()"><i class="fas fa-columns"></i> Comparar Ahora</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Comparativa -->
+        <div id="comparar-modal" class="modal-overlay" onclick="cerrarModalComparar(event)">
+            <div class="modal-content modal-comparativa" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <p style="color: var(--primary); font-weight:800; font-size:0.85rem; text-transform:uppercase;">COMPARATIVA TÉCNICA</p>
+                        <h2>Duelo de Equipos</h2>
+                    </div>
+                    <button class="modal-close" onclick="cerrarModalComparar(true)"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body" style="padding: 0; overflow-x: auto;">
+                    <table class="tabla-comparativa" id="tabla-comparativa">
+                        <!-- Se llena dinámicamente -->
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Mago (Ayúdame a elegir) -->
+        <div id="wizard-modal" class="modal-overlay" onclick="cerrarWizard(event)">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 500px; padding: 0;">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--bg-accent), #2d1b4d); border-bottom: 1px solid var(--secondary);">
+                    <div class="modal-title">
+                        <p style="color: var(--secondary); font-weight: 800; font-size: 0.75rem; text-transform: uppercase;">ASISTENTE JRTECH</p>
+                        <h2 style="font-size: 1.5rem;">Ayúdame a elegir</h2>
+                    </div>
+                    <button class="modal-close" onclick="cerrarWizard(true)"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body" id="wizard-body" style="padding: 30px;">
+                    <!-- Los pasos del quiz se inyectan aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Especificaciones -->
+        <div id="specs-modal" class="modal-overlay" onclick="cerrarModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <img id="modal-img" src="" alt="Producto" class="modal-img">
+                    <div class="modal-title">
+                        <p id="modal-marca">Marca</p>
+                        <h2 id="modal-modelo">Modelo del Equipo</h2>
+                    </div>
+                    <button class="modal-close" onclick="cerrarModal(true)"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modal-specs-grid" class="specs-grid">
+                        <!-- Especificaciones dinámicas aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Pedido -->
+        <div id="pedido-modal" class="modal-overlay" onclick="cerrarModalPedido(event)">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 520px;">
+                <div class="modal-header" style="padding: 20px 25px;">
+                    <div class="modal-title">
+                        <p id="pedido-modal-marca" style="color: var(--primary); font-weight:800; font-size:0.85rem; text-transform:uppercase;">EQUIPO SELECCIONADO</p>
+                        <h2 id="pedido-modal-modelo" style="font-size: 1.3rem;">Nombre del Equipo</h2>
+                        <p id="pedido-modal-precio" style="color: var(--primary); font-weight:800; font-size:1.2rem;"></p>
+                    </div>
+                    <button class="modal-close" onclick="cerrarModalPedido(true)"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formulario-pedido" onsubmit="enviarPedido(event)">
+                        <div class="form-grid">
+                            <div class="form-full-width">
+                                <label class="form-label">Nombre Completo *</label>
+                                <input type="text" id="pedido-nombre" class="form-input" placeholder="Ej: Juan Pérez Gómez" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Teléfono / WhatsApp *</label>
+                                <input type="tel" id="pedido-telefono" class="form-input" placeholder="3001234567" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Correo Electrónico</label>
+                                <input type="email" id="pedido-email" class="form-input" placeholder="tu@email.com">
+                            </div>
+                            <div>
+                                <label class="form-label">Municipio / Ciudad *</label>
+                                <input type="text" id="pedido-municipio" class="form-input" placeholder="Ej: Medellín" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Departamento *</label>
+                                <input type="text" id="pedido-departamento" class="form-input" placeholder="Ej: Antioquia" required>
+                            </div>
+                            <div class="form-full-width">
+                                <label class="form-label">Dirección de Entrega *</label>
+                                <input type="text" id="pedido-direccion" class="form-input" placeholder="Cra 10 #23-45, Barrio El Centro" required>
+                            </div>
+                            <div class="form-full-width">
+                                <label class="form-label">Método de Pago</label>
+                                <select id="pedido-metodopago" class="form-input">
+                                    <option value="Contraentrega">Contraentrega</option>
+                                    <option value="Transferencia">Transferencia Bancaria</option>
+                                    <option value="Nequi">Nequi</option>
+                                    <option value="Daviplata">Daviplata</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                </select>
+                            </div>
+                            <div class="form-full-width">
+                                <label class="form-label">Notas adicionales</label>
+                                <textarea id="pedido-notas" class="form-input" rows="2" placeholder="Color preferido, instrucciones especiales..."></textarea>
+                            </div>
+                        </div>
+
+                        <div id="pedido-estado" style="display:none; text-align:center; padding:15px; border-radius:12px; margin-bottom:15px;"></div>
+
+                        <button type="submit" id="pedido-submit-btn" class="producto-btn" style="padding:16px; font-size:1rem;">
+                            <i class="fas fa-paper-plane"></i> Enviar Pedido
+                        </button>
+                        <p style="text-align:center; font-size:0.8rem; color:var(--text-dim); margin-top:10px;">
+                            <i class="fas fa-lock"></i> Tus datos van directo a Albeiro. Nada se comparte con terceros.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <a href="https://wa.me/573128590469" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer style="position: relative;">
+        <p id="footer-p1">© 2026 Innovación Digital JRTech - Elevando Procesos Digitales</p>
+        <p id="footer-p2">Expertos en Tecnología Premium | Envios Nacionales | Soporte 24/7</p>
+    </footer>
+
+    <!-- PANEL ADMINISTRATIVO (OCULTO POR DEFECTO) -->
+    <div id="admin-panel" class="admin-panel-ui">
+        <div class="admin-header">
+            <h3><i class="fas fa-tools"></i> Editor JRTech</h3>
+            <button onclick="toggleAdminPanel()" class="admin-close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="admin-body">
+            <p>Modo Edición: <button id="edit-mode-toggle" class="btn-toggle" onclick="toggleEditMode()">DESACTIVADO</button></p>
+            <div class="admin-section">
+                <h4><i class="fas fa-palette"></i> Cambiar Estilo</h4>
+                <div class="theme-grid">
+                    <button class="theme-btn theme-cyber" onclick="setTheme('cyber')">Cyber (Original)</button>
+                    <button class="theme-btn theme-minimal" onclick="setTheme('minimal')">Minimal White</button>
+                    <button class="theme-btn theme-gold" onclick="setTheme('gold')">Luxury Gold</button>
+                    <button class="theme-btn theme-nature" onclick="setTheme('nature')">Eco Green</button>
+                </div>
+            </div>
+            <div class="admin-section">
+                <h4><i class="fas fa-save"></i> Guardar Cambios</h4>
+                <button class="btn-save-textos" onclick="descargarTextosJs()">
+                    <i class="fas fa-download"></i> Descargar textos.js
+                </button>
+                <p class="admin-hint">Descarga el archivo y reemplaza el actual en la carpeta del proyecto.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÓN DISPARADOR DEL PANEL (OCULTO EN ESQUINA) -->
+    <button id="admin-trigger" onclick="toggleAdminPanel()" title="Editor Maestro">
+        <i class="fas fa-cog fa-spin"></i>
+    </button>
+
+    <!-- MODAL DE RESEÑAS DE GOOGLE -->
+    <div id="modal-resenas" class="modal">
+        <div class="modal-content reviews-modal-content">
+            <span class="close-modal" onclick="cerrarModalResenas()">&times;</span>
+            <div class="google-modal-card">
+                <i class="fab fa-google" style="font-size: 3.5rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <h2>Reseñas de JR Tech</h2>
+                <p>Por seguridad y para garantizar que leas reseñas reales, Google nos pide abrir su plataforma directamente.</p>
+                <div class="modal-stats">
+                    <div class="stat-item">
+                        <strong>5.0</strong>
+                        <span>Estrellas</span>
+                    </div>
+                    <div class="stat-item">
+                        <strong>220+</strong>
+                        <span>Opiniones</span>
+                    </div>
+                </div>
+                <a href="https://search.google.com/local/reviews?placeid=ChIJEWZx0nNnJI4RHQrl-9ZMgM4" target="_blank" class="hub-btn" style="margin-top: 20px; text-decoration: none; padding: 15px 40px;">
+                    LEER TODAS EN GOOGLE MAPS
+                </a>
+                <p style="font-size: 0.8rem; margin-top: 20px; color: var(--text-dim);">
+                    * Se abrirá en una pestaña nueva para que no pierdas tu carrito.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HIDDEN POSTER TEMPLATE FOR DOWNLOADS (Card Style) -->
+    <div id="poster-template">
+        <div class="poster-card-layout">
+            <div class="poster-card-img-container">
+                <img src="" alt="Producto" class="poster-img" id="p-img">
+            </div>
+            
+            <div class="poster-card-info">
+                <div class="poster-marca-container">
+                    <img src="" alt="Marca" class="poster-marca-logo" id="p-marca-logo">
+                    <div class="poster-marca-text" id="p-marca" style="display:none">MARCA</div>
+                </div>
+                <h3 class="poster-modelo" id="p-modelo">MODELO</h3>
+                
+                <div class="poster-specs-list" id="p-specs">
+                    <!-- Se llena dinámicamente con iconos -->
+                </div>
+
+                <div class="poster-ai-phrase" id="p-phrase">
+                    <!-- Comentario IA -->
+                </div>
+                
+                <div class="poster-precio" id="p-price">$ 0</div>
+            </div>
+
+            <div class="poster-card-footer">
+                <img src="" alt="JRTech Logo" class="poster-footer-logo" id="p-logo">
+                <div class="poster-cta">
+                    <i class="fab fa-whatsapp"></i>
+                    <div>
+                        <span>PÍDELO AHORA</span><br>
+                        <span class="cta-phone">3128590469</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marca de agua sutil -->
+            <div class="poster-watermark">JRTech Humanizada</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoRD9yHPbKGkJfTj2neSHxyTm-O5Jxiww&libraries=places&v=weekly&loading=async"></script>
+    <script src="reviews.js"></script>
+    <script src="main.js"></script>
+    <script src="logo-base64.js"></script>
+    <script src="poster-generator.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

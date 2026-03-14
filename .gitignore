@@ -1,0 +1,27 @@
+# Git ignore for Innovación Digital JRTech
+
+# Browser folders
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary/Generated assets
+JRTech_Poster_*.png
+WhatsApp Image *.jpeg
+hero_tech_setup_*.png
+modern_office_trust_*.png
+smartphone_prestige_1773203501355.png
+albeiro_real_office_portrait.png
+
+# System logs
+logs/
+*.log
+
+# Environment/Private Config
+.env
+config_private.js
