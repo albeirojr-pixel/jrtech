@@ -24,4 +24,3 @@ logs/
 
 # Environment/Private Config
 .env
-config_private.js

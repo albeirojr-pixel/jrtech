@@ -3,7 +3,12 @@
  * Client-side logic for catalog loading, modals, and order processing.
  */
 
-const API_URL = CONFIG.API_URL;
+if (typeof CONFIG === 'undefined') {
+    console.error("CONFIG no definido. Asegúrate de que config.js esté cargado.");
+}
+
+const API_URL = typeof CONFIG !== 'undefined' ? CONFIG.API_URL : '';
+const TEL_WHATSAPP = typeof CONFIG !== 'undefined' ? CONFIG.TEL_WHATSAPP : '573128590469';
 let catalogoActual = [];
 let filtrosDisponibles = {};
 let rangosDisponibles = {};
