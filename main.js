@@ -1610,7 +1610,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         lastScrollY = currentScrollY;
     }, { passive: true });
+    
+    // Inyectar logo oficial en los placeholders
+    inyectarLogo();
+    
+    // Cargar textos iniciales
+    if (typeof cargarTextos === 'function') {
+        cargarTextos();
+    }
 });
+
+function inyectarLogo() {
+    if (typeof LOGO_BASE64 === 'undefined') return;
+    
+    const headerLogoContainer = document.getElementById('header-logo-placeholder');
+    
+    const logoHtml = `<img src="${LOGO_BASE64}" alt="JRTech Logo" class="brand-logo-img">`;
+    
+    if (headerLogoContainer) {
+        headerLogoContainer.innerHTML = logoHtml;
+    }
+}
 
 function toggleFaq(el) {
     const item = el.closest('.faq-item');

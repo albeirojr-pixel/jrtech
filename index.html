@@ -12,13 +12,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Configuración privada (Ignorada en Git para seguridad) -->
     <script src="config_private.js"></script>
+    <script src="logo-base64.js"></script>
     <script src="textos.js"></script>
 </head>
 
     <header class="header">
         <div class="header-content header-content-flex">
             <div class="header-text-block">
-                <h1 id="hero-title">TECNOLOGÍA DE UNA <br> SIN TANTO CUENTO</h1>
+                <div class="header-title-container">
+                    <div class="header-logo-container" id="header-logo-placeholder"></div>
+                    <h1 id="hero-title">TECNOLOGÍA HUMANIZADA</h1>
+                </div>
                 <p id="hero-subtitle">¿Busca calidad y buen precio? Aquí no somos robots ni empresas frías. Habla directo con Albeiro, el dueño, y llévese lo mejor sin intermediarios.</p>
                 <div style="margin-top: 40px;">
                     <a href="#beneficios" class="btn-wa hero-btn-custom" id="hero-btn-beneficios">
@@ -37,7 +41,6 @@
 
     <nav>
         <div class="nav-container">
-            <!-- Brand removed from here to avoid clutter -->
             <div class="menu">
                 <button type="button" id="nav-btn-bondades" onclick="mostrar('beneficios')">
                     <i class="fas fa-sparkles"></i> Bondades
@@ -80,34 +83,34 @@
             <h2 id="bondades-title">POR QUÉ NO SOMOS IGUAL A LOS DEMÁS</h2>
             <div class="beneficios-grid">
                 <div class="beneficio-card">
-                    <i id="bondad-1-icon" class="fas fa-coins"></i>
-                    <h3 id="bondad-1-title">Le atiende el dueño</h3>
-                    <p id="bondad-1-desc">Hable con Albeiro. Sin grabaciones ni esperas eternas, soluciones de una.</p>
+                    <i id="bondad-1-icon"></i>
+                    <h3 id="bondad-1-title"></h3>
+                    <p id="bondad-1-desc"></p>
                 </div>
                 <div class="beneficio-card">
-                    <i id="bondad-2-icon" class="fas fa-tag"></i>
-                    <h3 id="bondad-2-title">Envío todo rincón</h3>
-                    <p id="bondad-2-desc">Llegamos hasta donde el diablo perdió la cobija. Rápido y seguro.</p>
+                    <i id="bondad-2-icon"></i>
+                    <h3 id="bondad-2-title"></h3>
+                    <p id="bondad-2-desc"></p>
                 </div>
                 <div class="beneficio-card">
-                    <i id="bondad-3-icon" class="fas fa-truck-fast"></i>
-                    <h3 id="bondad-3-title">Garantía de un año</h3>
-                    <p id="bondad-3-desc">Tranquilidad total por 365 días. Nosotros le respondemos sin peros.</p>
+                    <i id="bondad-3-icon"></i>
+                    <h3 id="bondad-3-title"></h3>
+                    <p id="bondad-3-desc"></p>
                 </div>
                 <div class="beneficio-card">
-                    <i id="bondad-4-icon" class="fas fa-piggy-bank"></i>
-                    <h3 id="bondad-4-title">Del importador a su casa</h3>
-                    <p id="bondad-4-desc">Quitamos los intermediarios para que a usted le salga más barato.</p>
+                    <i id="bondad-4-icon"></i>
+                    <h3 id="bondad-4-title"></h3>
+                    <p id="bondad-4-desc"></p>
                 </div>
                 <div class="beneficio-card">
-                    <i id="bondad-5-icon" class="fas fa-key"></i>
-                    <h3 id="bondad-5-title">Configurados y listos</h3>
-                    <p id="bondad-5-desc">Ojo que de fábrica llegan limpios, aquí se los entregamos listos para camellar.</p>
+                    <i id="bondad-5-icon"></i>
+                    <h3 id="bondad-5-title"></h3>
+                    <p id="bondad-5-desc"></p>
                 </div>
                 <div class="beneficio-card">
-                    <i id="bondad-6-icon" class="fas fa-headset"></i>
-                    <h3 id="bondad-6-title">Soporte pa' toda la vida</h3>
-                    <p id="bondad-6-desc">¿Alguna duda o enredo? Le ayudamos por remoto sin cobrarle un peso más.</p>
+                    <i id="bondad-6-icon"></i>
+                    <h3 id="bondad-6-title"></h3>
+                    <p id="bondad-6-desc"></p>
                 </div>
             </div>
 

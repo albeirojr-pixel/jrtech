@@ -253,6 +253,26 @@ h1, h2, h3 {
     border-bottom: 1px solid var(--glass-border);
 }
 
+.header-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.header-logo-container {
+    display: flex;
+    align-items: center;
+    animation: float 4s ease-in-out infinite;
+}
+
+.brand-logo-img {
+    max-width: 120px;
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(255, 140, 50, 0.4));
+}
+
 .header::after {
     content: '';
     position: absolute;
@@ -266,14 +286,14 @@ h1, h2, h3 {
 }
 
 .header h1 {
-    font-size: clamp(3rem, 10vw, 5.5rem);
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
     background: linear-gradient(to right, #ffffff, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
-    margin-bottom: 20px;
     line-height: 1.1;
+    margin: 0;
 }
 
 .header p {
@@ -299,10 +319,10 @@ nav.hidden-scroll {
 }
 
 .nav-container {
-    max-width: 1200px;
+    max-width: fit-content;
     margin: 0 auto;
     display: flex;
-    flex-direction: column; /* Force two rows globally */
+    flex-direction: column; /* Two rows: Row 1 = Main Menu, Row 2 = Catalog */
     justify-content: center;
     align-items: center;
     background: var(--glass-bg);
