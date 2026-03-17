@@ -480,36 +480,47 @@
     <!-- HIDDEN POSTER TEMPLATE FOR DOWNLOADS (Card Style) -->
     <div id="poster-template">
         <div class="poster-card-layout">
+            <!-- 1. Comentario IA -->
+            <div class="poster-ai-phrase" id="p-phrase">
+                <!-- Comentario IA -->
+            </div>
+            
+            <!-- 2. Foto -->
             <div class="poster-card-img-container">
                 <img src="" alt="Producto" class="poster-img" id="p-img">
             </div>
             
             <div class="poster-card-info">
+                <!-- 3. Logo de la marca -->
                 <div class="poster-marca-container">
                     <img src="" alt="Marca" class="poster-marca-logo" id="p-marca-logo">
                     <div class="poster-marca-text" id="p-marca" style="display:none">MARCA</div>
                 </div>
-                <h3 class="poster-modelo" id="p-modelo">MODELO</h3>
+
+                <!-- 4. Modelo y Sílaba -->
+                <div class="poster-modelo-container">
+                    <h3 class="poster-modelo" id="p-modelo">MODELO</h3>
+                    <span id="p-prov-tag" class="prov-tag-modelo"></span>
+                </div>
                 
+                <!-- PRECIO (Se mantiene como clave de venta) -->
+                <div class="poster-precio" id="p-price">$ 0</div>
+                
+                <!-- 5. Logo JRTech y WhatsApp -->
+                <div class="poster-card-footer">
+                    <img src="" alt="JRTech Logo" class="poster-footer-logo" id="p-logo">
+                    <div class="poster-cta">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <span>PÍDELO AHORA</span><br>
+                            <span class="cta-phone">3128590469</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Especificaciones -->
                 <div class="poster-specs-list" id="p-specs">
                     <!-- Se llena dinámicamente con iconos -->
-                </div>
-
-                <div class="poster-ai-phrase" id="p-phrase">
-                    <!-- Comentario IA -->
-                </div>
-                
-                <div class="poster-precio" id="p-price">$ 0</div>
-            </div>
-
-            <div class="poster-card-footer">
-                <img src="" alt="JRTech Logo" class="poster-footer-logo" id="p-logo">
-                <div class="poster-cta">
-                    <i class="fab fa-whatsapp"></i>
-                    <div>
-                        <span>PÍDELO AHORA</span><br>
-                        <span class="cta-phone">3128590469</span>
-                    </div>
                 </div>
             </div>
 

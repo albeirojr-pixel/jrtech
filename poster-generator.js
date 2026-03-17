@@ -213,6 +213,11 @@ function getPosterSpecs(item, category) {
         const pan = getSpec(item, 'Pantalla') || getSpec(item, 'pantalla');
         const graf = getSpec(item, 'grafica') || getSpec(item, 'Gráfica');
 
+        const prov = getSpec(item, 'proveedor');
+        const provSyllable = prov ? prov.substring(0, 2).toUpperCase() : '';
+        const provTag = document.getElementById('p-prov-tag');
+        if (provTag) provTag.innerText = provSyllable;
+
         const specs = [
             { icon: 'fas fa-microchip', val: proc },
             { icon: 'fas fa-memory', val: (ram && ssd) ? `${ram} RAM | ${ssd} SSD` : (ram || ssd) },
@@ -232,6 +237,11 @@ function getPosterSpecs(item, category) {
         const camP = getSpec(item, 'camppal') || getSpec(item, 'camara_ppal') || getSpec(item, 'camara_principal') || getSpec(item, 'camara');
         const camS = getSpec(item, 'camselfie') || getSpec(item, 'camara_selfie') || getSpec(item, 'camara_frontal');
         const pan = getSpec(item, 'pantalla');
+
+        const prov = getSpec(item, 'proveedor');
+        const provSyllable = prov ? prov.substring(0, 2).toUpperCase() : '';
+        const provTag = document.getElementById('p-prov-tag');
+        if (provTag) provTag.innerText = provSyllable;
 
         return [
             { icon: 'fas fa-microchip', val: proc },

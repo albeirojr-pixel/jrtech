@@ -397,6 +397,8 @@ function renderGrid(items) {
 
         let specsHtml = '';
         const esCelTab = (categoriaActual === 'celulares' || categoriaActual === 'tablets');
+        const prov = getSpec(item, 'proveedor');
+        const provSyllable = prov ? prov.substring(0, 2).toUpperCase() : '';
 
         if (esCelTab) {
             const proc = getSpec(item, 'procesador') || getSpec(item, 'Procesador');
@@ -407,14 +409,12 @@ function renderGrid(items) {
             const camS = getSpec(item, 'camselfie') || getSpec(item, 'camara_selfie') || getSpec(item, 'camara_frontal');
             const pan = getSpec(item, 'pantalla');
 
-            const prov = getSpec(item, 'proveedor');
             specsHtml = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
                         ${proc ? `<div class="producto-spec"><i class="fas fa-microchip"></i> ${proc}</div>` : ''}
                         ${(ram || rom) ? `<div class="producto-spec"><i class="fas fa-memory"></i> ${ram}${ram && rom ? ' / ' : ''}${rom}</div>` : ''}
                     </div>
-                    ${prov ? `<div class="prov-badge" style="background: var(--bg-accent); color: var(--primary); font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--glass-border); line-height: 1;">${prov}</div>` : ''}
                 </div>
                 ${camP ? `<div class="producto-spec"><i class="fas fa-camera"></i> Principal: ${camP} MP</div>` : ''}
                 ${camS ? `<div class="producto-spec"><i class="fas fa-camera"></i> Selfie: ${camS} MP</div>` : ''}
@@ -446,6 +446,7 @@ function renderGrid(items) {
         card.innerHTML = `
             <div class="producto-img-container">
                 <img src="${imgSrc}" alt="${item.marca} ${item.modelo}" class="producto-img" onerror="this.src='${imgFallback}'">
+                ${provSyllable ? `<span class="prov-tag-discreto">${provSyllable}</span>` : ''}
             </div>
             <div class="producto-marca-container">
                 ${logoSrc ? `<img src="${logoSrc}" alt="${item.marca}" class="producto-marca-logo">` : `<div class="producto-marca-text">${item.marca}</div>`}
@@ -559,7 +560,6 @@ function abrirModal(itemId) {
 
             groupFields.forEach(f => {
                 let displayVal = f.val;
-                if (f.key.toLowerCase() === 'cod') displayVal = reverseString(displayVal);
 
                 let label = f.key.replace(/_/g, ' ');
                 label = label.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
