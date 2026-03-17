@@ -208,19 +208,33 @@ async function getBase64Image(url) {
 function getPosterSpecs(item, category) {
     if (category === 'portatiles') {
         const proc = getSpec(item, 'Procesador') || getSpec(item, 'procesador');
-        const ram = getSpec(item, 'RAM') || getSpec(item, 'ram');
+        const ramVal = getSpec(item, 'RAM') || getSpec(item, 'ram');
+        const ramType = getSpec(item, 'tipo_ram') || getSpec(item, 'tipo ram');
         const ssd = getSpec(item, 'SSD') || getSpec(item, 'ssd') || getSpec(item, 'almacenamiento');
-        const pan = getSpec(item, 'Pantalla') || getSpec(item, 'pantalla');
+        const panVal = getSpec(item, 'Pantalla') || getSpec(item, 'pantalla');
+        const panType = getSpec(item, 'tipo_pantalla') || getSpec(item, 'tipo pantalla');
         const graf = getSpec(item, 'grafica') || getSpec(item, 'Gráfica');
         const sist = getSpec(item, 'Sistema') || getSpec(item, 'sistema');
 
-        return [
+        const specs = [
             { icon: 'fas fa-microchip', val: proc },
-            { icon: 'fas fa-memory', val: (ram && ssd) ? `${ram} RAM | ${ssd} SSD` : (ram || ssd) },
-            { icon: 'fas fa-laptop', val: pan },
-            { icon: 'fas fa-image', val: (graf && graf.toLowerCase() !== 'integrada' && graf.toLowerCase() !== 'no') ? `Gráfica: ${graf}` : '' },
-            { icon: 'fas fa-window-maximize', val: sist }
-        ].filter(s => s.val);
+            { icon: 'fas fa-memory', val: ramVal ? `Memoria RAM: ${ramVal}${ramVal.toLowerCase().includes('gb') ? '' : ' GB'}` : '' },
+            { icon: 'fas fa-dna', val: ramType ? `Tipo de memoria RAM: ${ramType}` : '' },
+            { icon: 'fas fa-hdd', val: ssd ? `Almacenamiento SSD: ${ssd}${ssd.toLowerCase().includes('gb') || ssd.toLowerCase().includes('tb') ? '' : ' GB'}` : '' },
+            { icon: 'fas fa-laptop', val: panVal ? `Tamaño de Pantalla: ${panVal}${panVal.includes('"') ? '' : '"'}` : '' },
+            { icon: 'fas fa-tv', val: panType ? `Tipo de pantalla: ${panType}` : '' },
+            { icon: 'fas fa-window-maximize', val: sist ? `Sistema operativo: ${sist}` : '' },
+            { icon: 'fas fa-file-invoice', val: 'Office licenciado: SI' }
+        ];
+
+        // Lógica para Tarjeta Gráfica SI/NO
+        const tieneGrafica = (graf && graf.toLowerCase() !== 'integrada' && graf.toLowerCase() !== 'no' && graf !== '');
+        specs.push({ 
+            icon: 'fas fa-image', 
+            val: tieneGrafica ? `Tarjeta grafica: SI (${graf})` : 'Tarjeta grafica: NO' 
+        });
+
+        return specs.filter(s => s.val);
     } else {
         // Celulares y Tablets
         const proc = getSpec(item, 'procesador') || getSpec(item, 'Procesador');

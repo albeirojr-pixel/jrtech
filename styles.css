@@ -476,17 +476,18 @@ nav.hidden-scroll {
 .poster-spec-item {
     display: flex;
     align-items: center;
-    gap: 20px;
-    font-size: 35px; /* Shrink font */
+    gap: 15px;
+    font-size: 28px; /* Slightly smaller to fit long labels */
     color: #94a3b8; /* text-dim */
     font-weight: 500;
+    line-height: 1.2;
 }
 
 .poster-spec-item i {
     color: #22c55e; /* Green icons */
-    width: 45px;
+    width: 40px;
     text-align: center;
-    font-size: 40px; /* Shrink icon */
+    font-size: 32px; /* Smaller icon */
 }
 
 .poster-ai-phrase {
