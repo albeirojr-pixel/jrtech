@@ -275,10 +275,41 @@ function getFiltroIcono(key) {
     if (k.includes('ram')) return 'fas fa-memory';
     if (k.includes('rom') || k.includes('ssd')) return 'fas fa-hdd';
     if (k.includes('procesador')) return 'fas fa-microchip';
-    if (k.includes('pantalla')) return 'fas fa-mobile-alt';
+    if (k.includes('pantalla')) return 'fas fa-laptop';
     if (k.includes('sistema') || k.includes('android')) return 'fab fa-android';
     if (k.includes('bateria')) return 'fas fa-battery-full';
+    if (k.includes('grafica') || k.includes('gpu')) return 'fas fa-image';
+    if (k.includes('vram')) return 'fas fa-vr-cardboard';
+    if (k.includes('5g')) return 'fas fa-broadcast-tower';
+    if (k.includes('nfc')) return 'fas fa-contactless-payment';
+    if (k.includes('jack')) return 'fas fa-headphones';
     return 'fas fa-filter';
+}
+
+function limpiarFiltros() {
+    // 1. Limpiar buscador
+    const search = document.getElementById('catalogo-search');
+    if (search) search.value = '';
+
+    // 2. Limpiar marca seleccionada
+    marcaSeleccionada = 'Todos';
+    document.querySelectorAll('#catalogo-filtros-marcas .filtro-btn').forEach(b => {
+        if (b.innerText.trim().toLowerCase().includes('todos')) b.classList.add('active');
+        else b.classList.remove('active');
+    });
+
+    // 3. Limpiar dropdowns avanzados
+    document.querySelectorAll('.filtro-avanzado-select').forEach(s => s.value = 'Todos');
+
+    // 4. Limpiar precio (volver al máximo)
+    const priceSlider = document.getElementById('catalogo-price');
+    if (priceSlider) {
+        priceSlider.value = priceSlider.max;
+        actualizarLabelPrecio();
+    }
+
+    // 5. Aplicar
+    aplicarFiltros();
 }
 
 function seleccionarMarca(btnEl, marca) {
@@ -1095,6 +1126,7 @@ function enviarPedido(event) {
     if (!itemSeleccionadoParaPedido) return;
 
     const nombre = document.getElementById('pedido-nombre').value;
+    const cedula = document.getElementById('pedido-cedula').value;
     const telefono = document.getElementById('pedido-telefono').value;
     const email = document.getElementById('pedido-email').value;
     const municipio = document.getElementById('pedido-municipio').value;
@@ -1102,6 +1134,8 @@ function enviarPedido(event) {
     const direccion = document.getElementById('pedido-direccion').value;
     const pago = document.getElementById('pedido-metodopago').value;
     const notas = document.getElementById('pedido-notas').value;
+
+    const purchaseData = obtenerDatosCompra(itemSeleccionadoParaPedido, categoriaActual);
 
     const statusDiv = document.getElementById('pedido-estado');
     statusDiv.style.display = 'block';
@@ -1117,10 +1151,15 @@ function enviarPedido(event) {
                 id: itemSeleccionadoParaPedido.id,
                 marca: itemSeleccionadoParaPedido.marca,
                 modelo: itemSeleccionadoParaPedido.modelo,
-                precio: itemSeleccionadoParaPedido[getPriceField(itemSeleccionadoParaPedido.categoria_manual?.toLowerCase() === 'portátil' ? 'portatiles' : categoriaActual)]
+                precio: itemSeleccionadoParaPedido[getPriceField(itemSeleccionadoParaPedido.categoria_manual?.toLowerCase() === 'portátil' ? 'portatiles' : categoriaActual)],
+                codReal: itemSeleccionadoParaPedido.cod || itemSeleccionadoParaPedido.COD || '',
+                costo: purchaseData.costo,
+                proveedor: purchaseData.proveedor,
+                specsConcatenadas: purchaseData.specsConcatenadas
             },
             cliente: {
                 nombre: nombre,
+                cedula: cedula,
                 telefono: telefono,
                 email: email,
                 municipio: municipio,
@@ -1187,6 +1226,51 @@ function actualizarEstadoHub() {
             btn.classList.remove('active');
         }
     });
+}
+
+function obtenerDatosCompra(item, categoria) {
+    let costoMinimo = 0;
+    let proveedor = "Desconocido";
+    const esPortatil = (categoria === 'portatiles' || item.categoria_manual?.toLowerCase() === 'portátil');
+
+    if (esPortatil) {
+        // En portátiles solo hay un proveedor
+        costoMinimo = parseInt(item.compra || item.costo || item.minimo || 0);
+        proveedor = item.proveedor || "JRTech Global";
+    } else {
+        // Buscar el precio mínimo entre los campos de proveedores
+        // Buscamos campos con nombres de proveedores conocidos o simplemente números
+        const camposIgnorar = ['id', 'precio', 'marca', 'modelo', 'foto', 'enlace_foto', 'categoria_manual', 'specs', 'aiinsight', 'rom', 'ram', 'antutu', 'cod', 'codigo', 'cod_real'];
+        let min = Infinity;
+        let provFound = "No asignado";
+
+        for (let key in item) {
+            const val = item[key];
+            const numVal = parseInt(val);
+            if (!camposIgnorar.includes(key.toLowerCase()) && !isNaN(numVal) && numVal > 10000) {
+                if (numVal < min) {
+                    min = numVal;
+                    provFound = key.toUpperCase();
+                }
+            }
+        }
+        costoMinimo = (min === Infinity) ? 0 : min;
+        proveedor = provFound;
+    }
+
+    // Concatenar especificaciones para la columna A
+    // COD real + marca + modelo + ssd + ram + tamaño pantalla + tipo de pantalla
+    const cod = item.cod || item.COD || '';
+    const marca = item.marca || '';
+    const modelo = item.modelo || '';
+    const ssd = getSpec(item, 'ssd') || getSpec(item, 'rom') || '';
+    const ram = getSpec(item, 'ram') || '';
+    const pant = getSpec(item, 'pantalla') || '';
+    const tipoPant = getSpec(item, 'tipo_pantalla') || getSpec(item, 'tipo_panel') || '';
+
+    const specsConcatenadas = `${cod} ${marca} ${modelo} ${ssd} ${ram} ${pant} ${tipoPant}`.replace(/\s+/g, ' ').trim();
+
+    return { costo: costoMinimo, proveedor: proveedor, specsConcatenadas: specsConcatenadas };
 }
 
 

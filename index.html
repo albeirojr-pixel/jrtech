@@ -234,6 +234,9 @@
                             <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
                             <option value="marca-asc">Marca (A-Z)</option>
                         </select>
+                        <button id="limpiar-filtros-btn" onclick="limpiarFiltros()" style="padding: 10px 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-accent); color: var(--text-dim); cursor: pointer; transition: all 0.3s;" title="Limpiar todos los filtros">
+                            <i class="fas fa-sync-alt"></i> Limpiar
+                        </button>
                     </div>
                 </div>
 
@@ -356,6 +359,10 @@
                             <div class="form-full-width">
                                 <label class="form-label">Nombre Completo *</label>
                                 <input type="text" id="pedido-nombre" class="form-input" placeholder="Ej: Juan Pérez Gómez" required>
+                            </div>
+                            <div class="form-full-width">
+                                <label class="form-label">CÉDULA o NIT *</label>
+                                <input type="text" id="pedido-cedula" class="form-input" placeholder="Ej: 123456789" required>
                             </div>
                             <div>
                                 <label class="form-label">Teléfono / WhatsApp *</label>
