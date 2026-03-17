@@ -497,14 +497,18 @@
                     <div class="poster-marca-text" id="p-marca" style="display:none">MARCA</div>
                 </div>
 
-                <!-- 4. Modelo y Sílaba -->
+                <!-- 4. Modelo -->
                 <div class="poster-modelo-container">
                     <h3 class="poster-modelo" id="p-modelo">MODELO</h3>
-                    <span id="p-prov-tag" class="prov-tag-modelo"></span>
                 </div>
                 
-                <!-- PRECIO (Se mantiene como clave de venta) -->
+                <!-- PRECIO -->
                 <div class="poster-precio" id="p-price">$ 0</div>
+
+                <!-- 6. Especificaciones (Ahora debajo del precio) -->
+                <div class="poster-specs-list" id="p-specs">
+                    <!-- Se llena dinámicamente con iconos -->
+                </div>
                 
                 <!-- 5. Logo JRTech y WhatsApp -->
                 <div class="poster-card-footer">
@@ -517,11 +521,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- 6. Especificaciones -->
-                <div class="poster-specs-list" id="p-specs">
-                    <!-- Se llena dinámicamente con iconos -->
-                </div>
             </div>
 
             <!-- Marca de agua sutil -->
@@ -533,7 +532,6 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoRD9yHPbKGkJfTj2neSHxyTm-O5Jxiww&libraries=places&v=weekly&loading=async"></script>
     <script src="reviews.js"></script>
     <script src="main.js"></script>
-    <script src="logo-base64.js"></script>
     <script src="poster-generator.js"></script>
     <script src="admin.js"></script>
 </body>

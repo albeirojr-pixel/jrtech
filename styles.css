@@ -469,7 +469,7 @@ nav.hidden-scroll {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    margin-top: auto;
+    margin: 20px 0; /* Add margin for spacing between price and footer */
     text-align: left;
 }
 
@@ -504,12 +504,12 @@ nav.hidden-scroll {
 }
 
 .poster-precio {
-    font-size: 100px;
+    font-size: 80px; /* Reduced from 100px */
     font-weight: 900;
     color: white;
     text-align: center;
-    margin: 5px 0 15px 0;
-    letter-spacing: -3px;
+    margin: 10px 0;
+    letter-spacing: -2px;
 }
 
 .poster-modelo-container {
@@ -529,26 +529,16 @@ nav.hidden-scroll {
     letter-spacing: -2px;
 }
 
-.prov-tag-modelo {
-    font-size: 50px;
-    font-weight: 900;
-    color: #ffffff; /* Blanco puro para máximo contraste */
-    background: #334155; /* Fondo oscuro y sólido */
-    padding: 10px 25px; /* Más padding para que parezca un botón o etiqueta sólida */
-    border-radius: 20px; /* Bordes más redondeados */
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra para resaltarlo */
-    border: 2px solid rgba(255,255,255,0.2); /* Borde sutil */
-}
+/* .prov-tag-modelo removed */
 
 .poster-card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
-    margin-bottom: 30px; /* Separación con las specs */
+    margin-top: auto; /* Empuja el pie al final del contenedor */
+    margin-bottom: 20px;
     padding: 0 20px;
+    width: 100%;
 }
 
 .poster-footer-logo {

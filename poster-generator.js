@@ -212,22 +212,15 @@ function getPosterSpecs(item, category) {
         const ssd = getSpec(item, 'SSD') || getSpec(item, 'ssd') || getSpec(item, 'almacenamiento');
         const pan = getSpec(item, 'Pantalla') || getSpec(item, 'pantalla');
         const graf = getSpec(item, 'grafica') || getSpec(item, 'Gráfica');
+        const sist = getSpec(item, 'Sistema') || getSpec(item, 'sistema');
 
-        const prov = getSpec(item, 'proveedor');
-        const provSyllable = prov ? prov.substring(0, 2).toUpperCase() : '';
-        const provTag = document.getElementById('p-prov-tag');
-        if (provTag) provTag.innerText = provSyllable;
-
-        const specs = [
+        return [
             { icon: 'fas fa-microchip', val: proc },
             { icon: 'fas fa-memory', val: (ram && ssd) ? `${ram} RAM | ${ssd} SSD` : (ram || ssd) },
-            { icon: 'fas fa-laptop', val: pan }
-        ];
-
-        if (graf && graf.toLowerCase() !== 'integrada' && graf.toLowerCase() !== 'no') {
-            specs.push({ icon: 'fas fa-gamepad', val: graf });
-        }
-        return specs;
+            { icon: 'fas fa-laptop', val: pan },
+            { icon: 'fas fa-image', val: (graf && graf.toLowerCase() !== 'integrada' && graf.toLowerCase() !== 'no') ? `Gráfica: ${graf}` : '' },
+            { icon: 'fas fa-window-maximize', val: sist }
+        ].filter(s => s.val);
     } else {
         // Celulares y Tablets
         const proc = getSpec(item, 'procesador') || getSpec(item, 'Procesador');
@@ -237,20 +230,22 @@ function getPosterSpecs(item, category) {
         const camP = getSpec(item, 'camppal') || getSpec(item, 'camara_ppal') || getSpec(item, 'camara_principal') || getSpec(item, 'camara');
         const camS = getSpec(item, 'camselfie') || getSpec(item, 'camara_selfie') || getSpec(item, 'camara_frontal');
         const pan = getSpec(item, 'pantalla');
-
-        const prov = getSpec(item, 'proveedor');
-        const provSyllable = prov ? prov.substring(0, 2).toUpperCase() : '';
-        const provTag = document.getElementById('p-prov-tag');
-        if (provTag) provTag.innerText = provSyllable;
+        const ref = getSpec(item, 'refresco') || getSpec(item, 'tasa_refresco');
+        const ant = getSpec(item, 'antutu');
+        const nfc = getSpec(item, 'nfc');
+        const cga = getSpec(item, 'carga');
 
         return [
             { icon: 'fas fa-microchip', val: proc },
             { icon: 'fas fa-memory', val: (ram && rom) ? `${ram} / ${rom}` : (ram || rom) },
+            { icon: 'fas fa-rocket', val: ant ? `Antutu: ${ant}` : '' },
             { icon: 'fas fa-camera', val: camP ? `Principal: ${camP} MP` : '' },
             { icon: 'fas fa-camera', val: camS ? `Selfie: ${camS} MP` : '' },
-            { icon: 'fas fa-battery-full', val: bat ? `${bat} mAh` : '' },
-            { icon: 'fas fa-mobile-alt', val: pan }
-        ];
+            { icon: 'fas fa-battery-full', val: bat ? `Batería: ${bat} mAh` : '' },
+            { icon: 'fas fa-bolt', val: cga ? `Carga: ${cga}` : '' },
+            { icon: 'fas fa-mobile-alt', val: pan && ref ? `${pan} @ ${ref}` : (pan || ref) },
+            { icon: 'fas fa-rss', val: (nfc && nfc.toLowerCase() !== 'no' && nfc !== '') ? 'NFC: Sí' : '' }
+        ].filter(s => s.val);
     }
 }
 
