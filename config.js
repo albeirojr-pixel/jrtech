@@ -12,5 +12,5 @@ const CONFIG = {
 
     // Otros ajustes globales
     GarantiaMeses: 12,
-    EmailContacto: 'contacto@jrtech.com.co'
+    EmailContacto: 'albeiro.jr@gmail.com'
 };

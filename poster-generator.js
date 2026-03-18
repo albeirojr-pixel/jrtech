@@ -34,6 +34,12 @@ async function generatePoster(productId) {
         // 1. Imagen del Producto
         if (productImageUrl) {
             const p64 = await getBase64Image(productImageUrl);
+            // Si getBase64Image devolvió una URL real (no base64), habilitar CORS
+            if (p64 && p64.startsWith('http')) {
+                imgElement.crossOrigin = "anonymous";
+            } else {
+                imgElement.removeAttribute('crossOrigin');
+            }
             imgElement.src = p64;
             imagesToLoad.push(waitImg(imgElement));
         }
@@ -41,6 +47,11 @@ async function generatePoster(productId) {
         // 2. Logo de Marca
         if (brandLogoUrl) {
             const b64 = await getBase64Image(brandLogoUrl);
+            if (b64 && b64.startsWith('http')) {
+                brandLogoEl.crossOrigin = "anonymous";
+            } else {
+                brandLogoEl.removeAttribute('crossOrigin');
+            }
             brandLogoEl.src = b64;
             brandLogoEl.style.display = 'block';
             document.getElementById('p-marca').style.display = 'none';
@@ -81,7 +92,7 @@ async function generatePoster(productId) {
 
     // Esperar imágenes antes de capturar
     await Promise.all(imagesToLoad);
-    await new Promise(r => setTimeout(r, 400)); // Margen extra render
+    await new Promise(r => setTimeout(r, 600)); // Margen extra render aumentado a 600ms
 
     try {
         // Feedback visual de carga
@@ -173,35 +184,61 @@ function fallbackDownload(canvas, fileName) {
 }
 
 async function getBase64Image(url) {
-    if (!url || !url.startsWith('http')) return url; // Ignorar base64 directos o rutas locales
+    if (!url || !url.startsWith('http')) return url;
 
-    const encodedUrl = encodeURIComponent(url);
+    // FIX FOR GOOGLE DRIVE URLS: Convert various patterns to direct 'uc?id='
+    let directUrl = url;
+    if (directUrl.includes('drive.google.com/file/d/')) {
+        const parts = directUrl.split('/d/');
+        if (parts.length > 1) {
+            const id = parts[1].split('/')[0].split('?')[0];
+            directUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+        }
+    } else if (directUrl.includes('drive.google.com/open?id=')) {
+        const id = directUrl.split('id=')[1].split('&')[0];
+        directUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+    } else if (directUrl.includes('docs.google.com/uc?')) {
+        // Ensure it has export=download
+        if (!directUrl.includes('export=download')) {
+            directUrl += directUrl.includes('?') ? '&export=download' : '?export=download';
+        }
+    }
+
+    const encodedUrl = encodeURIComponent(directUrl);
     const proxies = [
         `https://images.weserv.nl/?url=${encodedUrl}&maxage=31d`,
-        `https://api.codetabs.com/v1/proxy?quest=${url}`,
-        `https://corsproxy.io/?${url}`,
-        `https://api.allorigins.win/raw?url=${encodedUrl}`
+        `https://api.allorigins.win/raw?url=${encodedUrl}`,
+        `https://corsproxy.io/?${encodedUrl}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodedUrl}`
     ];
     
     for (const proxyUrl of proxies) {
         try {
-            const response = await fetch(proxyUrl);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout per proxy
+            
+            const response = await fetch(proxyUrl, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            
             if (!response.ok) continue;
             
             const blob = await response.blob();
-            return await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
+            if (blob.type.startsWith('image/')) {
+                return await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            }
         } catch (e) {
-            console.warn(`Falló el proxy ${proxyUrl}. Intentando el siguiente...`);
+            console.warn(`Falló el proxy ${proxyUrl}. Error:`, e.message);
         }
     }
     
-    // Si todos fallan, devuelve la URL original como último recurso
-    return url;
+    // Si todos los proxies fallan, devolvemos la URL original (o la de Drive corregida)
+    console.warn("Todos los proxies de imagen fallaron para:", directUrl);
+    return directUrl;
 }
 
 
