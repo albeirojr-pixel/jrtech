@@ -8,18 +8,18 @@ async function generatePoster(productId) {
     if (!item) return;
 
     const template = document.getElementById('poster-template');
-    
+
     // Rellenar datos básicos
     document.getElementById('p-marca').innerText = item.marca;
     document.getElementById('p-modelo').innerText = item.modelo;
-    
+
     const imgElement = document.getElementById('p-img');
     const brandLogoEl = document.getElementById('p-marca-logo');
     const footerLogoEl = document.getElementById('p-logo');
-    
+
     const productImageUrl = item.enlace_foto || item.foto || '';
     const brandLogoUrl = getBrandLogo(item) || '';
-    
+
     const imagesToLoad = [];
 
     // Helper para esperar carga de imagen de forma segura
@@ -69,16 +69,16 @@ async function generatePoster(productId) {
     } catch (e) {
         console.error("Error cargando imágenes:", e);
     }
-    
+
     document.getElementById('p-price').innerText = formatMoneda(item[getPriceField(categoriaActual)]);
-    
-    const insightText = (item.aiInsight && item.aiInsight.resumen) 
-                        ? item.aiInsight.resumen 
-                        : 'Tecnología de última generación seleccionada por JRTech';
-    
+
+    const insightText = (item.aiInsight && item.aiInsight.idealPara)
+        ? `🎯 Ideal para: ${item.aiInsight.idealPara}`
+        : 'Tecnología de última generación seleccionada por JRTech';
+
     const phraseEl = document.getElementById('p-phrase');
     if (phraseEl) phraseEl.innerText = `"${insightText}"`;
-    
+
     const specsContainer = document.getElementById('p-specs');
     specsContainer.innerHTML = '';
     const specs = getPosterSpecs(item, categoriaActual);
@@ -104,9 +104,9 @@ async function generatePoster(productId) {
 
         const canvas = await html2canvas(template, {
             useCORS: true,
-            allowTaint: false, 
+            allowTaint: false,
             backgroundColor: '#0a0b14',
-            scale: 2 
+            scale: 2
         });
 
         if (originalBtn && originalBtn.classList.contains('btn-share-discreto')) {
@@ -114,7 +114,7 @@ async function generatePoster(productId) {
         }
 
         const fileName = `JRTech_Poster_${item.marca}_${item.modelo}.png`;
-        
+
         // Procesar resultado (Blob -> Copy -> Share -> Fallback)
         canvas.toBlob(async (blob) => {
             if (!blob) {
@@ -138,7 +138,7 @@ async function generatePoster(productId) {
                 try {
                     const file = new File([blob], fileName, { type: blob.type });
                     const additionalSpecs = getFullSpecsText(item, categoriaActual);
-                    
+
                     // Pie de foto (caption) con formato profesional inspirado en el código exitoso
                     const shareText = `*${item.marca} ${item.modelo}*\n\n${additionalSpecs}\n\n_Catálogo JRTech_`;
 
@@ -211,17 +211,17 @@ async function getBase64Image(url) {
         `https://corsproxy.io/?${encodedUrl}`,
         `https://api.codetabs.com/v1/proxy?quest=${encodedUrl}`
     ];
-    
+
     for (const proxyUrl of proxies) {
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout per proxy
-            
+
             const response = await fetch(proxyUrl, { signal: controller.signal });
             clearTimeout(timeoutId);
-            
+
             if (!response.ok) continue;
-            
+
             const blob = await response.blob();
             if (blob.type.startsWith('image/')) {
                 return await new Promise((resolve, reject) => {
@@ -235,7 +235,7 @@ async function getBase64Image(url) {
             console.warn(`Falló el proxy ${proxyUrl}. Error:`, e.message);
         }
     }
-    
+
     // Si todos los proxies fallan, devolvemos la URL original (o la de Drive corregida)
     console.warn("Todos los proxies de imagen fallaron para:", directUrl);
     return directUrl;
@@ -266,9 +266,9 @@ function getPosterSpecs(item, category) {
 
         // Lógica para Tarjeta Gráfica SI/NO
         const tieneGrafica = (graf && graf.toLowerCase() !== 'integrada' && graf.toLowerCase() !== 'no' && graf !== '');
-        specs.push({ 
-            icon: 'fas fa-image', 
-            val: tieneGrafica ? `Tarjeta grafica: SI (${graf})` : 'Tarjeta grafica: NO' 
+        specs.push({
+            icon: 'fas fa-image',
+            val: tieneGrafica ? `Tarjeta grafica: SI (${graf})` : 'Tarjeta grafica: NO'
         });
 
         return specs.filter(s => s.val);
@@ -306,12 +306,12 @@ function getPosterSpecs(item, category) {
 function getFullSpecsText(item, category) {
     const posterSpecsObj = getPosterSpecs(item, category);
     const valuesInPoster = posterSpecsObj.map(s => String(s.val).toLowerCase());
-    
+
     const groups = SPECS_GROUPS[category === 'portatiles' ? 'portatiles' : 'mobile'];
     if (!groups) return "";
 
     let text = "";
-    
+
     // 1. Gama y Veredicto IA (Inspirado en el código exitoso)
     if (item.aiInsight) {
         if (item.aiInsight.gama) text += `🏆 *Gama:* ${item.aiInsight.gama}\n`;
