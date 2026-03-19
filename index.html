@@ -214,56 +214,77 @@
                 <p style="margin-top: 15px; font-weight: 600;">Cargando inventario desde la bodega...</p>
             </div>
 
-            <!-- Controles Superiores -->
-            <div id="catalogo-controls" style="display:none; max-width: 1000px; margin: 0 auto 30px auto; background: var(--glass-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--sombra-premium);">
+            <!-- ══════════════════════════════════════════════════════════ -->
+            <!-- PANEL DE CONTROL UNIFICADO                                 -->
+            <!-- ══════════════════════════════════════════════════════════ -->
+            <div id="catalogo-controls" class="filtro-panel-unificado">
                 
-                <!-- Buscador y Ordenar -->
-                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <div style="flex: 1; min-width: 250px; position: relative;">
-                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-dim);"></i>
-                        <input type="text" id="catalogo-search" placeholder="Buscar por marca, modelo o especificación..." style="width: 100%; padding: 12px 15px 12px 40px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-accent); font-family: 'Outfit'; font-size: 1rem; color: var(--text-main); outline: none;" oninput="aplicarFiltros()">
-                        <!-- Sugerencias rápidas -->
-                        <div id="search-suggestions" style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
+                <!-- ── SECCIÓN 1: BUSCAR ────────────────────────────────── -->
+                <div class="filtro-seccion">
+                    <div class="filtro-seccion-header">
+                        <span class="filtro-seccion-label"><i class="fas fa-search"></i> Buscar</span>
+                        <div class="filtro-header-actions">
+                            <select id="catalogo-sort" class="filtro-select-order" onchange="aplicarFiltros()">
+                                <option value="precio-asc">Precio: Menor a Mayor</option>
+                                <option value="precio-desc">Precio: Mayor a Menor</option>
+                                <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
+                                <option value="marca-asc">Marca (A-Z)</option>
+                            </select>
+                            <button id="limpiar-filtros-btn" onclick="limpiarFiltros()" class="filtro-btn-limpiar" title="Limpiar todos los filtros">
+                                <i class="fas fa-sync-alt"></i> Limpiar
+                            </button>
+                        </div>
                     </div>
-                    </div>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <label style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;"><i class="fas fa-sort-amount-down"></i> Ordenar:</label>
-                        <select id="catalogo-sort" style="padding: 10px 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-accent); font-family: 'Outfit'; outline: none; cursor: pointer;" onchange="aplicarFiltros()">
-                            <option value="precio-asc">Precio: Menor a Mayor</option>
-                            <option value="precio-desc">Precio: Mayor a Menor</option>
-                            <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
-                            <option value="marca-asc">Marca (A-Z)</option>
-                        </select>
-                        <button id="limpiar-filtros-btn" onclick="limpiarFiltros()" style="padding: 10px 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-accent); color: var(--text-dim); cursor: pointer; transition: all 0.3s;" title="Limpiar todos los filtros">
-                            <i class="fas fa-sync-alt"></i> Limpiar
-                        </button>
+                    <div class="filtro-search-wrap">
+                        <i class="fas fa-search filtro-search-icon"></i>
+                        <input type="text" id="catalogo-search" class="filtro-search-input" placeholder="Buscar por marca, modelo o especificación..." oninput="aplicarFiltros()">
                     </div>
                 </div>
 
-                <!-- Rango de Precio -->
-                <div style="margin-bottom: 20px;">
-                    <label style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; margin-bottom: 10px;">
-                        <span><i class="fas fa-wallet"></i> Presupuesto Máximo</span>
-                        <span id="precio-valor-label" style="color: var(--primary);">Cualquiera</span>
+                <!-- ── SECCIÓN 2: ¿PARA QUIÉN ES? (Perfil IA) ───────────── -->
+                <div class="filtro-seccion">
+                    <span class="filtro-seccion-label"><i class="fas fa-user-tag"></i> ¿Para quién es?</span>
+                    <div id="search-suggestions" class="filtro-chips-row"></div>
+                </div>
+
+                <!-- ── SECCIÓN 3: PRESUPUESTO ──────────────────────────── -->
+                <div class="filtro-seccion">
+                    <label class="filtro-seccion-header" style="cursor:default;">
+                        <span class="filtro-seccion-label"><i class="fas fa-wallet"></i> Presupuesto</span>
+                        <span id="precio-valor-label" class="filtro-price-value">Cualquiera</span>
                     </label>
-                    <input type="range" id="catalogo-price" min="0" max="10000000" step="50000" value="10000000" style="width: 100%; accent-color: var(--primary);" oninput="actualizarLabelPrecio(); aplicarFiltros()">
+                    <input type="range" id="catalogo-price" min="0" max="10000000" step="50000" value="10000000" class="filtro-price-slider" oninput="actualizarLabelPrecio(); aplicarFiltros()">
                 </div>
 
-                <!-- Filtros Clickeables (Marcas) -->
-                <div id="catalogo-filtros-marcas" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
-
-                <!-- Botón Avanzado y Mago -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                    <button class="wizard-trigger-btn" onclick="abrirWizard()" style="background: linear-gradient(135deg, var(--secondary), var(--accent)); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 20px rgba(176, 38, 255, 0.3); transition: var(--transition);">
-                        <i class="fas fa-magic"></i> ¿Andas perdido? Ayúdame a elegir
-                    </button>
-                    <button class="filtro-btn" onclick="toggleFiltrosAvanzados()" style="font-size: 0.8rem;"><i class="fas fa-sliders-h"></i> Filtros Técnicos</button>
+                <!-- ── SECCIÓN 4: MARCA ────────────────────────────────── -->
+                <div class="filtro-seccion">
+                    <span class="filtro-seccion-label"><i class="fas fa-tags"></i> Marca</span>
+                    <div id="catalogo-filtros-marcas" class="filtro-chips-row"></div>
                 </div>
-                
+
+                <!-- ── SECCIÓN 5: HERRAMIENTAS ─────────────────────────── -->
+                <div class="filtro-seccion filtro-seccion-tools">
+                    <div class="filtro-tools-row">
+                        <button class="wizard-trigger-btn filtro-tool-btn-wizard" onclick="abrirWizard()">
+                            <i class="fas fa-magic"></i> ¿Andas perdido? Ayúdame a elegir
+                        </button>
+                        <!-- Software (solo portátiles) -->
+                        <div id="software-filter-btn-container" style="display:none;" class="filtro-tool-sw-wrap">
+                            <button class="filtro-tool-btn-sw" onclick="toggleSoftwarePanel()">
+                                <i class="fas fa-laptop-code"></i> Buscar por Software
+                            </button>
+                            <span id="sw-filter-label" class="filtro-sw-active-label"></span>
+                        </div>
+                        <button class="filtro-tool-btn" onclick="toggleFiltrosAvanzados()"><i class="fas fa-sliders-h"></i> Filtros Técnicos</button>
+                    </div>
+                </div>
+
+                <!-- ── EXPANDIBLES ─────────────────────────────────────── -->
                 <!-- Filtros Avanzados Dropdowns -->
-                <div id="filtros-avanzados" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); gap: 15px; flex-wrap: wrap;">
-                    <!-- Se inyectan en JS -->
-                </div>
+                <div id="filtros-avanzados" class="filtro-expandible"></div>
+
+                <!-- Panel Filtro por Software (solo portatiles) -->
+                <div id="filtro-software-panel" class="filtro-expandible"></div>
 
             </div>
 

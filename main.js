@@ -23,6 +23,37 @@ const WHITELIST_MOBILE = ['COD', 'marca', 'modelo', 'rom', 'ram', 'pantalla', 't
 const GRID_LAPTOPS = ['procesador', 'ram', 'ssd', 'grafica'];
 const GRID_MOBILE = ['procesador', 'ram', 'rom', 'pantalla', 'antutu'];
 
+// ─── BASE DE DATOS DE SOFTWARE ────────────────────────────────────────────────
+// cs: 1=básico 2=i3 3=i5 4=i7 5=i9 | gs: 0=integrada 1=baja 2=media 3=alta
+// ram/ssd en GB
+const SOFTWARE_DB = [
+    // Productividad
+    { id:'office',        nombre:'Microsoft Office',   icono:'📄', cat:'Productividad',   min:{cs:1,ram:4, gs:0,ssd:64 }, rec:{cs:2,ram:8, gs:0,ssd:256} },
+    { id:'zoom',          nombre:'Zoom / Teams',        icono:'📹', cat:'Productividad',   min:{cs:1,ram:4, gs:0,ssd:64 }, rec:{cs:2,ram:8, gs:0,ssd:128} },
+    // Diseño Gráfico
+    { id:'photoshop',     nombre:'Adobe Photoshop',    icono:'🖼️', cat:'Diseño Gráfico',  min:{cs:2,ram:8, gs:0,ssd:256}, rec:{cs:3,ram:16,gs:1,ssd:512} },
+    { id:'illustrator',   nombre:'Adobe Illustrator',  icono:'✏️', cat:'Diseño Gráfico',  min:{cs:2,ram:8, gs:0,ssd:256}, rec:{cs:3,ram:16,gs:0,ssd:512} },
+    { id:'corel',         nombre:'CorelDRAW',           icono:'🎨', cat:'Diseño Gráfico',  min:{cs:2,ram:8, gs:0,ssd:128}, rec:{cs:3,ram:16,gs:0,ssd:256} },
+    // Video / Audio
+    { id:'premiere',      nombre:'Adobe Premiere Pro', icono:'🎬', cat:'Video / Audio',   min:{cs:3,ram:8, gs:1,ssd:256}, rec:{cs:4,ram:16,gs:2,ssd:512} },
+    { id:'aftereffects',  nombre:'After Effects',       icono:'✨', cat:'Video / Audio',   min:{cs:3,ram:16,gs:1,ssd:256}, rec:{cs:4,ram:32,gs:2,ssd:512} },
+    { id:'davinci',       nombre:'DaVinci Resolve',     icono:'🎥', cat:'Video / Audio',   min:{cs:3,ram:16,gs:2,ssd:256}, rec:{cs:4,ram:16,gs:3,ssd:512} },
+    // 3D / Animación
+    { id:'blender',       nombre:'Blender',             icono:'🐣', cat:'3D / Animación',  min:{cs:2,ram:8, gs:0,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:512} },
+    { id:'autocad',       nombre:'AutoCAD',             icono:'📐', cat:'3D / Animación',  min:{cs:2,ram:8, gs:0,ssd:128}, rec:{cs:3,ram:16,gs:1,ssd:256} },
+    { id:'sketchup',      nombre:'SketchUp',            icono:'🏗️', cat:'3D / Animación',  min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
+    // Gaming
+    { id:'fortnite',      nombre:'Fortnite',            icono:'🎯', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
+    { id:'valorant',      nombre:'Valorant',            icono:'🔫', cat:'Gaming',          min:{cs:2,ram:4, gs:0,ssd:64 }, rec:{cs:3,ram:8, gs:1,ssd:128} },
+    { id:'gtav',          nombre:'GTA V',               icono:'🚗', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
+    { id:'cs2',           nombre:'Counter-Strike 2',    icono:'💣', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:64 }, rec:{cs:3,ram:16,gs:2,ssd:256} },
+    { id:'minecraft',     nombre:'Minecraft',           icono:'⛏️', cat:'Gaming',          min:{cs:1,ram:4, gs:0,ssd:64 }, rec:{cs:2,ram:8, gs:0,ssd:128} },
+    // Programación
+    { id:'vscode',        nombre:'VS Code',             icono:'💻', cat:'Programación',    min:{cs:1,ram:4, gs:0,ssd:64 }, rec:{cs:2,ram:8, gs:0,ssd:256} },
+    { id:'androidstudio', nombre:'Android Studio',      icono:'🤖', cat:'Programación',    min:{cs:2,ram:8, gs:0,ssd:256}, rec:{cs:3,ram:16,gs:0,ssd:512} },
+    { id:'intellij',      nombre:'IntelliJ IDEA',       icono:'⚙️', cat:'Programación',    min:{cs:2,ram:8, gs:0,ssd:256}, rec:{cs:3,ram:16,gs:0,ssd:512} },
+];
+
 const SPECS_GROUPS = {
     portatiles: [
         { name: 'Identificación', fields: ['cod', 'marca', 'modelo'] },
@@ -171,7 +202,8 @@ async function cargarCatalogo(categoria) {
         controlsDiv.style.display = 'block';
         configurarControles(filtrosDisponibles, rangosDisponibles);
         procesarCatalogoConIA();
-        renderSugerenciasBusqueda();
+        renderFiltrosPerfil();
+        renderFiltroSoftware();
         actualizarEstadoHub();
         aplicarFiltros();
 
@@ -211,17 +243,17 @@ function configurarControles(filters, rangos) {
     marcas.forEach(marca => {
         const btn = document.createElement('button');
         btn.className = 'filtro-btn';
-        
+
         // Buscar el logo de esta marca en el catálogo actual
         const itemConLogo = catalogoActual.find(it => it.marca === marca && getBrandLogo(it));
         const logoUrl = itemConLogo ? getBrandLogo(itemConLogo) : null;
-        
+
         if (logoUrl) {
             btn.innerHTML = `<img src="${logoUrl}" alt="${marca}" title="${marca}" style="height: 25px; width: auto; max-width: 80px; object-fit: contain;">`;
         } else {
             btn.innerHTML = `${marca}`;
         }
-        
+
         btn.onclick = (e) => seleccionarMarca(e.currentTarget, marca);
         containerMarcas.appendChild(btn);
     });
@@ -308,7 +340,17 @@ function limpiarFiltros() {
         actualizarLabelPrecio();
     }
 
-    // 5. Aplicar
+    // 5. Limpiar filtro de perfil IA
+    filtroPerfilActivo = null;
+    document.querySelectorAll('.perfil-chip').forEach(b => b.classList.remove('active'));
+
+    // 6. Limpiar filtro de Software
+    filtroSoftwareActivo = null;
+    document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
+    const swLbl = document.getElementById('sw-filter-label');
+    if (swLbl) swLbl.style.display = 'none';
+
+    // 7. Aplicar
     aplicarFiltros();
 }
 
@@ -321,7 +363,8 @@ function seleccionarMarca(btnEl, marca) {
 
 function toggleFiltrosAvanzados() {
     const div = document.getElementById('filtros-avanzados');
-    div.style.display = div.style.display === 'none' ? 'flex' : 'none';
+    const visible = getComputedStyle(div).display !== 'none';
+    div.style.display = visible ? 'none' : 'flex';
 }
 
 function actualizarLabelPrecio() {
@@ -363,7 +406,7 @@ function aplicarFiltros() {
         if (searchQuery) {
             const isLaptop = categoriaActual === 'portatiles';
             const whitelist = isLaptop ? WHITELIST_LAPTOPS : WHITELIST_MOBILE;
-            
+
             let searchableText = '';
             whitelist.forEach(k => {
                 const val = getSpec(item, k);
@@ -381,6 +424,15 @@ function aplicarFiltros() {
         for (let prop in filtrosElegidos) {
             const itemVal = item[prop] || (item.specs && item.specs[prop]);
             if (String(itemVal) !== filtrosElegidos[prop]) return false;
+        }
+
+        // 5. Filtro por Perfil de Usuario (IA)
+        if (!matchesPerfil(item, filtroPerfilActivo)) return false;
+
+        // 6. Filtro por Software
+        if (filtroSoftwareActivo) {
+            const sc = getSoftwareCompat(item, filtroSoftwareActivo);
+            if (!sc || sc === 'incompatible') return false;
         }
 
         return true;
@@ -406,6 +458,149 @@ function aplicarFiltros() {
 
     renderGrid(filtrados);
 }
+
+// ─── FILTROS POR PERFIL DE USO ───────────────────────────────────────────────
+let filtroPerfilActivo = null;
+let filtroSoftwareActivo = null;
+
+function renderFiltrosPerfil() {
+    const esPortatil = categoriaActual === 'portatiles';
+    const perfilesPortatil = [
+        { id: 'gamer',       label: '🎮 Gamer' },
+        { id: 'programador', label: '💻 Programador' },
+        { id: 'disenador',   label: '🎨 Diseñador' },
+        { id: 'oficina',     label: '🏢 Oficina' },
+        { id: 'estudiante',  label: '🎓 Estudiante' },
+        { id: 'basico',      label: '🏠 Doméstico' }
+    ];
+    const perfilesCelular = [
+        { id: 'fotografo',   label: '📸 Fotógrafo' },
+        { id: 'gamer_cel',   label: '🎮 Gamer' },
+        { id: 'bateria',     label: '🔋 Batería larga' },
+        { id: 'pro_cel',     label: '⭐ Serie Pro' },
+        { id: 'equilibrado', label: '⚖️ Equilibrado' },
+        { id: 'basico_cel',  label: '📱 Básico' }
+    ];
+
+    const perfiles = esPortatil ? perfilesPortatil : perfilesCelular;
+
+    // ── Zona 1 (debajo del buscador): única ubicación de los chips ───────────
+    const sugBox = document.getElementById('search-suggestions');
+    if (sugBox) {
+        sugBox.innerHTML = '';
+        perfiles.forEach(p => {
+            const btn = document.createElement('button');
+            btn.className = 'search-chip perfil-chip' + (filtroPerfilActivo === p.id ? ' active' : '');
+            btn.dataset.perfil = p.id;
+            btn.innerHTML = p.label;
+            btn.onclick = () => toggleFiltroPerfil(p.id);
+            sugBox.appendChild(btn);
+        });
+    }
+}
+
+function toggleFiltroPerfil(perfilId) {
+    filtroPerfilActivo = (filtroPerfilActivo === perfilId) ? null : perfilId;
+    document.querySelectorAll('.perfil-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.perfil === filtroPerfilActivo);
+    });
+    aplicarFiltros();
+}
+
+function matchesPerfil(item, perfilId) {
+    if (!perfilId) return true;
+    const insight = item.aiInsight;
+    if (!insight) return true;
+    const ideal = (insight.idealPara || '').toLowerCase();
+    const gama  = (insight.gama || '').toLowerCase();
+
+    const mapas = {
+        // Portátiles
+        'gamer':       () => ideal.includes('gamer') || ideal.includes('gaming') || ideal.includes('stream'),
+        'programador': () => ideal.includes('program') || ideal.includes('data') || ideal.includes('desarrollad'),
+        'disenador':   () => ideal.includes('diseñ') || ideal.includes('vfx') || ideal.includes('editor') || ideal.includes('creativ'),
+        'oficina':     () => ideal.includes('admin') || ideal.includes('abogad') || ideal.includes('médico') || ideal.includes('secretar') || ideal.includes('corporat'),
+        'estudiante':  () => ideal.includes('universit') || ideal.includes('bachiller') || ideal.includes('estudi') || ideal.includes('docente'),
+        'basico':      () => ideal.includes('domést') || ideal.includes('básic') || ideal.includes('netflix') || ideal.includes('primeros'),
+        // Celulares
+        'fotografo':   () => ideal.includes('fotógraf') || ideal.includes('creador') || ideal.includes('youtuber'),
+        'gamer_cel':   () => ideal.includes('gamer') || ideal.includes('gaming'),
+        'bateria':     () => ideal.includes('viajero') || ideal.includes('batería') || ideal.includes('campo'),
+        'pro_cel':     () => gama === 'alta' && (ideal.includes('profesional') || ideal.includes('serie pro') || ideal.includes('5g')),
+        'equilibrado': () => ideal.includes('equilibrad') || ideal.includes('universitar') || ideal.includes('oficina'),
+        'basico_cel':  () => ideal.includes('whatsapp') || ideal.includes('llamadas') || ideal.includes('básico')
+    };
+    return mapas[perfilId] ? mapas[perfilId]() : true;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ─── FILTRO POR SOFTWARE ─────────────────────────────────────────────────────
+function getSoftwareCompat(item, swId) {
+    if (!swId) return null;
+    const sw = SOFTWARE_DB.find(s => s.id === swId);
+    if (!sw || !item.aiInsight?.scores) return null;
+    const { cs, gs, ram, ssd } = item.aiInsight.scores;
+    if (cs >= sw.rec.cs && ram >= sw.rec.ram && gs >= sw.rec.gs && ssd >= sw.rec.ssd) return 'optimal';
+    if (cs >= sw.min.cs && ram >= sw.min.ram && gs >= sw.min.gs && ssd >= sw.min.ssd) return 'compatible';
+    return 'incompatible';
+}
+
+function renderFiltroSoftware() {
+    const panel = document.getElementById('filtro-software-panel');
+    const btnWrap = document.getElementById('software-filter-btn-container');
+    if (!panel) return;
+    if (categoriaActual !== 'portatiles') {
+        panel.style.display = 'none';
+        if (btnWrap) btnWrap.style.display = 'none';
+        return;
+    }
+    if (btnWrap) btnWrap.style.display = 'inline-flex';
+
+    const cats = {};
+    SOFTWARE_DB.forEach(sw => {
+        if (!cats[sw.cat]) cats[sw.cat] = [];
+        cats[sw.cat].push(sw);
+    });
+
+    panel.innerHTML = Object.entries(cats).map(([cat, items]) => `
+        <div class="sw-category">
+            <div class="sw-cat-label">${cat}</div>
+            <div class="sw-grid">
+                ${items.map(sw => `
+                    <button class="sw-btn ${filtroSoftwareActivo === sw.id ? 'active' : ''}"
+                            onclick="toggleFiltroSoftware('${sw.id}')" data-sw="${sw.id}">
+                        <span class="sw-icono">${sw.icono}</span>
+                        <span class="sw-nombre">${sw.nombre}</span>
+                    </button>`).join('')}
+            </div>
+        </div>`).join('');
+}
+
+function toggleSoftwarePanel() {
+    const panel = document.getElementById('filtro-software-panel');
+    if (!panel) return;
+    const visible = getComputedStyle(panel).display !== 'none';
+    panel.style.display = visible ? 'none' : 'block';
+}
+
+function toggleFiltroSoftware(swId) {
+    filtroSoftwareActivo = (filtroSoftwareActivo === swId) ? null : swId;
+    document.querySelectorAll('.sw-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.sw === filtroSoftwareActivo);
+    });
+    const sw = SOFTWARE_DB.find(s => s.id === filtroSoftwareActivo);
+    const lbl = document.getElementById('sw-filter-label');
+    if (lbl) {
+        if (sw) {
+            lbl.innerHTML = `${sw.icono} <strong>${sw.nombre}</strong> <span style="cursor:pointer;margin-left:4px;opacity:0.6" onclick="toggleFiltroSoftware('${sw.id}')">✕</span>`;
+            lbl.style.display = 'inline-flex';
+        } else {
+            lbl.style.display = 'none';
+        }
+    }
+    aplicarFiltros();
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 function renderGrid(items) {
     const grid = document.getElementById('catalogo-grid');
@@ -474,6 +669,40 @@ function renderGrid(items) {
         const imgFallback = 'https://placehold.co/300x300/f8fafc/4f46e5?text=' + categoriaActual.toUpperCase();
         const imgSrc = item.enlace_foto || item.foto || logoSrc || imgFallback;
 
+        // ── BADGE IA ──────────────────────────────────────────────────────────
+        const badgeGama = item.aiInsight?.gama || null;
+        const badgeIdeal = item.aiInsight?.idealPara || null;
+        const badgeColor = badgeGama === 'Alta' ? 'var(--primary)'
+                         : badgeGama === 'Media' || badgeGama === 'Media-Alta' ? 'var(--secondary)'
+                         : '#6b7280';
+        const badgeHtml = badgeIdeal ? `
+            <div class="ai-badge-card" style="
+                background: linear-gradient(135deg, ${badgeColor}18, ${badgeColor}08);
+                border: 1px solid ${badgeColor}44;
+                border-radius: 10px;
+                padding: 7px 10px;
+                margin-bottom: 10px;
+                font-size: 0.72rem;
+                color: var(--text-dim);
+                line-height: 1.3;
+            ">
+                <span style="color:${badgeColor}; font-weight:800; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px;">
+                    🎯 Ideal para
+                </span><br>
+                ${badgeIdeal}
+            </div>` : '';
+        // ── SOFTWARE COMPAT BADGE ─────────────────────────────────────────────
+        let swCompatHtml = '';
+        if (filtroSoftwareActivo && item.aiInsight?.scores) {
+            const swComp = getSoftwareCompat(item, filtroSoftwareActivo);
+            const swObj  = SOFTWARE_DB.find(s => s.id === filtroSoftwareActivo);
+            if (swObj && swComp === 'optimal')
+                swCompatHtml = `<div class="sw-compat-badge sw-optimal">✅ Óptimo para ${swObj.nombre}</div>`;
+            else if (swObj && swComp === 'compatible')
+                swCompatHtml = `<div class="sw-compat-badge sw-compatible">⚡ Cumple mínimos de ${swObj.nombre}</div>`;
+        }
+        // ─────────────────────────────────────────────────────────────────────
+
         card.innerHTML = `
             <div class="producto-img-container">
                 <img src="${imgSrc}" alt="${item.marca} ${item.modelo}" class="producto-img" onerror="this.src='${imgFallback}'">
@@ -483,6 +712,8 @@ function renderGrid(items) {
                 ${logoSrc ? `<img src="${logoSrc}" alt="${item.marca}" class="producto-marca-logo">` : `<div class="producto-marca-text">${item.marca}</div>`}
             </div>
             <h3 class="producto-modelo">${item.modelo}</h3>
+            ${badgeHtml}
+            ${swCompatHtml}
             <div class="producto-specs">
                 ${specsHtml}
             </div>
@@ -582,7 +813,7 @@ function abrirModal(itemId) {
     groups.forEach(group => {
         // Filtrar campos del grupo que tengan valor
         const groupFields = group.fields.map(k => ({ key: k, val: getSpec(item, k) }))
-                                        .filter(f => f.val && f.val.trim() !== '' && f.val.toLowerCase() !== 'undefined');
+            .filter(f => f.val && f.val.trim() !== '' && f.val.toLowerCase() !== 'undefined');
 
         if (groupFields.length > 0) {
             grid.innerHTML += `<div class="spec-group-header" style="grid-column: 1/-1; margin-top: 20px; padding-bottom: 5px; border-bottom: 1px solid var(--primary); color: var(--primary); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
@@ -621,7 +852,7 @@ function abrirModal(itemId) {
     const modal = document.getElementById('specs-modal');
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
-    
+
     // Scroll al inicio del modal por si venimos de otro producto relacionado
     document.querySelector('#specs-modal .modal-content').scrollTop = 0;
 }
@@ -629,7 +860,7 @@ function abrirModal(itemId) {
 function renderRelacionados(currentItem) {
     const container = document.getElementById('modal-specs-grid');
     const priceField = getPriceField(categoriaActual);
-    
+
     // Todos los candidatos de la misma categoría excepto el actual
     let candidatos = catalogoActual.filter(it => it.id !== currentItem.id);
 
@@ -676,7 +907,7 @@ function renderRelacionados(currentItem) {
 function calcularPuntajeSimilitud(itemA, itemB) {
     let score = 0;
     const priceField = getPriceField(categoriaActual);
-    
+
     // 1. Cercanía de Precio (Máximo 40 puntos)
     const precioA = parseInt(itemA[priceField]) || 0;
     const precioB = parseInt(itemB[priceField]) || 0;
@@ -728,10 +959,10 @@ function cerrarModal(force = false, event = null) {
 function copiarEstilo(estilo, itemId) {
     const item = catalogoActual.find(i => i.id === itemId);
     if (!item) return;
-    
+
     const isLaptop = categoriaActual === 'portatiles';
     const icon = isLaptop ? '💻 Portátil' : (categoriaActual === 'celulares' ? '📱 Celular' : '📱 Tablet');
-    
+
     let specsTxt = '';
     if (isLaptop) {
         const proc = getSpec(item, 'procesador') || getSpec(item, 'Procesador') || '-';
@@ -744,7 +975,7 @@ function copiarEstilo(estilo, itemId) {
         const proc = getSpec(item, 'procesador') || '-';
         const ram = getSpec(item, 'ram', 'GB') || '-';
         const rom = getSpec(item, 'rom', 'GB') || getSpec(item, 'almacenamiento', 'GB') || '-';
-        
+
         specsTxt = `▫️ Procesador: ${proc}\n▫️ RAM: ${ram}\n▫️ Almacenamiento: ${rom}`;
     }
 
@@ -805,9 +1036,9 @@ function limpiarComparativa() {
 
 function renderHeaderVersus(items) {
     if (items.length < 2) return '';
-    
+
     const priceField = getPriceField(categoriaActual);
-    
+
     // Identificar ganadores en campos clave
     const winAntutu = determinarGanador(items, 'antutu', 'max');
     const winRam = determinarGanador(items, 'ram', 'max');
@@ -817,7 +1048,7 @@ function renderHeaderVersus(items) {
     items.forEach((item, idx) => {
         const isWinnerGeneral = (idx === 0); // Placeholder o lógica más compleja
         const imgFallback = 'https://placehold.co/200x200/f8fafc/4f46e5?text=PROD';
-        
+
         duelHtml += `
             <div class="versus-item">
                 <div class="versus-img-wrap">
@@ -845,16 +1076,16 @@ function renderHeaderVersus(items) {
                 <div class="versus-stat-label">${stat.label}</div>
                 <div style="display: flex; justify-content: space-around; gap: 10px; align-items: center;">
                     ${items.map(it => {
-                        const val = getSpec(it, stat.key) || it[stat.key] || '0';
-                        const displayVal = stat.isPrice ? formatMoneda(val) : val;
-                        const isWin = it.id === stat.winnerId;
-                        return `
+            const val = getSpec(it, stat.key) || it[stat.key] || '0';
+            const displayVal = stat.isPrice ? formatMoneda(val) : val;
+            const isWin = it.id === stat.winnerId;
+            return `
                             <div style="position: relative; flex: 1; ${isWin ? 'color: var(--primary); font-weight: 900;' : 'color: var(--text-dim);'}">
                                 ${displayVal}
                                 ${isWin ? '<div class="winner-crown"><i class="fas fa-crown"></i></div>' : ''}
                             </div>
                         `;
-                    }).join('<div style="opacity: 0.2">|</div>')}
+        }).join('<div style="opacity: 0.2">|</div>')}
                 </div>
             </div>
         `;
@@ -879,7 +1110,7 @@ function determinarGanador(items, key, mode) {
         let raw = getSpec(it, key) || it[key] || '0';
         // Limpiar para extraer número (ej: "8 GB" -> 8)
         let val = parseFloat(String(raw).replace(/[^0-9.]/g, '')) || 0;
-        
+
         if (val === 0) return;
 
         if (mode === 'max' && val > bestVal) {
@@ -900,7 +1131,7 @@ function abrirModalComparar() {
 
     const tabla = document.getElementById('tabla-comparativa');
     const modalBody = document.querySelector('#comparar-modal .modal-body');
-    
+
     // Limpiar Versus previo si existe
     const oldVersus = modalBody.querySelector('.versus-header');
     if (oldVersus) oldVersus.remove();
@@ -1420,7 +1651,7 @@ function calcularRecomendacion() {
                 const itemData = (it.aiInsight?.[resp.score.key] || "").toLowerCase() + " " + (it.aiInsight?.resumen || "").toLowerCase();
                 if (itemData.includes(resp.score.match.toLowerCase())) score += 10;
             }
-            
+
             // Filtro de Presupuesto
             if (resp.val === 'low' && precio < 2000000) score += 5;
             if (resp.val === 'mid' && precio >= 2000000 && precio < 3500000) score += 5;
@@ -1470,43 +1701,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-function renderSugerenciasBusqueda() {
-    const container = document.getElementById('search-suggestions');
-    if (!container) return;
-
-    const sugerencias = {
-        portatiles: [
-            { text: 'Gamer', icon: 'fas fa-gamepad' },
-            { text: 'Económico', icon: 'fas fa-tag' },
-            { text: 'Diseño', icon: 'fas fa-paint-brush' },
-            { text: 'Ryzen', icon: 'fas fa-microchip' }
-        ],
-        mobile: [
-            { text: 'Cámara Pro', icon: 'fas fa-camera' },
-            { text: 'Gamer', icon: 'fas fa-bolt' },
-            { text: 'Amoled', icon: 'fas fa-clapperboard' },
-            { text: 'Batería', icon: 'fas fa-battery-full' }
-        ],
-        tablets: [
-            { text: 'Económica', icon: 'fas fa-wallet' },
-            { text: 'Estudio', icon: 'fas fa-pen-nib' },
-            { text: 'Potente', icon: 'fas fa-rocket' }
-        ]
-    };
-
-    const slugs = sugerencias[categoriaActual] || sugerencias.mobile;
-    container.innerHTML = slugs.map(s => `
-        <div class="search-chip" onclick="ejecutarSugerencia('${s.text}')">
-            <i class="${s.icon}"></i> ${s.text}
-        </div>
-    `).join('');
-}
-
-function ejecutarSugerencia(texto) {
-    const input = document.getElementById('catalogo-search');
-    input.value = texto;
-    aplicarFiltros();
-}
+// renderSugerenciasBusqueda() eliminada — los chips de perfil IA
+// se renderizan directamente en #search-suggestions desde renderFiltrosPerfil().
 
 // ============================================
 // AI INSIGHTS LOGIC (JRTech Intel)
@@ -1516,7 +1712,7 @@ function procesarCatalogoConIA() {
     catalogoActual = catalogoActual.map(item => {
         const isLaptop = categoriaActual === 'portatiles';
         const itemWithIA = { ...item };
-        
+
         if (isLaptop) {
             itemWithIA.aiInsight = generarComentarioPortatilIA(item);
         } else {
@@ -1538,114 +1734,302 @@ function procesarCatalogoConIA() {
 }
 
 function generarComentarioIA(datos) {
-    const { antutu = 0, bateria = 0, refresco = 0, camPrincipal = 0, camSelfie = 0, precio = 0, red5g = "" } = datos;
+    const { antutu = 0, bateria = 0, refresco = 0, camPrincipal = 0, camSelfie = 0, precio = 0, red5g = '' } = datos;
 
-    let puntosFuertes = [];
-    let idealPara = [];
-    let noRecomendado = [];
+    // ─── NIVELES BASE ────────────────────────────────────────────────────────
+    // Antutu tiers
+    const as = antutu >= 900000 ? 5 : antutu >= 700000 ? 4 : antutu >= 500000 ? 3 : antutu >= 300000 ? 2 : 1;
+    const tiene5g   = typeof red5g === 'string' && /si|sí|yes|true/i.test(red5g);
+    const bateriaXL = bateria >= 6000;
+    const bateriaBuena = bateria >= 5000;
+    const pantallaFluida = refresco >= 120;
+    const camProf   = camPrincipal >= 108;
+    const camBuena  = camPrincipal >= 64;
+    const selfieOk  = camSelfie >= 16;
 
-    let gama = "Entrada";
-    if (antutu >= 900000) gama = "Alta";
-    else if (antutu >= 600000) gama = "Media-Alta";
-    else if (antutu >= 400000) gama = "Media";
-    else if (antutu >= 250000) gama = "Media-Baja";
+    // ─── MOTOR DE PERFILES (6 para celulares) ────────────────────────────────
+    let gama         = 'Entrada';
+    let idealPara    = '';
+    let resumen      = '';
+    let veredicto    = '';
+    let noRecomendado = '';
 
-    let score = 0;
-    if (antutu >= 900000) score += 4;
-    else if (antutu >= 600000) score += 3;
-    else if (antutu >= 400000) score += 2;
-    else if (antutu >= 250000) score += 1;
+    if (as >= 5 && camProf && pantallaFluida) {
+        // PERFIL 1 — Flagship Creator / Fotógrafo Pro
+        gama      = 'Alta';
+        idealPara = 'Fotógrafos, youtubers, creadores de contenido pro';
+        resumen   = 'Flagship con cámara profesional y pantalla de alta fluidez.';
+        veredicto = 'Si vives de tus fotos o videos, este celular no te va a decepcionar.';
+        noRecomendado = '';
 
-    if (refresco >= 120) {
-        score += 1;
-        puntosFuertes.push("Pantalla de alta fluidez");
-    }
-    if (bateria >= 5000) {
-        score += 1;
-        puntosFuertes.push("Batería de larga duración");
-        idealPara.push("uso intensivo");
-    }
+    } else if (as >= 4 && pantallaFluida) {
+        // PERFIL 2 — Gamer Móvil
+        gama      = 'Alta';
+        idealPara = 'Gamers: PUBG, Genshin Impact, Call of Duty Mobile';
+        resumen   = 'Alto rendimiento y pantalla fluida para gaming móvil exigente.';
+        veredicto = 'Para quien juega en serio y no puede darse el lujo de lagear.';
+        noRecomendado = 'fotografía nocturna extrema';
 
-    if (score >= 5) {
-        puntosFuertes.unshift("Rendimiento sobresaliente");
-        idealPara.push("gaming exigente", "multitarea pesada");
-    } else if (score >= 3) {
-        puntosFuertes.unshift("Rendimiento sólido y equilibrado");
-        idealPara.push("redes sociales", "streaming");
+    } else if (bateriaXL && bateria >= 6000) {
+        // PERFIL 3 — Batería Extrema / Campo
+        gama      = as >= 3 ? 'Media-Alta' : 'Media';
+        idealPara = 'Viajeros, vendedores en campo, quien no quiere cargar';
+        resumen   = 'Batería masiva para días enteros sin enchufarse.';
+        veredicto = 'Si odias buscar el cargador, este es tu compañero perfecto.';
+        noRecomendado = 'gaming AAA exigente';
+
+    } else if (as >= 4 && tiene5g) {
+        // PERFIL 4 — Serie Pro 5G
+        gama      = 'Alta';
+        idealPara = 'Profesionales 5G, ejecutivos, viajeros frecuentes';
+        resumen   = 'Conectividad 5G y rendimiento premium para profesionales.';
+        veredicto = 'Conectividad del futuro con potencia para el trabajo de hoy.';
+        noRecomendado = '';
+
+    } else if (as >= 3 && (camBuena || bateriaBuena)) {
+        // PERFIL 5 — Equilibrado
+        gama      = 'Media';
+        idealPara = 'Universitarios, trabajadores de oficina, uso diario intenso';
+        resumen   = 'Equilibrio ideal entre rendimiento, cámara y batería.';
+        veredicto = 'Un celular completo para quien quiere todo sin pagar de más.';
+        noRecomendado = 'gaming AAA, fotografía profesional';
+
     } else {
-        puntosFuertes.unshift("Uso funcional para tareas básicas");
-        idealPara.push("WhatsApp", "llamadas");
-        noRecomendado.push("gaming pesado");
+        // PERFIL 6 — Básico Conectado
+        gama      = as >= 2 ? 'Media-Baja' : 'Entrada';
+        idealPara = 'WhatsApp, llamadas, redes sociales y tareas básicas';
+        resumen   = 'Celular confiable para lo esencial del día a día.';
+        veredicto = 'Si solo necesitas estar conectado, este no te va a fallar.';
+        noRecomendado = 'gaming exigente, múltiples apps pesadas';
     }
 
-    if (camPrincipal >= 108) {
-        puntosFuertes.push("Cámara de alta resolución");
-        idealPara.push("fotografía detallada");
+    // ─── DETALLES EXTRA QUE ENRIQUECEN LA FRASE ──────────────────────────────
+    if (selfieOk && !idealPara.includes('youtuber') && !idealPara.includes('Fotóg')) {
+        idealPara += ', selfies de calidad';
+    }
+    if (pantallaFluida && !idealPara.includes('Gaming') && !idealPara.includes('Gamer')) {
+        idealPara += ', streaming fluido';
     }
 
-    return {
-        gama,
-        resumen: puntosFuertes.slice(0, 3).join(". ") + ".",
-        idealPara: [...new Set(idealPara)].join(", "),
-        noRecomendado: [...new Set(noRecomendado)].join(", "),
-        veredicto: `Un equipo de gama ${gama} que destaca por su ${puntosFuertes[0].toLowerCase()}, ideal para quienes buscan ${idealPara[0] || 'un buen equilibrio'}.`
-    };
+    // ─── RELACIÓN CALIDAD / PRECIO ────────────────────────────────────────────
+    if (precio > 0) {
+        if      (gama === 'Alta'       && precio < 1500000) veredicto += ' 💰 Excelente precio para este nivel.';
+        else if (gama === 'Media'      && precio < 900000)  veredicto += ' 💰 Muy buena relación calidad-precio.';
+        else if (precio > 2500000      && gama !== 'Alta')  veredicto += ' ⚠️ Considera opciones con mejor valor.';
+    }
+
+    return { gama, resumen, idealPara, noRecomendado, veredicto };
 }
 
 function generarComentarioPortatilIA(item) {
     const safe = (v) => (v ?? "").toString().toLowerCase();
     const num = (v) => parseInt((v ?? "").toString().replace(/[^\d]/g, "")) || 0;
 
-    const cpu = safe(getSpec(item, 'procesador'));
-    const ram = num(getSpec(item, 'ram'));
-    const ssd = num(getSpec(item, 'ssd'));
-    const grafica = safe(getSpec(item, 'modelo_grafica') || getSpec(item, 'grafica'));
+    const cpu    = safe(getSpec(item, 'procesador'));
+    const ram    = num(getSpec(item, 'ram'));
+    const ssd    = num(getSpec(item, 'ssd'));
     const precio = Number(item.precio) || 0;
 
-    let puntosFuertes = [];
-    let idealPara = [];
-    let noRecomendado = [];
-    let gama = "Entrada";
+    // ─── NIVELES DE CPU ───────────────────────────────────────────────────────
+    // cs: 1=básico  2=bajo  3=medio  4=alto  5=extremo
+    // Cubre naming clásico (Core i7) Y naming moderno desde 2023 (Core Ultra 9, Core 7, etc.)
+    let cs = 1;
+    let cpuModerna = false;
 
-    if (cpu.includes("i7") || cpu.includes("ryzen 7") || cpu.includes("i9") || cpu.includes("ryzen 9")) {
-        gama = "Alta";
-        puntosFuertes.push("Procesador de alto rendimiento para cargas exigentes");
-        idealPara.push("programación avanzada", "edición multimedia");
-    } else if (cpu.includes("i5") || cpu.includes("ryzen 5")) {
-        gama = "Media-Alta";
-        puntosFuertes.push("Procesador equilibrado para trabajo profesional");
-        idealPara.push("trabajo", "estudio");
+    if (/celeron|pentium|n[34]\d{3}|n[1-9]00\b|atom/.test(cpu)) {
+        // Gama básica
+        cs = 1;
+
+    } else if (/snapdragon\s*x/.test(cpu)) {
+        // Qualcomm Snapdragon X Elite / Plus → equivale a gama alta moderna
+        cs = 4; cpuModerna = true;
+
+    } else if (
+        /core\s*ultra\s*9|\bi9\b|ryzen\s*(ai\s*)?9|threadripper/.test(cpu)
+    ) {
+        // Intel Core Ultra 9 / i9 / Ryzen 9 / Ryzen AI 9 → Extremo
+        cs = 5; cpuModerna = true;
+
+    } else if (
+        /core\s*ultra\s*7|core\s*7\s+\d|\bi7\b|ryzen\s*(ai\s*)?7/.test(cpu)
+    ) {
+        // Intel Core Ultra 7 / Core 7 / i7 / Ryzen 7 / Ryzen AI 7 → Alto
+        cs = 4;
+        cpuModerna = /core\s*ultra|core\s*7\s+\d|i7-1[1-9]\d{3}|ryzen\s*(ai\s*)?7/.test(cpu);
+
+    } else if (
+        /core\s*ultra\s*5|core\s*5\s+\d|\bi5\b|ryzen\s*(ai\s*)?5/.test(cpu)
+    ) {
+        // Intel Core Ultra 5 / Core 5 / i5 / Ryzen 5 / Ryzen AI 5 → Medio
+        cs = 3;
+        cpuModerna = /core\s*ultra|core\s*5\s+\d|i5-1[1-9]\d{3}|ryzen\s*(ai\s*)?5/.test(cpu);
+
+    } else if (
+        /core\s*ultra\s*3|core\s*3\s+\d|\bi3\b|ryzen\s*(ai\s*)?3/.test(cpu)
+    ) {
+        // Intel Core Ultra 3 / Core 3 / i3 / Ryzen 3 / Ryzen AI 3 → Bajo
+        cs = 2;
+        cpuModerna = /core\s*ultra|core\s*3\s+\d|ryzen\s*ai/.test(cpu);
     }
 
-    if (ram >= 16) puntosFuertes.push("Memoria RAM de gran capacidad");
-    if (ssd >= 512) puntosFuertes.push("Almacenamiento rápido y espacioso");
+    // ─── NIVELES DE GPU ───────────────────────────────────────────────────────
+    // gs: 0=integrada  1=dedicada baja  2=dedicada media  3=dedicada alta  4=ultra
+    // Leer tanto modelo_grafica como grafica (que puede decir solo "SI")
+    const grafModelo = safe(getSpec(item, 'modelo_grafica'));
+    const grafFlag   = safe(getSpec(item, 'grafica'));  // puede decir "SI"/"NO"
+    const graf       = grafModelo || grafFlag;
 
-    if (grafica.includes("rtx") || grafica.includes("gtx") || (grafica.includes("radeon") && !grafica.includes("integrated"))) {
-        gama = "Alta";
-        puntosFuertes.push("Gráfica dedicada apta para gaming y diseño");
-        idealPara.push("gaming", "renderizado");
+    let gs = 0;
+    if      (/rtx\s*(40[789]\d|4[1-9]\d{2}|3[089]\d0|5\d{3})/.test(graf)) gs = 4; // RTX 4070+ / 5000 / 3080+
+    else if (/rtx\s*(3070|4060|4050)/.test(graf))                           gs = 3; // RTX 3070 / 4060
+    else if (/rtx\s*(3050|3060)|gtx\s*1660|arc\s*[a-z]/.test(graf))       gs = 2; // RTX 3050-3060 / Arc
+    else if (/gtx\s*1650|mx[2-9]\d0/.test(graf))                           gs = 1; // GTX 1650 / MX
+    else if (graf.includes('radeon') && !/integrated|vega\s*[2-8]/.test(graf)) gs = 2;
+    // Fallback: si el campo "grafica" dice "SI" o "Sí" y no se detectó modelo, asumir dedicada media
+    else if (/^s[ií]$/.test(grafFlag.trim())) gs = 2;
+
+    // ─── NIVELES DE RAM Y SSD ────────────────────────────────────────────────
+    // rs: 0=<8  1=8  2=16  3=32+
+    const rs = ram >= 32 ? 3 : ram >= 16 ? 2 : ram >= 8 ? 1 : 0;
+    // ss: 0=<256  1=256  2=512  3=1TB+
+    const ss = ssd >= 1000 ? 3 : ssd >= 512 ? 2 : ssd >= 256 ? 1 : 0;
+
+    // ─── MOTOR DE 12 PERFILES (mayor a menor exigencia) ──────────────────────
+    let gama       = "Entrada";
+    let idealPara  = "";
+    let resumen    = "";
+    let veredicto  = "";
+    let noRecomendado = "";
+
+    if (cs >= 5 && rs >= 3 && gs >= 4) {
+        // ── PERFIL 1: Workstation Extrema ──
+        gama      = "Alta";
+        idealPara = "Ingenieros IA, animadores 3D, postproducción 4K";
+        resumen   = "Potencia extrema para los trabajos más exigentes del mundo digital.";
+        veredicto = "Si buscas lo máximo sin límites, esta es tu máquina.";
+        noRecomendado = "";
+
+    } else if (cs >= 5 && rs >= 2 && gs >= 2) {
+        // ── PERFIL 2: Workstation Creativa ──
+        gama      = "Alta";
+        idealPara = "Directores de foto, productores audio, VFX artists";
+        resumen   = "Workstation profesional para producción creativa avanzada.";
+        veredicto = "Ideal para quien vive de la creatividad digital a nivel profesional.";
+
+    } else if (cs >= 4 && rs >= 2 && gs >= 2 && ss >= 2) {
+        // ── PERFIL 3: Gamer / Creator con GPU Dedicada ──
+        gama      = "Alta";
+        idealPara = "Gamers AAA, streamers, editores de video, gaming competitivo";
+        resumen   = "Equipo con GPU dedicada para gaming y creación de contenido.";
+        veredicto = "Para quien juega en serio y también produce contenido digital.";
+        noRecomendado = "";
+
+    } else if (cs >= 3 && gs >= 2 && rs >= 1) {
+        // ── PERFIL 3b: Gamer Entry (i5 + GPU dedicada media) ──
+        gama      = "Media";
+        idealPara = "Gamers que empiezan, gaming casual, diseñadores en formación";
+        resumen   = "GPU dedicada para gaming moderado y tareas de diseño.";
+        veredicto = "Buen punto de entrada al gaming sin romper el presupuesto.";
+        noRecomendado = "gaming AAA a ultra, renders 4K";
+
+    } else if (cs >= 4 && rs >= 2 && gs === 0) {
+        // ── PERFIL 5: Técnico de Alto Nivel sin GPU ──
+        gama      = "Alta";
+        idealPara = "Programadores, data analysts, ingenieros AutoCAD";
+        resumen   = "Procesamiento potente para trabajo técnico y analítico intensivo.";
+        veredicto = "Perfecto para compilar código, analizar datos o manejar grandes archivos.";
+        noRecomendado = "gaming exigente, renderizado 3D";
+
+    } else if (cs >= 4 && gs >= 1) {
+        // ── PERFIL 6: Creativo Mid con GPU (i7 + 8GB + GPU) ──
+        gama      = "Media";
+        idealPara = "Diseñadores gráficos, community mgrs, gaming casual";
+        resumen   = "CPU potente con gráfica dedicada para diseño y entretenimiento.";
+        veredicto = "Muy buena opción para creativos que también juegan ocasionalmente.";
+        noRecomendado = "multitarea muy pesada";
+
+    } else if (cs >= 4) {
+        // ── PERFIL 5b: i7 + poca RAM + sin GPU ──
+        gama      = "Media";
+        idealPara = "Analistas, admins avanzados, desarrolladores básicos";
+        resumen   = "Gran procesador para tareas técnicas y administrativas complejas.";
+        veredicto = "Un CPU de larga duración para trabajo profesional del día a día.";
+        noRecomendado = "gaming, renderizado, multitarea pesada";
+
+    } else if (cs >= 3 && cpuModerna && rs >= 2 && ss >= 2) {
+        // ── PERFIL 7: Profesional Corporativo Exigente ──
+        gama      = "Media";
+        idealPara = "Administradores, abogados, ingenieros civiles, médicos";
+        resumen   = "Multitarea fluida con procesador moderno para entornos corporativos.";
+        veredicto = "Ideal para oficinas que necesitan muchas apps abiertas a la vez.";
+        noRecomendado = "gaming, edición de video";
+
+    } else if (cs >= 3 && cpuModerna && gs >= 1) {
+        // ── PERFIL Alt: i5 Moderno + GPU + 8GB ──
+        gama      = "Media";
+        idealPara = "Diseñadores en formación, marketing digital, gaming casual";
+        resumen   = "Procesador moderno y gráfica dedicada para diseño y multimedia.";
+        veredicto = "Buena inversión si te dedicas al diseño o comunicación digital.";
+        noRecomendado = "renders pesados, gaming AAA";
+
+    } else if (cs >= 3 && cpuModerna) {
+        // ── PERFIL 8: Estudiante Técnico con CPU Moderna ──
+        gama      = "Media";
+        idealPara = "Ing. sistemas, contadores, docentes con Zoom";
+        resumen   = "Procesador actualizado para el día a día universitario y profesional.";
+        veredicto = "Equipo sólido para estudiar o trabajar sin preocuparte por el rendimiento.";
+        noRecomendado = "gaming, diseño avanzado";
+
+    } else if (cs >= 3 && rs >= 1) {
+        // ── PERFIL 9: Profesional de Oficina Estándar ──
+        gama      = "Media";
+        idealPara = "Secretarias, docentes, universitarios, freelancers";
+        resumen   = "Equipo confiable para oficina, clases virtuales y documentos.";
+        veredicto = "Para quien necesita un computador estable para el trabajo de cada día.";
+        noRecomendado = "gaming, edición multimedia";
+
+    } else if (cs >= 2 && rs >= 1) {
+        // ── PERFIL 10: Estudiante Básico ──
+        gama      = "Entrada";
+        idealPara = "Bachilleres, universitarios básicos, tareas en clase";
+        resumen   = "Equipo funcional para estudio básico y uso escolar cotidiano.";
+        veredicto = "Una buena entrada al mundo digital sin gastar de más.";
+        noRecomendado = "multitarea pesada, diseño, gaming";
+
+    } else if (cs >= 2) {
+        // ── PERFIL 11: Uso Doméstico ──
+        gama      = "Entrada";
+        idealPara = "Doméstico: Netflix, redes sociales, home office";
+        resumen   = "Portátil ligero para consumo de contenido y tareas del hogar.";
+        veredicto = "Si solo necesitas lo básico, este te cumple sin complicaciones.";
+        noRecomendado = "gaming, múltiples aplicaciones pesadas";
+
     } else {
-        noRecomendado.push("gaming exigente");
+        // ── PERFIL 12: Mínimo / Primeros Pasos ──
+        gama      = "Entrada";
+        idealPara = "Tareas básicas, primeros pasos en tecnología";
+        resumen   = "Equipo básico para primeros pasos en el mundo digital.";
+        veredicto = "Sirve para uso muy básico. Si quieres algo más fluido, te ayudo a elegir mejor.";
+        noRecomendado = "multitarea, diseño, gaming, programación";
     }
 
-    const resumen = puntosFuertes.length ? puntosFuertes.slice(0, 3).join(". ") + "." : "Equipo funcional para tareas generales.";
-    const idealFinal = idealPara.length ? [...new Set(idealPara)].join(", ") : "uso general";
+    // ─── RELACIÓN CALIDAD / PRECIO ────────────────────────────────────────────
+    if (precio > 0) {
+        if      (gama === "Alta"   && precio < 3000000) veredicto += " 💰 Excelente precio por lo que ofrece.";
+        else if (gama === "Media"  && precio < 1800000) veredicto += " 💰 Muy buena relación calidad-precio.";
+        else if (precio > 4500000  && gama !== "Alta")  veredicto += " ⚠️ Considera otras opciones con mejor valor.";
+    }
 
-    return {
-        gama,
-        resumen,
-        idealPara: idealFinal,
-        noRecomendado: noRecomendado.join(", "),
-        veredicto: `Portátil de gama ${gama} bien orientado a ${idealFinal.split(",")[0] || "uso general"}.`
-    };
+    return { gama, resumen, idealPara, noRecomendado, veredicto, scores: { cs, gs, ram, ssd } };
 }
 
 // --- NUEVA LÓGICA UX REDESIGN ---
 
+
 document.addEventListener('DOMContentLoaded', () => {
     const hub = document.getElementById('catalog-nav-row');
     const catalogCta = document.getElementById('catalog-cta');
-    
+
     // Revelar hub con Intersection Observer
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1675,7 +2059,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
-        
+
         // El usuario baja: Mostrar botones (según pedido específico)
         // El usuario sube: Ocultar botones
         if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -1699,10 +2083,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         lastScrollY = currentScrollY;
     }, { passive: true });
-    
+
     // Inyectar logo oficial en los placeholders
     inyectarLogo();
-    
+
     // Cargar textos iniciales
     if (typeof cargarTextos === 'function') {
         cargarTextos();
@@ -1711,11 +2095,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function inyectarLogo() {
     if (typeof LOGO_BASE64 === 'undefined') return;
-    
+
     const headerLogoContainer = document.getElementById('header-logo-placeholder');
-    
+
     const logoHtml = `<img src="${LOGO_BASE64}" alt="JRTech Logo" class="brand-logo-img">`;
-    
+
     if (headerLogoContainer) {
         headerLogoContainer.innerHTML = logoHtml;
     }
@@ -1738,7 +2122,7 @@ function mostrarCatalogAction() {
 
 // Sobrescribir mostrar para integrar con el catálogo
 const originalMostrar = mostrar;
-mostrar = function(id) {
+mostrar = function (id) {
     if (id === 'catalogo') {
         mostrarCatalogAction();
     } else {
@@ -1748,16 +2132,16 @@ mostrar = function(id) {
 
 function getBrandLogo(item) {
     if (!item) return null;
-    
+
     // 1. Intentar en el nivel raíz
     if (item.enlace_logo) return item.enlace_logo;
     if (item.logo) return item.logo;
-    
+
     // 2. Intentar dentro de specs (común en portátiles)
     if (item.specs) {
         if (item.specs.enlace_logo) return item.specs.enlace_logo;
         if (item.specs.logo) return item.specs.logo;
     }
-    
+
     return null;
 }
