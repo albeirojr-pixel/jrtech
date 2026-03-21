@@ -249,26 +249,59 @@ function vincularGoogleEmail(data) {
 function getTodosPedidos(token) {
   if (!isAdmin(token)) return { error: 'No autorizado' };
   try {
-    const ss     = SpreadsheetApp.openById(SPREADSHEET_ID_CV);
-    // Compra-venta tiene 2 filas de encabezado: fila 1 = títulos, fila 2 = columnas reales
-    const pedidos = sheetToObjects(ss.getSheetByName('Compra-venta'), 1).map(p => ({
-      rowNum:     p._rowNum,
-      factura:    p['# Fact.'],
-      item:       p['Item'],
-      equipo:     p['EQUIPO'],
-      fechaVenta: p['Fecha'] instanceof Date ? p['Fecha'].toLocaleDateString('es-CO') : p['Fecha'],
-      cliente:    p['Cliente'],
-      idCliente:  p['Id Cliente'],
-      precio:     p['Precio Venta'],
-      costo:      p['$ Compra mercancia'],
-      proveedor:  p['Proveedor'],
-      utilidad:   p['Utilidad OP'],
-      estado:     p['ESTADO_PORTAL'] || 'Sin estado',
-      guiaNumero: p['GUIA_NUMERO']  || '',
-      guiaPdfUrl: p['GUIA_PDF_URL'] || '',
-      guiaFecha:  p['GUIA_FECHA'] instanceof Date ? p['GUIA_FECHA'].toLocaleDateString('es-CO') : (p['GUIA_FECHA'] || ''),
-      nota:       p['NOTA_ADMIN']   || '',
-    }));
+    const ss      = SpreadsheetApp.openById(SPREADSHEET_ID_CV);
+    const sheet   = ss.getSheetByName('Compra-venta');
+    const range   = sheet.getDataRange();
+    const values  = range.getValues();
+    const bgs     = range.getBackgrounds();
+    
+    // Compra-venta tiene 2 filas de encabezado: fila 1 = títulos, fila 2 = encabezados reales
+    const headerRowIndex = 1;
+    if (values.length <= headerRowIndex + 1) return { pedidos: [] };
+    
+    const headers = values[headerRowIndex].map(h => String(h).trim());
+    
+    // Funciones helper para buscar celdas de forma robusta
+    const getVal = (row, headerName) => {
+      const idx = getColIndex(headers, headerName);
+      return idx === -1 ? null : row[idx];
+    };
+
+    const pedidos = [];
+    for (let i = headerRowIndex + 1; i < values.length; i++) {
+        const row = values[i];
+        
+        // FILTRO CRÍTICO: Solo mostrar filas con celda resaltada en columna E (Índice 4)
+        // El color que usa registrarPedido es '#ff9900', pero cualquier color != blanco se considera resaltado.
+        const colorResalte = bgs[i][4];
+        if (colorResalte === '#ffffff') continue;
+
+        const rowNum = i + 1;
+        const p = {
+          rowNum:     rowNum,
+          factura:    getVal(row, '# Fact.'),
+          item:       getVal(row, 'Item'),
+          equipo:     getVal(row, 'EQUIPO'),
+          fechaVenta: getVal(row, 'Fecha') instanceof Date ? getVal(row, 'Fecha').toLocaleDateString('es-CO') : getVal(row, 'Fecha'),
+          cliente:    getVal(row, 'Cliente'),
+          idCliente:  getVal(row, 'Id Cliente'),
+          precio:     getVal(row, 'Precio Venta'),
+          costo:      getVal(row, '$ Compra mercancia'),
+          proveedor:  getVal(row, 'Proveedor'),
+          utilidad:   getVal(row, 'Utilidad OP'),
+          estado:     getVal(row, 'ESTADO_PORTAL') || 'Sin estado',
+          guiaNumero: getVal(row, 'GUIA_NUMERO')  || '',
+          guiaPdfUrl: getVal(row, 'GUIA_PDF_URL') || '',
+          guiaFecha:  getVal(row, 'GUIA_FECHA') instanceof Date ? getVal(row, 'GUIA_FECHA').toLocaleDateString('es-CO') : (getVal(row, 'GUIA_FECHA') || ''),
+          nota:       getVal(row, 'NOTA_ADMIN')   || '',
+        };
+        
+        // Si no hay equipo o factura, podría ser una fila vacía resaltada por error, pero el usuario pidió basarse en el resalte.
+        if (p.equipo || p.factura) {
+          pedidos.push(p);
+        }
+    }
+    
     return { pedidos };
   } catch(err) { return { error: err.toString() }; }
 }
@@ -298,22 +331,47 @@ function getStatsAdmin(token) {
   if (!isAdmin(token)) return { error: 'No autorizado' };
   try {
     const ss      = SpreadsheetApp.openById(SPREADSHEET_ID_CV);
-    const pedidos = sheetToObjects(ss.getSheetByName('Compra-venta'), 1); // fila 2 = encabezados
-    const hoy     = new Date();
+    const sheet   = ss.getSheetByName('Compra-venta');
+    const range   = sheet.getDataRange();
+    const values  = range.getValues();
+    const bgs     = range.getBackgrounds();
+    
+    // headerRowIndex = 1 (fila 2)
+    const headerRowIndex = 1;
+    if (values.length <= headerRowIndex + 1) return { totalPedidos:0, pedidosMes:0, ventasMes:0, utilidadMes:0, porEstado:{} };
+    
+    const headers = values[headerRowIndex].map(h => String(h).trim());
+    const getVal = (row, headerName) => {
+      const idx = getColIndex(headers, headerName);
+      return idx === -1 ? null : row[idx];
+    };
+
+    const hoy       = new Date();
     const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+    const stats     = { totalPedidos: 0, pedidosMes: 0, ventasMes: 0, utilidadMes: 0, porEstado: {} };
 
-    const stats = { totalPedidos: pedidos.length, pedidosMes: 0, ventasMes: 0, utilidadMes: 0, porEstado: {} };
+    for (let i = headerRowIndex + 1; i < values.length; i++) {
+      const row = values[i];
+      
+      // Filtro de resalte (coincidir con getTodosPedidos)
+      if (bgs[i][4] === '#ffffff') continue;
+      
+      const equipo  = getVal(row, 'EQUIPO');
+      const factura = getVal(row, '# Fact.');
+      if (!equipo && !factura) continue;
 
-    pedidos.forEach(p => {
-      const estado = p['ESTADO_PORTAL'] || 'Sin estado';
+      stats.totalPedidos++;
+      
+      const estado = getVal(row, 'ESTADO_PORTAL') || 'Sin estado';
       stats.porEstado[estado] = (stats.porEstado[estado] || 0) + 1;
-      const fecha = p['Fecha'];
+      
+      const fecha = getVal(row, 'Fecha');
       if (fecha instanceof Date && fecha >= inicioMes) {
         stats.pedidosMes++;
-        stats.ventasMes    += Number(p['Precio Venta'] || 0);
-        stats.utilidadMes  += Number(p['Utilidad OP']  || 0);
+        stats.ventasMes    += Number(getVal(row, 'Precio Venta') || 0);
+        stats.utilidadMes  += Number(getVal(row, 'Utilidad OP')  || 0);
       }
-    });
+    }
     return stats;
   } catch(err) { return { error: err.toString() }; }
 }
