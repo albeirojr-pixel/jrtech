@@ -43,10 +43,10 @@ const SOFTWARE_DB = [
     { id:'autocad',       nombre:'AutoCAD',             icono:'📐', cat:'3D / Animación',  min:{cs:2,ram:8, gs:0,ssd:128}, rec:{cs:3,ram:16,gs:1,ssd:256} },
     { id:'sketchup',      nombre:'SketchUp',            icono:'🏗️', cat:'3D / Animación',  min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
     // Gaming
-    { id:'fortnite',      nombre:'Fortnite',            icono:'🎯', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
-    { id:'valorant',      nombre:'Valorant',            icono:'🔫', cat:'Gaming',          min:{cs:2,ram:4, gs:0,ssd:64 }, rec:{cs:3,ram:8, gs:1,ssd:128} },
-    { id:'gtav',          nombre:'GTA V',               icono:'🚗', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
-    { id:'cs2',           nombre:'Counter-Strike 2',    icono:'💣', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:64 }, rec:{cs:3,ram:16,gs:2,ssd:256} },
+    { id:'eafc',        nombre:'EA SPORTS FC',        icono:'⚽', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
+    { id:'forza',       nombre:'Forza Horizon',       icono:'🏎️', cat:'Gaming',          min:{cs:2,ram:4, gs:0,ssd:64 }, rec:{cs:3,ram:8, gs:1,ssd:128} },
+    { id:'asphalt',     nombre:'Asphalt Legends',     icono:'🚗', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:128}, rec:{cs:3,ram:16,gs:2,ssd:256} },
+    { id:'roblox',      nombre:'Roblox / Sims 4',     icono:'🎮', cat:'Gaming',          min:{cs:2,ram:8, gs:1,ssd:64 }, rec:{cs:3,ram:16,gs:2,ssd:256} },
     { id:'minecraft',     nombre:'Minecraft',           icono:'⛏️', cat:'Gaming',          min:{cs:1,ram:4, gs:0,ssd:64 }, rec:{cs:2,ram:8, gs:0,ssd:128} },
     // Programación
     { id:'vscode',        nombre:'VS Code',             icono:'💻', cat:'Programación',    min:{cs:1,ram:4, gs:0,ssd:64 }, rec:{cs:2,ram:8, gs:0,ssd:256} },
@@ -1765,7 +1765,7 @@ function generarComentarioIA(datos) {
     } else if (as >= 4 && pantallaFluida) {
         // PERFIL 2 — Gamer Móvil
         gama      = 'Alta';
-        idealPara = 'Gamers: PUBG, Genshin Impact, Call of Duty Mobile';
+        idealPara = 'Gamer (EA FC Mobile, Roblox, Aventuras) y Apps de Trabajo Exigentes';
         resumen   = 'Alto rendimiento y pantalla fluida para gaming móvil exigente.';
         veredicto = 'Para quien juega en serio y no puede darse el lujo de lagear.';
         noRecomendado = 'fotografía nocturna extrema';
@@ -1919,7 +1919,7 @@ function generarComentarioPortatilIA(item) {
     } else if (cs >= 4 && rs >= 2 && gs >= 2 && ss >= 2) {
         // ── PERFIL 3: Gamer / Creator con GPU Dedicada ──
         gama      = "Alta";
-        idealPara = "Gamers AAA, streamers, editores de video, gaming competitivo";
+        idealPara = "Gamers (Deportes, Aventuras), Streamers y Edición de Video 4K";
         resumen   = "Equipo con GPU dedicada para gaming y creación de contenido.";
         veredicto = "Para quien juega en serio y también produce contenido digital.";
         noRecomendado = "";
