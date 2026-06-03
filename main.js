@@ -230,7 +230,16 @@ function configurarControles(filters, rangos) {
     actualizarLabelPrecio();
 
     // 1. Filtro de Marcas (Horizontal)
-    const marcas = filters['marca'] || [];
+    const marcasRaw = filters['Marca'] || filters['marca'] || [];
+    // Deduplicar case-insensitive en el cliente (por si el servidor envía duplicados)
+    const seenMarcas = new Set();
+    const marcas = marcasRaw.filter(m => {
+        const key = m.trim().toUpperCase();
+        if (seenMarcas.has(key)) return false;
+        seenMarcas.add(key);
+        return true;
+    });
+
     const containerMarcas = document.getElementById('catalogo-filtros-marcas');
     containerMarcas.innerHTML = '';
 
@@ -244,8 +253,9 @@ function configurarControles(filters, rangos) {
         const btn = document.createElement('button');
         btn.className = 'filtro-btn';
 
-        // Buscar el logo de esta marca en el catálogo actual
-        const itemConLogo = catalogoActual.find(it => it.marca === marca && getBrandLogo(it));
+        // Buscar el logo de esta marca (comparación case-insensitive)
+        const marcaUp = marca.trim().toUpperCase();
+        const itemConLogo = catalogoActual.find(it => it.marca.trim().toUpperCase() === marcaUp && getBrandLogo(it));
         const logoUrl = itemConLogo ? getBrandLogo(itemConLogo) : null;
 
         if (logoUrl) {
@@ -400,7 +410,7 @@ function aplicarFiltros() {
         if (valPrecio > maxPrecio) return false;
 
         // 2. Filtro de Marca
-        if (marcaSeleccionada !== 'Todos' && item.marca !== marcaSeleccionada) return false;
+        if (marcaSeleccionada !== 'Todos' && item.marca.trim().toUpperCase() !== marcaSeleccionada.trim().toUpperCase()) return false;
 
         // 3. Búsqueda de Texto (Sobre campos de la Lista Blanca)
         if (searchQuery) {
