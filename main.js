@@ -19,9 +19,11 @@ let listaComparar = [];
 // Whitelists for security and UI
 const WHITELIST_LAPTOPS = ['cod', 'marca', 'modelo', 'procesador', 'ram', 'tipo_ram', 'ssd', 'Sistema', 'pantalla', 'tipo_pantalla', 'grafica', 'modelo_grafica', 'vram'];
 const WHITELIST_MOBILE = ['COD', 'marca', 'modelo', 'rom', 'ram', 'pantalla', 'tipo_panel', 'resolucion', 'grosor', 'peso', 'procesador', 'litografia', 'refresco', 'antutu', 'bateria', 'carga', 'cam_ppal', 'cam_selfie', 'red_5g', 'android', 'bluetooth', 'wlan', 'nfc', 'jack', 'proveedor'];
+const WHITELIST_PRINTERS = ['cod', 'marca', 'modelo', 'tipo', 'tecnologia', 'color', 'duplex', 'conectividad'];
 
 const GRID_LAPTOPS = ['procesador', 'ram', 'ssd', 'grafica'];
 const GRID_MOBILE = ['procesador', 'ram', 'rom', 'pantalla', 'antutu'];
+const GRID_PRINTERS = ['tipo', 'tecnologia', 'color', 'conectividad'];
 
 // ─── BASE DE DATOS DE SOFTWARE ────────────────────────────────────────────────
 // cs: 1=básico 2=i3 3=i5 4=i7 5=i9 | gs: 0=integrada 1=baja 2=media 3=alta
@@ -67,6 +69,11 @@ const SPECS_GROUPS = {
         { name: 'Cámaras', fields: ['cam_ppal', 'cam_selfie'] },
         { name: 'Autonomía', fields: ['bateria', 'carga'] },
         { name: 'Conectividad y Extras', fields: ['red_5g', 'android', 'bluetooth', 'wlan', 'nfc', 'jack', 'grosor', 'peso'] }
+    ],
+    impresoras: [
+        { name: 'Identificación', fields: ['marca', 'modelo'] },
+        { name: 'Características Técnicas', fields: ['tipo', 'tecnologia', 'color', 'duplex'] },
+        { name: 'Conectividad y Otros', fields: ['conectividad', 'especificaciones_texto'] }
     ]
 };
 
@@ -179,7 +186,7 @@ async function cargarCatalogo(categoria) {
     document.getElementById('filtros-avanzados').style.display = 'flex';
     const optAntutu = document.getElementById('opt-antutu');
     // Mostrar AnTuTu solo si es categoría con potencia (ahora lo habilitamos siempre por petición del usuario si hay dato, pero por defecto lo mostramos en celulares/tablets)
-    optAntutu.style.display = 'block';
+    optAntutu.style.display = (categoria === 'impresoras') ? 'none' : 'block';
 
     try {
         const response = await fetch(`${API_URL}?api=${categoria}`);
@@ -332,6 +339,11 @@ function getFiltroIcono(key) {
     if (k.includes('5g')) return 'fas fa-broadcast-tower';
     if (k.includes('nfc')) return 'fas fa-contactless-payment';
     if (k.includes('jack')) return 'fas fa-headphones';
+    if (k.includes('tecnología') || k.includes('tecnologia')) return 'fas fa-cogs';
+    if (k.includes('color')) return 'fas fa-palette';
+    if (k.includes('duplex') || k.includes('doble cara')) return 'fas fa-copy';
+    if (k.includes('conectividad') || k.includes('wifi')) return 'fas fa-wifi';
+    if (k.includes('tipo')) return 'fas fa-print';
     return 'fas fa-filter';
 }
 
@@ -436,8 +448,10 @@ function aplicarFiltros() {
 
         // 3. Búsqueda de Texto (Sobre campos de la Lista Blanca)
         if (searchQuery) {
-            const isLaptop = categoriaActual === 'portatiles';
-            const whitelist = isLaptop ? WHITELIST_LAPTOPS : WHITELIST_MOBILE;
+            let whitelist = [];
+            if (categoriaActual === 'portatiles') whitelist = WHITELIST_LAPTOPS;
+            else if (categoriaActual === 'impresoras') whitelist = WHITELIST_PRINTERS;
+            else whitelist = WHITELIST_MOBILE;
 
             let searchableText = '';
             whitelist.forEach(k => {
@@ -454,8 +468,22 @@ function aplicarFiltros() {
 
         // 4. Filtros Avanzados Dinámicos
         for (let prop in filtrosElegidos) {
-            const itemVal = item[prop] || (item.specs && item.specs[prop]);
-            if (String(itemVal) !== filtrosElegidos[prop]) return false;
+            const targetKey = normalizeKey(prop);
+            let itemVal = undefined;
+
+            // Buscar en nivel superior del item
+            for (let k in item) {
+                if (normalizeKey(k) === targetKey) { itemVal = item[k]; break; }
+            }
+
+            // Buscar en .specs si no se encontró
+            if ((itemVal === undefined || itemVal === null) && item.specs) {
+                for (let k in item.specs) {
+                    if (normalizeKey(k) === targetKey) { itemVal = item.specs[k]; break; }
+                }
+            }
+
+            if (String(itemVal || '') !== filtrosElegidos[prop]) return false;
         }
 
         // 5. Filtro por Perfil de Usuario (IA)
@@ -497,6 +525,7 @@ let filtroSoftwareActivo = null;
 
 function renderFiltrosPerfil() {
     const esPortatil = categoriaActual === 'portatiles';
+    const esImpresora = categoriaActual === 'impresoras';
     const perfilesPortatil = [
         { id: 'gamer',       label: '🎮 Gamer' },
         { id: 'programador', label: '💻 Programador' },
@@ -513,8 +542,16 @@ function renderFiltrosPerfil() {
         { id: 'equilibrado', label: '⚖️ Equilibrado' },
         { id: 'basico_cel',  label: '📱 Básico' }
     ];
+    const perfilesImpresora = [
+        { id: 'imp_hogar',      label: '🏠 Hogar' },
+        { id: 'imp_oficina',    label: '🏢 Oficina' },
+        { id: 'imp_negocio',    label: '🏪 Punto de Venta' },
+        { id: 'imp_estudiante', label: '🎓 Estudiante' },
+        { id: 'imp_foto',       label: '📸 Fotografía' },
+        { id: 'imp_volumen',    label: '📄 Alto Volumen' }
+    ];
 
-    const perfiles = esPortatil ? perfilesPortatil : perfilesCelular;
+    const perfiles = esImpresora ? perfilesImpresora : (esPortatil ? perfilesPortatil : perfilesCelular);
 
     // ── Zona 1 (debajo del buscador): única ubicación de los chips ───────────
     const sugBox = document.getElementById('search-suggestions');
@@ -545,6 +582,25 @@ function matchesPerfil(item, perfilId) {
     if (!insight) return true;
     const ideal = (insight.idealPara || '').toLowerCase();
     const gama  = (insight.gama || '').toLowerCase();
+
+    // Para impresoras, filtrar por specs directamente (no tienen aiInsight)
+    if (categoriaActual === 'impresoras') {
+        const tipo = (getSpec(item, 'tipo') || '').toLowerCase();
+        const tec = (getSpec(item, 'tecnologia') || '').toLowerCase();
+        const col = (getSpec(item, 'color') || '').toLowerCase();
+        const conec = (getSpec(item, 'conectividad') || '').toLowerCase();
+        const duplex = (getSpec(item, 'duplex') || '').toLowerCase();
+
+        const mapasImp = {
+            'imp_hogar':      () => tec.includes('tinta') && tipo.includes('multifuncional'),
+            'imp_oficina':    () => (tec.includes('láser') || duplex.includes('sí')) && conec.includes('wi-fi'),
+            'imp_negocio':    () => tec.includes('matriz') || (tec.includes('láser') && col.includes('monocromática')),
+            'imp_estudiante': () => tec.includes('tinta') || (item.precio && item.precio < 800000),
+            'imp_foto':       () => col.includes('color') && tec.includes('tinta'),
+            'imp_volumen':    () => tec.includes('láser') || duplex.includes('sí')
+        };
+        return mapasImp[perfilId] ? mapasImp[perfilId]() : true;
+    }
 
     const mapas = {
         // Portátiles
@@ -672,6 +728,18 @@ function renderGrid(items) {
                 ${camS ? `<div class="producto-spec"><i class="fas fa-camera"></i> Selfie: ${camS} MP</div>` : ''}
                 ${bat ? `<div class="producto-spec"><i class="fas fa-battery-full"></i> ${bat} mAh</div>` : ''}
                 ${pan ? `<div class="producto-spec"><i class="fas fa-mobile-alt"></i> ${pan}</div>` : ''}
+            `;
+        } else if (categoriaActual === 'impresoras') {
+            const tipo = getSpec(item, 'tipo') || getSpec(item, 'Tipo');
+            const tec = getSpec(item, 'tecnologia') || getSpec(item, 'Tecnología');
+            const col = getSpec(item, 'color') || getSpec(item, 'Color');
+            const conec = getSpec(item, 'conectividad') || getSpec(item, 'Conectividad');
+
+            specsHtml = `
+                ${tipo ? `<div class="producto-spec"><i class="fas fa-print"></i> ${tipo}</div>` : ''}
+                ${tec ? `<div class="producto-spec"><i class="fas fa-cogs"></i> ${tec}</div>` : ''}
+                ${col ? `<div class="producto-spec"><i class="fas fa-palette"></i> ${col}</div>` : ''}
+                ${conec ? `<div class="producto-spec"><i class="fas fa-wifi"></i> ${conec}</div>` : ''}
             `;
         } else {
             const proc = getSpec(item, 'Procesador') || getSpec(item, 'procesador');
@@ -834,7 +902,7 @@ function abrirModal(itemId) {
     };
 
     const isLaptop = categoriaActual === 'portatiles';
-    const groups = isLaptop ? SPECS_GROUPS.portatiles : SPECS_GROUPS.mobile;
+    const groups = isLaptop ? SPECS_GROUPS.portatiles : (categoriaActual === 'impresoras' ? SPECS_GROUPS.impresoras : SPECS_GROUPS.mobile);
 
     groups.forEach(group => {
         // Filtrar campos del grupo que tengan valor
@@ -954,6 +1022,13 @@ function calcularPuntajeSimilitud(itemA, itemB) {
         if (getSpec(itemA, 'ram') === getSpec(itemB, 'ram')) score += 15;
         // Comparar Procesador/Gama (30 pts)
         if (itemA.aiInsight?.gama === itemB.aiInsight?.gama) score += 30;
+    } else if (categoriaActual === 'impresoras') {
+        // Comparar Tipo (20 pts)
+        if (getSpec(itemA, 'tipo') === getSpec(itemB, 'tipo')) score += 20;
+        // Comparar Tecnología (15 pts)
+        if (getSpec(itemA, 'tecnologia') === getSpec(itemB, 'tecnologia')) score += 15;
+        // Comparar Color (10 pts)
+        if (getSpec(itemA, 'color') === getSpec(itemB, 'color')) score += 10;
     } else {
         // Móviles/Tablets
         // Comparar Antutu/Potencia (20 pts)
@@ -987,7 +1062,7 @@ function copiarEstilo(estilo, itemId) {
     if (!item) return;
 
     const isLaptop = categoriaActual === 'portatiles';
-    const icon = isLaptop ? '💻 Portátil' : (categoriaActual === 'celulares' ? '📱 Celular' : '📱 Tablet');
+    const icon = isLaptop ? '💻 Portátil' : (categoriaActual === 'celulares' ? '📱 Celular' : (categoriaActual === 'impresoras' ? '🖨️ Impresora' : '📱 Tablet'));
 
     let specsTxt = '';
     if (isLaptop) {
@@ -997,6 +1072,13 @@ function copiarEstilo(estilo, itemId) {
         const estado = getSpec(item, 'estado') || 'Reacondicionado Grado A';
 
         specsTxt = `▫️ Procesador: ${proc}\n▫️ RAM: ${ram}\n▫️ Almacenamiento: ${ssd}\n▫️ Estado: ${estado}`;
+    } else if (categoriaActual === 'impresoras') {
+        const tipo = getSpec(item, 'tipo') || '-';
+        const tec = getSpec(item, 'tecnologia') || '-';
+        const col = getSpec(item, 'color') || '-';
+        const conec = getSpec(item, 'conectividad') || '-';
+
+        specsTxt = `▫️ Tipo: ${tipo}\n▫️ Tecnología: ${tec}\n▫️ Color: ${col}\n▫️ Conectividad: ${conec}`;
     } else {
         const proc = getSpec(item, 'procesador') || '-';
         const ram = getSpec(item, 'ram', 'GB') || '-';
@@ -1538,7 +1620,7 @@ function obtenerDatosCompra(item, categoria) {
 let wizardPasoActual = 0;
 let wizardRespuestas = {};
 
-const WIZARD_STEPS = [
+const WIZARD_STEPS_DEFAULT = [
     {
         pregunta: "¿Qué uso principal le va a dar al equipo?",
         opciones: [
@@ -1566,9 +1648,49 @@ const WIZARD_STEPS = [
     }
 ];
 
+const WIZARD_STEPS_IMPRESORAS = [
+    {
+        pregunta: "🖨️ ¿Para qué necesita la impresora?",
+        opciones: [
+            { texto: "🏠 Uso en casa (tareas, fotos, documentos)", val: "hogar", specMatch: { key: 'tipo', match: 'Multifuncional' } },
+            { texto: "🏢 Oficina o negocio (facturas, informes)", val: "oficina", specMatch: { key: 'tecnologia', match: 'Láser' } },
+            { texto: "🎓 Estudiante (trabajos, apuntes)", val: "estudiante", specMatch: { key: 'tipo', match: 'Multifuncional' } },
+            { texto: "📸 Impresión de fotos a color", val: "fotos", specMatch: { key: 'color', match: 'A Color' } }
+        ]
+    },
+    {
+        pregunta: "📄 ¿Cuánto imprime aproximadamente al mes?",
+        opciones: [
+            { texto: "📋 Poco (menos de 100 páginas)", val: "bajo", specMatch: { key: 'tecnologia', match: 'Tinta' } },
+            { texto: "📑 Moderado (100 a 500 páginas)", val: "medio" },
+            { texto: "📚 Alto volumen (más de 500 páginas)", val: "alto", specMatch: { key: 'tecnologia', match: 'Láser' } }
+        ]
+    },
+    {
+        pregunta: "🎨 ¿Necesita imprimir a color?",
+        opciones: [
+            { texto: "🌈 Sí, necesito color", val: "color", specMatch: { key: 'color', match: 'A Color' } },
+            { texto: "⬛ Solo blanco y negro", val: "mono", specMatch: { key: 'color', match: 'Monocromática' } },
+            { texto: "🤷 Me da igual", val: "ambos" }
+        ]
+    },
+    {
+        pregunta: "💰 ¿Cuál es su presupuesto?",
+        opciones: [
+            { texto: "💎 No importa, quiero la mejor", val: 'high' },
+            { texto: "⚖️ Algo equilibrado (Calidad/Precio)", val: 'mid' },
+            { texto: "💰 La más económica posible", val: 'low' }
+        ]
+    }
+];
+
+let WIZARD_STEPS = WIZARD_STEPS_DEFAULT;
+
 function abrirWizard() {
     wizardPasoActual = 0;
     wizardRespuestas = {};
+    // Seleccionar los pasos adecuados según la categoría
+    WIZARD_STEPS = (categoriaActual === 'impresoras') ? WIZARD_STEPS_IMPRESORAS : WIZARD_STEPS_DEFAULT;
     renderPasoWizard();
     document.getElementById('wizard-modal').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -1654,7 +1776,16 @@ function mostrarResultadoWizard() {
                     </div>
                 </div>
                 <div style="background: var(--bg-accent); padding: 15px; border-radius: 15px; margin-bottom: 25px; font-style: italic; color: var(--text-dim); font-size: 0.9rem;">
-                    "${recomendacion.aiInsight?.resumen || 'Un equipo excelente para lo que busca.'}"
+                    "${categoriaActual === 'impresoras'
+                        ? (() => {
+                            const t = getSpec(recomendacion, 'tipo') || '';
+                            const tec = getSpec(recomendacion, 'tecnologia') || '';
+                            const col = getSpec(recomendacion, 'color') || '';
+                            const con = getSpec(recomendacion, 'conectividad') || '';
+                            return `Impresora ${t} ${tec} ${col}${con ? ', con ' + con : ''}. Ideal para lo que necesitas.`;
+                        })()
+                        : (recomendacion.aiInsight?.resumen || 'Un equipo excelente para lo que busca.')
+                    }"
                 </div>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn-secundario" style="margin:0; flex:1" onclick="cerrarWizard(true); abrirModal('${recomendacion.id}')">Ver ficha técnica</button>
@@ -1666,6 +1797,7 @@ function mostrarResultadoWizard() {
 }
 
 function calcularRecomendacion() {
+    const esImpresora = categoriaActual === 'impresoras';
     let puntuados = catalogoActual.map(it => {
         let score = 0;
         const priceField = getPriceField(categoriaActual);
@@ -1673,15 +1805,28 @@ function calcularRecomendacion() {
 
         // Analizar cada respuesta dada
         Object.values(wizardRespuestas).forEach(resp => {
-            if (resp.score) {
+            // Score por AI insight (celulares, portátiles, tablets)
+            if (resp.score && !esImpresora) {
                 const itemData = (it.aiInsight?.[resp.score.key] || "").toLowerCase() + " " + (it.aiInsight?.resumen || "").toLowerCase();
                 if (itemData.includes(resp.score.match.toLowerCase())) score += 10;
             }
 
-            // Filtro de Presupuesto
-            if (resp.val === 'low' && precio < 2000000) score += 5;
-            if (resp.val === 'mid' && precio >= 2000000 && precio < 3500000) score += 5;
-            if (resp.val === 'high' && precio >= 3500000) score += 5;
+            // Score por specs directas (impresoras)
+            if (resp.specMatch && esImpresora) {
+                const specVal = (getSpec(it, resp.specMatch.key) || '').toLowerCase();
+                if (specVal.includes(resp.specMatch.match.toLowerCase())) score += 10;
+            }
+
+            // Filtro de Presupuesto (umbrales distintos para impresoras)
+            if (esImpresora) {
+                if (resp.val === 'low' && precio < 700000) score += 5;
+                if (resp.val === 'mid' && precio >= 700000 && precio < 1500000) score += 5;
+                if (resp.val === 'high' && precio >= 1500000) score += 5;
+            } else {
+                if (resp.val === 'low' && precio < 2000000) score += 5;
+                if (resp.val === 'mid' && precio >= 2000000 && precio < 3500000) score += 5;
+                if (resp.val === 'high' && precio >= 3500000) score += 5;
+            }
         });
 
         return { item: it, score };

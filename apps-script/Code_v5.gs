@@ -97,6 +97,7 @@ function doGet(e) {
   if (api === 'celulares')  return jsonResponse(getCelularesData());
   if (api === 'portatiles') return jsonResponse(getCatalogData());
   if (api === 'tablets')    return jsonResponse(getTabletsData());
+  if (api === 'impresoras') return jsonResponse(getImpresorasData());
 
   // Portal cliente
   if (api === 'verificar_cliente') return jsonResponse(verificarCliente(p.email || ''));
@@ -445,12 +446,31 @@ function notificarCliente(sheetCV, rowNum, estado, guiaNumero) {
 // ══════════════════════════════════════════════
 
 function registrarPedido(pedido) {
+  const c      = pedido.cliente;
+  const cedula = c.cedula || c.id || c.telefono;
+  
+  // --- PROTECCIÓN ANTI-SPAM (Rate Limiting) ---
+  if (!cedula) return { success: false, error: "Faltan datos de identificación del cliente." };
+  
+  const cache = CacheService.getScriptCache();
+  const cacheKey = 'PEDIDOS_' + String(cedula).trim();
+  let attempts = cache.get(cacheKey);
+  
+  if (attempts) {
+    attempts = parseInt(attempts);
+    if (attempts >= 5) {
+      return { success: false, error: "Has alcanzado el límite máximo de pedidos por hoy. Por favor, contacta a soporte o intenta mañana." };
+    }
+    cache.put(cacheKey, (attempts + 1).toString(), 21600); // 21600 segundos = 6 horas de bloqueo
+  } else {
+    cache.put(cacheKey, "1", 21600); // Iniciar contador
+  }
+  // ---------------------------------------------
+
   const ssCV    = SpreadsheetApp.openById(SPREADSHEET_ID_CV);
   const sheetCl = ssCV.getSheetByName('Cl');
   const sheetCV = ssCV.getSheetByName('Compra-venta');
 
-  const c      = pedido.cliente;
-  const cedula = c.cedula || c.id || c.telefono;
   const fechaHoy = new Date();
 
   // 1. REGISTRO EN "Cl"
@@ -567,6 +587,69 @@ function getTabletsData() {
   } catch(e) { return { error: e.toString() }; }
 }
 
+function getImpresorasData() {
+  try {
+    const ss      = SpreadsheetApp.openById(SPREADSHEET_ID_COMPILADOS);
+    const sheet   = ss.getSheetByName('IMPRESORAS');
+    if (!sheet) return { error: "La hoja 'IMPRESORAS' no existe." };
+
+    const data    = sheet.getDataRange().getValues();
+    const headers = data[0].map(h => String(h).trim().toLowerCase());
+    
+    const items = data.slice(1).map((row, i) => {
+      const item = { id: 'IMP' + i, specs: {} };
+      
+      headers.forEach((h, c) => {
+        const val = String(row[c] || '').trim();
+        // Mapeo exacto basado en las imágenes proporcionadas (¡Con espacios!)
+        if      (h === 'enlace foto') item.foto   = val;
+        else if (h === 'precio')      item.precio = parseFloat(val.replace(/[^0-9.]/g, '')) || 0;
+        else if (h === 'marca')       item.marca  = val;
+        else if (h === 'modelo')      item.modelo = val;
+        else if (h === 'enlace logo') item.specs.enlace_logo = val;
+        else if (h === 'especificaciones') {
+            item.especificaciones_texto = val;
+            const text = val.toUpperCase();
+            
+            // 1. Tipo
+            if (text.includes('MULTIFUNCIONAL')) item.specs.tipo = 'Multifuncional';
+            else item.specs.tipo = 'Solo Impresión';
+            
+            // 2. Tecnología
+            if (text.includes('TINTA CONTINUA') || text.includes('RECARGA CONTINUA')) item.specs.tecnologia = 'Tinta Continua';
+            else if (text.includes('LASER') || text.includes('LASERJET')) item.specs.tecnologia = 'Láser';
+            else if (text.includes('MATRIZ DE PUNTO')) item.specs.tecnologia = 'Matriz de Punto';
+            else item.specs.tecnologia = 'Otro';
+            
+            // 3. Color
+            if (text.includes('MONOCROMATICA')) item.specs.color = 'Monocromática';
+            else item.specs.color = 'A Color'; 
+            
+            // 4. Dúplex
+            if (text.includes('DUPLEX')) item.specs.duplex = 'Sí';
+            else item.specs.duplex = 'No';
+            
+            // 5. Conectividad
+            let conectividad = [];
+            if (text.includes('WIFI') || text.includes('WI-FI')) conectividad.push('Wi-Fi');
+            if (text.includes('ETHERNET') || text.includes('LAN') || text.includes('PUERTO RED')) conectividad.push('Ethernet (Red)');
+            if (text.includes('USB')) conectividad.push('USB');
+            item.specs.conectividad = conectividad.length > 0 ? conectividad.join(' + ') : 'No especificada';
+        }
+      });
+      
+      if (!item.marca || item.marca === 'N/A' || item.marca === '') return null;
+      return item;
+    }).filter(Boolean);
+
+    const f = ['marca', 'tipo', 'tecnologia', 'color', 'duplex', 'conectividad'];
+    const minPrecio = items.length > 0 ? Math.min(...items.map(i=>i.precio)) : 0;
+    const maxPrecio = items.length > 0 ? Math.max(...items.map(i=>i.precio)) : 0;
+
+    return { items, filters: extractFilters(items, f), rangos: { Precio: { min: minPrecio, max: maxPrecio } } };
+  } catch(e) { return { error: e.toString() }; }
+}
+
 function extractFilters(items, keys) {
   const filters = {};
   keys.forEach(k => {
@@ -611,6 +694,6 @@ function onOpen() {
 
 function invalidarCache() {
   const cache = CacheService.getScriptCache();
-  ['catalog_portatiles','catalog_celulares','catalog_tablets'].forEach(k => cache.remove(k));
+  ['catalog_portatiles','catalog_celulares','catalog_tablets','catalog_impresoras'].forEach(k => cache.remove(k));
   SpreadsheetApp.getUi().alert('Caché limpiado.');
 }

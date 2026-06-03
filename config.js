@@ -5,7 +5,7 @@
 
 const CONFIG = {
     // URL del API de Google Apps Script
-    API_URL: 'https://script.google.com/macros/s/AKfycbyTbg7fBCemYfVnE9LvP3mt9sRamICbOajFtAryvSr3UA5jSW39Hw920DMl5CwAM8md/exec',
+    API_URL: 'https://script.google.com/macros/s/AKfycbxwr0nxugmVeIM3y9BOnUh-uonbx9OIsWdnZ2IBswCG8FnX56lTa0X3XCnnM8QAC504kQ/exec',
 
     // Teléfono de contacto (WhatsApp) - Formato internacional sin símbolos
     TEL_WHATSAPP: '573128590469',
