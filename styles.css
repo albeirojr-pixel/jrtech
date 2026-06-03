@@ -1270,34 +1270,55 @@ footer p {
    MOBILE RESPONSIVE OVERRIDES
    ============================================ */
 @media (max-width: 900px) {
-    nav { margin: 0 10px; top: 10px; }
+    nav { margin: 0 5px; top: 5px; width: calc(100% - 10px); }
     
     .nav-container {
-        border-radius: 25px;
-        padding: 10px;
+        border-radius: 20px;
+        padding: 10px 5px;
         gap: 5px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .menu {
         width: 100%;
-        justify-content: center;
-        gap: 5px;
+        justify-content: flex-start;
+        gap: 8px;
         flex-wrap: nowrap;
         overflow-x: auto;
         padding-bottom: 5px;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .menu::-webkit-scrollbar {
+        display: none;
     }
 
     .menu button {
         padding: 8px 12px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         white-space: nowrap;
         flex-shrink: 0;
     }
 
+    .menu-catalog {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        box-sizing: border-box;
+    }
+    .menu-catalog::-webkit-scrollbar {
+        display: none;
+    }
+
     .menu-catalog.visible {
         border-top: 1px solid var(--glass-border);
-        padding: 10px 0 5px 0;
+        padding: 10px 5px 5px 5px;
         border-radius: 0;
         box-shadow: none;
         background: transparent;
@@ -1306,8 +1327,10 @@ footer p {
     }
     
     .menu-catalog .hub-btn {
-        padding: 5px 12px;
-        font-size: 0.8rem;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .barato-content, .perfil-content {
