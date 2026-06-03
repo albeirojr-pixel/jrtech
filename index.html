@@ -208,6 +208,14 @@
 
         <section id="catalogo" style="display:none">
             <h2 id="catalogo-title">EL CATÁLOGO</h2>
+
+            <!-- ── BOTÓN ASISTENTE DESTACADO ────────────────────────── -->
+            <div style="text-align: center; margin: 0 0 28px 0;">
+                <button class="wizard-hero-btn" onclick="abrirWizard()">
+                    <i class="fas fa-magic"></i> ¿TE AYUDO A ELEGIR?
+                </button>
+            </div>
+
             
             <div id="catalogo-loader" style="display:none; text-align:center; padding: 40px;">
                 <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
@@ -218,73 +226,88 @@
             <!-- PANEL DE CONTROL UNIFICADO                                 -->
             <!-- ══════════════════════════════════════════════════════════ -->
             <div id="catalogo-controls" class="filtro-panel-unificado">
-                
-                <!-- ── SECCIÓN 1: BUSCAR ────────────────────────────────── -->
-                <div class="filtro-seccion">
-                    <div class="filtro-seccion-header">
-                        <span class="filtro-seccion-label"><i class="fas fa-search"></i> Buscar</span>
-                        <div class="filtro-header-actions">
-                            <select id="catalogo-sort" class="filtro-select-order" onchange="aplicarFiltros()">
-                                <option value="precio-asc">Precio: Menor a Mayor</option>
-                                <option value="precio-desc">Precio: Mayor a Menor</option>
-                                <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
-                                <option value="marca-asc">Marca (A-Z)</option>
-                            </select>
-                            <button id="limpiar-filtros-btn" onclick="limpiarFiltros()" class="filtro-btn-limpiar" title="Limpiar todos los filtros">
-                                <i class="fas fa-sync-alt"></i> Limpiar
-                            </button>
-                        </div>
-                    </div>
-                    <div class="filtro-search-wrap">
-                        <i class="fas fa-search filtro-search-icon"></i>
-                        <input type="text" id="catalogo-search" class="filtro-search-input" placeholder="Buscar por marca, modelo o especificación..." oninput="aplicarFiltros()">
-                    </div>
-                </div>
 
-                <!-- ── SECCIÓN 2: ¿PARA QUIÉN ES? (Perfil IA) ───────────── -->
-                <div class="filtro-seccion">
-                    <span class="filtro-seccion-label"><i class="fas fa-user-tag"></i> ¿Para quién es?</span>
-                    <div id="search-suggestions" class="filtro-chips-row"></div>
-                </div>
-
-                <!-- ── SECCIÓN 3: PRESUPUESTO ──────────────────────────── -->
-                <div class="filtro-seccion">
-                    <label class="filtro-seccion-header" style="cursor:default;">
-                        <span class="filtro-seccion-label"><i class="fas fa-wallet"></i> Presupuesto</span>
-                        <span id="precio-valor-label" class="filtro-price-value">Cualquiera</span>
-                    </label>
-                    <input type="range" id="catalogo-price" min="0" max="10000000" step="50000" value="10000000" class="filtro-price-slider" oninput="actualizarLabelPrecio(); aplicarFiltros()">
-                </div>
-
-                <!-- ── SECCIÓN 4: MARCA ────────────────────────────────── -->
-                <div class="filtro-seccion">
-                    <span class="filtro-seccion-label"><i class="fas fa-tags"></i> Marca</span>
+                <!-- ── MARCAS (logos) ──────────────────────────────────── -->
+                <div class="filtro-seccion filtro-seccion-marcas">
                     <div id="catalogo-filtros-marcas" class="filtro-chips-row"></div>
                 </div>
 
-                <!-- ── SECCIÓN 5: HERRAMIENTAS ─────────────────────────── -->
-                <div class="filtro-seccion filtro-seccion-tools">
-                    <div class="filtro-tools-row">
-                        <button class="wizard-trigger-btn filtro-tool-btn-wizard" onclick="abrirWizard()">
-                            <i class="fas fa-magic"></i> ¿Andas perdido? Ayúdame a elegir
+                <!-- ── BARRA "FILTRAR POR" ────────────────────────────── -->
+                <div class="filtro-por-bar">
+                    <span class="filtrar-por-label"><i class="fas fa-filter"></i> Filtrar por</span>
+                    <div class="filtrar-por-btns">
+                        <button class="filtrar-por-btn" id="fpb-presupuesto" onclick="toggleFiltrarPor('presupuesto')">
+                            <i class="fas fa-wallet"></i> Presupuesto <i class="fas fa-chevron-down fp-chevron"></i>
                         </button>
-                        <!-- Software (solo portátiles) -->
-                        <div id="software-filter-btn-container" style="display:none;" class="filtro-tool-sw-wrap">
-                            <button class="filtro-tool-btn-sw" onclick="toggleSoftwarePanel()">
-                                <i class="fas fa-laptop-code"></i> Buscar por Software
+                        <button class="filtrar-por-btn" id="fpb-especificaciones" onclick="toggleFiltrarPor('especificaciones')">
+                            <i class="fas fa-sliders-h"></i> Especificaciones <i class="fas fa-chevron-down fp-chevron"></i>
+                        </button>
+                        <button class="filtrar-por-btn" id="fpb-referencia" onclick="toggleFiltrarPor('referencia')">
+                            <i class="fas fa-search"></i> Referencia <i class="fas fa-chevron-down fp-chevron"></i>
+                        </button>
+                        <button class="filtrar-por-btn" id="fpb-tipo-usuario" onclick="toggleFiltrarPor('tipo-usuario')">
+                            <i class="fas fa-user-tag"></i> Tipo de Usuario <i class="fas fa-chevron-down fp-chevron"></i>
+                        </button>
+                        <div id="software-filter-btn-container" style="display:none;">
+                            <button class="filtrar-por-btn" id="fpb-uso-recomendado" onclick="toggleFiltrarPor('uso-recomendado')">
+                                <i class="fas fa-laptop-code"></i> Uso Recomendado <i class="fas fa-chevron-down fp-chevron"></i>
                             </button>
-                            <span id="sw-filter-label" class="filtro-sw-active-label"></span>
                         </div>
-                        <button class="filtro-tool-btn" onclick="toggleFiltrosAvanzados()"><i class="fas fa-sliders-h"></i> Filtros Técnicos</button>
+                    </div>
+                    <div class="filtrar-por-actions">
+                        <span style="font-size:0.7rem; font-weight:800; color:var(--text-dim); text-transform:uppercase;">Ordenar por:</span>
+                        <select id="catalogo-sort" class="filtro-select-order" onchange="aplicarFiltros()">
+                            <option value="precio-asc">Precio: Menor a Mayor</option>
+                            <option value="precio-desc">Precio: Mayor a Menor</option>
+                            <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
+                            <option value="marca-asc">Marca (A-Z)</option>
+                        </select>
+                        <button id="limpiar-filtros-btn" onclick="limpiarFiltros()" class="filtro-btn-limpiar" title="Limpiar todos los filtros">
+                            <i class="fas fa-sync-alt"></i> Limpiar
+                        </button>
                     </div>
                 </div>
 
-                <!-- ── EXPANDIBLES ─────────────────────────────────────── -->
-                <!-- Filtros Avanzados Dropdowns -->
-                <div id="filtros-avanzados" class="filtro-expandible"></div>
+                <!-- ── PANEL: PRESUPUESTO ─────────────────────────────── -->
+                <div id="panel-presupuesto" class="filtrar-por-panel">
+                    <div class="filtro-seccion">
+                        <label class="filtro-seccion-header" style="cursor:default;">
+                            <span class="filtro-seccion-label"><i class="fas fa-wallet"></i> Rango de Precio</span>
+                            <span id="precio-valor-label" class="filtro-price-value">Cualquiera</span>
+                        </label>
+                        <input type="range" id="catalogo-price" min="0" max="10000000" step="50000" value="10000000" class="filtro-price-slider" oninput="actualizarLabelPrecio(); aplicarFiltros()">
+                    </div>
+                </div>
 
-                <!-- Panel Filtro por Software (solo portatiles) -->
-                <div id="filtro-software-panel" class="filtro-expandible"></div>
+                <!-- ── PANEL: ESPECIFICACIONES ─────────────────────────── -->
+                <div id="panel-especificaciones" class="filtrar-por-panel">
+                    <div id="filtros-avanzados" class="filtro-expandible" style="display:flex;"></div>
+                </div>
+
+                <!-- ── PANEL: REFERENCIA ───────────────────────────────── -->
+                <div id="panel-referencia" class="filtrar-por-panel">
+                    <div class="filtro-seccion">
+                        <div class="filtro-search-wrap">
+                            <i class="fas fa-search filtro-search-icon"></i>
+                            <input type="text" id="catalogo-search" class="filtro-search-input" placeholder="Buscar por marca, modelo o referencia..." oninput="aplicarFiltros()" autofocus>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── PANEL: TIPO DE USUARIO ─────────────────────────── -->
+                <div id="panel-tipo-usuario" class="filtrar-por-panel">
+                    <div class="filtro-seccion">
+                        <div id="search-suggestions" class="filtro-chips-row"></div>
+                    </div>
+                </div>
+
+                <!-- ── PANEL: USO RECOMENDADO ─────────────────────────── -->
+                <div id="panel-uso-recomendado" class="filtrar-por-panel">
+                    <div class="filtro-seccion">
+                        <span id="sw-filter-label" class="filtro-sw-active-label"></span>
+                        <div id="filtro-software-panel" style="display:flex; flex-wrap:wrap; gap:12px; padding-top:8px;"></div>
+                    </div>
+                </div>
 
             </div>
 

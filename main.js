@@ -174,7 +174,7 @@ async function cargarCatalogo(categoria) {
     // Resetear UI
     document.getElementById('catalogo-search').value = '';
     document.getElementById('catalogo-sort').value = 'precio-asc';
-    document.getElementById('filtros-avanzados').style.display = 'none';
+    document.getElementById('filtros-avanzados').style.display = 'flex';
     const optAntutu = document.getElementById('opt-antutu');
     // Mostrar AnTuTu solo si es categoría con potencia (ahora lo habilitamos siempre por petición del usuario si hay dato, pero por defecto lo mostramos en celulares/tablets)
     optAntutu.style.display = 'block';
@@ -224,7 +224,12 @@ async function cargarCatalogo(categoria) {
 function configurarControles(filters, rangos) {
     const sliderPrecio = document.getElementById('catalogo-price');
     const priceField = getPriceField(categoriaActual);
-    const maxPrecio = (rangos[priceField] || rangos['Precio']) ? (rangos[priceField]?.max || rangos['Precio'].max) : 10000000;
+    let maxPrecio = 10000000;
+    if (rangos[priceField] && !isNaN(rangos[priceField].max) && rangos[priceField].max > 0) {
+        maxPrecio = rangos[priceField].max;
+    } else if (rangos['Precio'] && !isNaN(rangos['Precio'].max) && rangos['Precio'].max > 0) {
+        maxPrecio = rangos['Precio'].max;
+    }
     sliderPrecio.max = maxPrecio;
     sliderPrecio.value = maxPrecio;
     actualizarLabelPrecio();
@@ -371,10 +376,24 @@ function seleccionarMarca(btnEl, marca) {
     aplicarFiltros();
 }
 
-function toggleFiltrosAvanzados() {
-    const div = document.getElementById('filtros-avanzados');
-    const visible = getComputedStyle(div).display !== 'none';
-    div.style.display = visible ? 'none' : 'flex';
+function toggleFiltrarPor(panelId) {
+    const panels = ['presupuesto', 'especificaciones', 'referencia', 'tipo-usuario', 'uso-recomendado'];
+    panels.forEach(p => {
+        const btn = document.getElementById('fpb-' + p);
+        const panel = document.getElementById('panel-' + p);
+        if (!btn || !panel) return;
+
+        if (p === panelId) {
+            btn.classList.toggle('active');
+            panel.classList.toggle('active');
+            if (p === 'referencia' && panel.classList.contains('active')) {
+                setTimeout(() => document.getElementById('catalogo-search').focus(), 100);
+            }
+        } else {
+            btn.classList.remove('active');
+            panel.classList.remove('active');
+        }
+    });
 }
 
 function actualizarLabelPrecio() {
@@ -394,14 +413,15 @@ function aplicarFiltros() {
 
     const searchQuery = document.getElementById('catalogo-search').value.toLowerCase();
     const sortVal = document.getElementById('catalogo-sort').value;
-    const maxPrecio = parseInt(document.getElementById('catalogo-price').value);
+    let maxPrecio = parseInt(document.getElementById('catalogo-price').value);
+    if (isNaN(maxPrecio)) maxPrecio = Infinity;
     const priceField = getPriceField(categoriaActual);
 
     // Obtener filtros avanzados activos
     const selectsAv = document.querySelectorAll('.filtro-avanzado-select');
     const filtrosElegidos = {};
     selectsAv.forEach(s => {
-        if (s.value !== "Todos") filtrosElegidos[s.dataset.filtro] = s.value;
+        if (s.value && s.value !== "Todos") filtrosElegidos[s.dataset.filtro] = s.value;
     });
 
     let filtrados = catalogoActual.filter(item => {
@@ -564,6 +584,7 @@ function renderFiltroSoftware() {
         if (btnWrap) btnWrap.style.display = 'none';
         return;
     }
+    panel.style.display = 'flex';
     if (btnWrap) btnWrap.style.display = 'inline-flex';
 
     const cats = {};
@@ -585,14 +606,7 @@ function renderFiltroSoftware() {
             </div>
         </div>`).join('');
 }
-
-function toggleSoftwarePanel() {
-    const panel = document.getElementById('filtro-software-panel');
-    if (!panel) return;
-    const visible = getComputedStyle(panel).display !== 'none';
-    panel.style.display = visible ? 'none' : 'block';
-}
-
+// Removed toggleSoftwarePanel
 function toggleFiltroSoftware(swId) {
     filtroSoftwareActivo = (filtroSoftwareActivo === swId) ? null : swId;
     document.querySelectorAll('.sw-btn').forEach(btn => {
