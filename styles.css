@@ -2399,6 +2399,7 @@ button, .btn-wa, .btn-secundario, .producto-btn, .filtro-btn {
     border-radius: 15px;
     transition: var(--transition);
     position: relative;
+    text-decoration: none;
 }
 
 .hub-btn i {

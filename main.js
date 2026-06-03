@@ -131,14 +131,16 @@ function getSpec(item, key, unit = '') {
 }
 
 function mostrar(id) {
+    const section = document.getElementById(id);
+    if (!section) {
+        window.location.href = 'index.html#' + id;
+        return;
+    }
     document.querySelectorAll("main section").forEach(sec => {
         sec.style.display = "none";
     });
-    const section = document.getElementById(id);
-    if (section) {
-        section.style.display = "block";
-        section.scrollIntoView({ behavior: 'smooth' });
-    }
+    section.style.display = "block";
+    section.scrollIntoView({ behavior: 'smooth' });
 }
 
 async function cargarCatalogo(categoria) {
@@ -1695,7 +1697,9 @@ document.addEventListener("DOMContentLoaded", () => {
         cargarTextos();
     }
 
-    cargarProductoAleatorio();
+    if (!window.PAGE_CATEGORY) {
+        cargarProductoAleatorio();
+    }
 
     const drop = document.querySelector(".dropbtn");
     const menu = document.querySelector(".dropdown-content");
@@ -2114,6 +2118,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar textos iniciales
     if (typeof cargarTextos === 'function') {
         cargarTextos();
+    }
+
+    // Si es una página de categoría, cargar catálogo correspondiente
+    if (typeof window.PAGE_CATEGORY !== 'undefined' && window.PAGE_CATEGORY) {
+        cargarCatalogo(window.PAGE_CATEGORY);
     }
 });
 
