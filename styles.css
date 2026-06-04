@@ -1284,7 +1284,7 @@ footer p {
     .menu {
         width: 100%;
         justify-content: center;
-        gap: 4px;
+        gap: 2px;
         flex-wrap: nowrap;
         overflow-x: auto;
         padding-bottom: 5px;
@@ -1296,10 +1296,15 @@ footer p {
     }
 
     .menu button {
-        padding: 8px 6px;
-        font-size: 0.75rem;
+        padding: 8px 4px;
+        font-size: 0.8rem;
         white-space: nowrap;
         flex-shrink: 0;
+        text-transform: capitalize;
+    }
+    
+    .menu button i {
+        display: none;
     }
 
     .menu-catalog {
@@ -1339,7 +1344,7 @@ footer p {
     }
     
     .menu-catalog .hub-btn i {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
 
     .barato-content, .perfil-content {
