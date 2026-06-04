@@ -1283,8 +1283,8 @@ footer p {
 
     .menu {
         width: 100%;
-        justify-content: flex-start;
-        gap: 8px;
+        justify-content: center;
+        gap: 4px;
         flex-wrap: nowrap;
         overflow-x: auto;
         padding-bottom: 5px;
@@ -1296,16 +1296,16 @@ footer p {
     }
 
     .menu button {
-        padding: 8px 12px;
-        font-size: 0.85rem;
+        padding: 8px 6px;
+        font-size: 0.75rem;
         white-space: nowrap;
         flex-shrink: 0;
     }
 
     .menu-catalog {
         width: 100%;
-        justify-content: flex-start;
-        gap: 8px;
+        justify-content: center;
+        gap: 4px;
         flex-wrap: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -1318,7 +1318,7 @@ footer p {
 
     .menu-catalog.visible {
         border-top: 1px solid var(--glass-border);
-        padding: 10px 5px 5px 5px;
+        padding: 10px 2px 5px 2px;
         border-radius: 0;
         box-shadow: none;
         background: transparent;
@@ -1327,10 +1327,19 @@ footer p {
     }
     
     .menu-catalog .hub-btn {
-        padding: 8px 12px;
-        font-size: 0.85rem;
+        padding: 8px 6px;
+        font-size: 0.75rem;
         white-space: nowrap;
         flex-shrink: 0;
+    }
+    
+    .menu-catalog .hub-btn span {
+        font-size: 0.65rem;
+        letter-spacing: 0;
+    }
+    
+    .menu-catalog .hub-btn i {
+        font-size: 1.2rem;
     }
 
     .barato-content, .perfil-content {
