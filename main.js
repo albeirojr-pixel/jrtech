@@ -150,7 +150,7 @@ function mostrar(id) {
     section.scrollIntoView({ behavior: 'smooth' });
 }
 
-async function cargarCatalogo(categoria) {
+async function cargarCatalogo(categoria, forceRefresh = false) {
     mostrar('catalogo');
     categoriaActual = categoria;
     marcaSeleccionada = 'Todos';
@@ -188,13 +188,61 @@ async function cargarCatalogo(categoria) {
     // Mostrar AnTuTu solo si es categoría con potencia (ahora lo habilitamos siempre por petición del usuario si hay dato, pero por defecto lo mostramos en celulares/tablets)
     optAntutu.style.display = (categoria === 'impresoras') ? 'none' : 'block';
 
+    const cacheKey = `jrtech_catalog_${categoria}`;
+    const cacheTimeKey = `jrtech_catalog_${categoria}_time`;
+    const cacheDuration = 10 * 60 * 1000; // 10 minutos
+
+    if (forceRefresh) {
+        localStorage.removeItem(cacheKey);
+        localStorage.removeItem(cacheTimeKey);
+    }
+
+    let data = null;
+    const cachedData = localStorage.getItem(cacheKey);
+    const cachedTime = localStorage.getItem(cacheTimeKey);
+
+    if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < cacheDuration)) {
+        try {
+            data = JSON.parse(cachedData);
+            console.log(`Cargando ${categoria} desde caché local (Instantáneo)`);
+        } catch (e) {
+            console.error("Error al parsear cache local", e);
+        }
+    }
+
     try {
-        const response = await fetch(`${API_URL}?api=${categoria}`);
-        if (!response.ok) throw new Error('Error en la red');
+        if (!data) {
+            let response;
+            if (forceRefresh) {
+                console.log(`Forzando recarga desde API de Google Sheets para ${categoria}...`);
+                response = await fetch(`${API_URL}?api=${categoria}`);
+                if (!response.ok) throw new Error('Error en la red al conectar con Google Sheets API');
+                data = await response.json();
+            } else {
+                try {
+                    console.log(`Intentando cargar data/${categoria}.json...`);
+                    response = await fetch(`data/${categoria}.json`);
+                    if (!response.ok) throw new Error('No se encontró el archivo estático');
+                    data = await response.json();
+                    if (data && !data.error) {
+                        console.log(`Cargado ${categoria} desde JSON estático`);
+                    } else {
+                        throw new Error('Dato estático inválido');
+                    }
+                } catch (staticErr) {
+                    console.warn(`Fallback al API de Google Sheets para ${categoria}:`, staticErr);
+                    response = await fetch(`${API_URL}?api=${categoria}`);
+                    if (!response.ok) throw new Error('Error en la red al conectar con Google Sheets API');
+                    data = await response.json();
+                }
+            }
 
-        const data = await response.json();
+            if (data.error) throw new Error(data.error);
 
-        if (data.error) throw new Error(data.error);
+            // Guardar en caché local
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+            localStorage.setItem(cacheTimeKey, Date.now().toString());
+        }
 
         catalogoActual = data.items || [];
         filtrosDisponibles = data.filters || {};
@@ -216,18 +264,64 @@ async function cargarCatalogo(categoria) {
         actualizarEstadoHub();
         aplicarFiltros();
 
+        // Disparar pre-fetch en segundo plano de las demás categorías
+        prefetchOtrasCategorias();
+
     } catch (err) {
         console.error(err);
         loader.style.display = 'none';
         grid.innerHTML = '';
         errorDiv.innerHTML = `
             <p>Hubo un problema al cargar el catálogo. Por favor intenta de nuevo más tarde.</p>
-            <button class="btn-secundario" onclick="cargarCatalogo('${categoria}')" style="margin-top: 20px;">
+            <button class="btn-secundario" onclick="cargarCatalogo('${categoria}', true)" style="margin-top: 20px;">
                 <i class="fas fa-sync-alt"></i> Reintentar Carga
             </button>
         `;
         errorDiv.style.display = 'block';
     }
+}
+
+function forzarRefrescoCatalogo() {
+    cargarCatalogo(categoriaActual, true);
+}
+
+function prefetchOtrasCategorias() {
+    const categorias = ['celulares', 'tablets', 'portatiles', 'impresoras'];
+    const cacheDuration = 10 * 60 * 1000; // 10 minutos
+    
+    categorias.forEach(cat => {
+        if (cat === categoriaActual) return;
+        
+        const cacheKey = `jrtech_catalog_${cat}`;
+        const cacheTimeKey = `jrtech_catalog_${cat}_time`;
+        const cachedTime = localStorage.getItem(cacheTimeKey);
+        
+        if (!cachedTime || (Date.now() - parseInt(cachedTime) > cacheDuration)) {
+            // Cargar en background con delay sutil
+            setTimeout(async () => {
+                try {
+                    let res = await fetch(`data/${cat}.json`);
+                    let data = null;
+                    if (res.ok) {
+                        data = await res.json();
+                    }
+                    if (!data || data.error) {
+                        res = await fetch(`${API_URL}?api=${cat}`);
+                        if (res.ok) {
+                            data = await res.json();
+                        }
+                    }
+                    if (data && !data.error) {
+                        localStorage.setItem(cacheKey, JSON.stringify(data));
+                        localStorage.setItem(cacheTimeKey, Date.now().toString());
+                        console.log(`Pre-fetch completado para: ${cat}`);
+                    }
+                } catch (e) {
+                    console.warn(`Error en pre-fetch para ${cat}:`, e);
+                }
+            }, 3000);
+        }
+    });
 }
 
 function configurarControles(filters, rangos) {
@@ -578,10 +672,6 @@ function toggleFiltroPerfil(perfilId) {
 
 function matchesPerfil(item, perfilId) {
     if (!perfilId) return true;
-    const insight = item.aiInsight;
-    if (!insight) return true;
-    const ideal = (insight.idealPara || '').toLowerCase();
-    const gama  = (insight.gama || '').toLowerCase();
 
     // Para impresoras, filtrar por specs directamente (no tienen aiInsight)
     if (categoriaActual === 'impresoras') {
@@ -601,6 +691,11 @@ function matchesPerfil(item, perfilId) {
         };
         return mapasImp[perfilId] ? mapasImp[perfilId]() : true;
     }
+
+    const insight = item.aiInsight;
+    if (!insight) return true;
+    const ideal = (insight.idealPara || '').toLowerCase();
+    const gama  = (insight.gama || '').toLowerCase();
 
     const mapas = {
         // Portátiles
@@ -746,13 +841,21 @@ function renderGrid(items) {
             const ram = getSpec(item, 'RAM') || getSpec(item, 'ram');
             const ssd = getSpec(item, 'SSD') || getSpec(item, 'ssd') || getSpec(item, 'almacenamiento');
             const pan = getSpec(item, 'Pantalla') || getSpec(item, 'pantalla');
-            const graf = getSpec(item, 'grafica') || getSpec(item, 'Gráfica');
+            
+            const grafFlag = (getSpec(item, 'grafica') || getSpec(item, 'Gráfica') || '').toString().trim().toUpperCase();
+            const grafModelo = (getSpec(item, 'modelo_grafica') || getSpec(item, 'Modelo Gráfica') || '').toString().trim();
+            const grafVram = (getSpec(item, 'vram') || getSpec(item, 'Tamaño Gráfica') || '').toString().trim();
+
+            let grafText = 'INTEGRADA';
+            if (grafFlag === 'SI') {
+                grafText = (grafModelo + ' ' + grafVram).trim() || 'DEDICADA';
+            }
 
             specsHtml = `
                 ${proc ? `<div class="producto-spec"><i class="fas fa-microchip"></i> ${proc}</div>` : ''}
                 ${(ram || ssd) ? `<div class="producto-spec"><i class="fas fa-memory"></i> ${ram} RAM | ${ssd} Almacenamiento</div>` : ''}
                 ${pan ? `<div class="producto-spec"><i class="fas fa-laptop"></i> ${pan}</div>` : ''}
-                ${(graf && graf.toLowerCase() !== 'integrada' && graf.toLowerCase() !== 'no') ? `<div class="producto-spec"><i class="fas fa-gamepad"></i> ${graf}</div>` : ''}
+                <div class="producto-spec"><i class="fas fa-gamepad"></i> ${grafText}</div>
             `;
         }
 
@@ -781,7 +884,7 @@ function renderGrid(items) {
                 line-height: 1.3;
             ">
                 <span style="color:${badgeColor}; font-weight:800; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px;">
-                    🎯 Ideal para
+                    🎯 Uso recomendado
                 </span><br>
                 ${badgeIdeal}
             </div>` : '';
@@ -863,7 +966,7 @@ function abrirModal(itemId) {
                 <p style="font-size: 1.1rem; font-weight: 600; line-height: 1.4; color: var(--text-main); margin-bottom: 15px;">"${item.aiInsight.resumen}"</p>
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
                     <div style="flex: 1; min-width: 200px;">
-                        <p style="color: var(--secondary); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px;"><i class="fas fa-check-circle"></i> Ideal para:</p>
+                        <p style="color: var(--secondary); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px;"><i class="fas fa-check-circle"></i> Uso recomendado:</p>
                         <p style="font-size: 0.9rem; color: var(--text-dim);">${item.aiInsight.idealPara}</p>
                     </div>
                     ${item.aiInsight.noRecomendado ? `
@@ -1886,6 +1989,11 @@ function procesarCatalogoConIA() {
         const isLaptop = categoriaActual === 'portatiles';
         const itemWithIA = { ...item };
 
+        if (categoriaActual === 'impresoras') {
+            itemWithIA.aiInsight = null;
+            return itemWithIA;
+        }
+
         if (isLaptop) {
             itemWithIA.aiInsight = generarComentarioPortatilIA(item);
         } else {
@@ -1902,6 +2010,12 @@ function procesarCatalogoConIA() {
             };
             itemWithIA.aiInsight = generarComentarioIA(datosParaIA);
         }
+
+        const usoRecManual = getSpec(item, 'uso_recomendado') || getSpec(item, 'uso recomendado') || getSpec(item, 'usorecomendado');
+        if (usoRecManual && itemWithIA.aiInsight) {
+            itemWithIA.aiInsight.idealPara = usoRecManual;
+        }
+
         return itemWithIA;
     });
 }

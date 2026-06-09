@@ -1832,6 +1832,22 @@ button, .btn-wa, .btn-secundario, .producto-btn, .filtro-btn {
     gap: 6px;
 }
 .filtro-btn-limpiar:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.2); }
+.filtro-btn-refrescar {
+    padding: 9px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.filtro-btn-refrescar:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.2); }
 
 /* Search */
 .filtro-search-wrap {

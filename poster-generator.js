@@ -73,7 +73,7 @@ async function generatePoster(productId) {
     document.getElementById('p-price').innerText = formatMoneda(item[getPriceField(categoriaActual)]);
 
     const insightText = (item.aiInsight && item.aiInsight.idealPara)
-        ? `🎯 Ideal para: ${item.aiInsight.idealPara}`
+        ? `🎯 Uso recomendado: ${item.aiInsight.idealPara}`
         : 'Tecnología de última generación seleccionada por JRTech';
 
     const phraseEl = document.getElementById('p-phrase');
@@ -336,7 +336,7 @@ function getFullSpecsText(item, category) {
     });
 
     if (item.aiInsight) {
-        if (item.aiInsight.idealPara) text += `\n🎯 *Ideal para*: ${item.aiInsight.idealPara}`;
+        if (item.aiInsight.idealPara) text += `\n🎯 *Uso recomendado*: ${item.aiInsight.idealPara}`;
         if (item.aiInsight.veredicto) text += `\n\n🧠 *Veredicto:* ${item.aiInsight.veredicto}`;
     }
 
