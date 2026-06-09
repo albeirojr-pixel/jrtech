@@ -1,0 +1,403 @@
+{
+  "items": [
+    {
+      "id": "IMP0",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
+      },
+      "marca": "BROTHER",
+      "modelo": "HL-L2405W",
+      "especificaciones_texto": "MONOCROMATICA - WIFI DOBLE BANDA",
+      "precio": 579990,
+      "foto": "https://www.hltecnologia.com/wp-content/uploads/2025/06/brother_hl_l2405w_monochrome_b_w_laser_1802558.jpg"
+    },
+    {
+      "id": "IMP1",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
+      },
+      "marca": "BROTHER",
+      "modelo": "DCP-T230",
+      "especificaciones_texto": "MULTIFUNCIONAL - AMPLIA Y REDUCE - USB - TINTA CONTINUA",
+      "precio": 604990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEaj-YUTxdAo3V-KcfRlpkfiSX-sw0epOBMw&s"
+    },
+    {
+      "id": "IMP2",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASERJET M111W",
+      "especificaciones_texto": "MONOCROMATICA - WIFI - 7MD68A#BGJ",
+      "precio": 629990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUdEZG5ifJbY6lXUvSnNE_e-bNd_iT3bJ7Mw&s"
+    },
+    {
+      "id": "IMP3",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Canon_logo.svg/120px-Canon_logo.svg.png"
+      },
+      "marca": "CANON",
+      "modelo": "G2170",
+      "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - USB - AMPLIA Y REDUCE - PANEL LCD",
+      "precio": 629990,
+      "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/11/CnP_28112025_053222.png"
+    },
+    {
+      "id": "IMP4",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi + USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "SMART TANK 585",
+      "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - USB - WIFI - CON DISPLAY LCD - 1F3YA4#AKY",
+      "precio": 759990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdXAbcPHqVtKxeGrsmFj4Jq4be6d8jXaJabQ&s"
+    },
+    {
+      "id": "IMP5",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi + USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
+      },
+      "marca": "BROTHER",
+      "modelo": "DCP-T430W",
+      "especificaciones_texto": "MULTIFUNCIONAL - WIFI - AMPLIA Y REDUCE - USB - TINTA CONT + OBSEQUIO DE ROTULADORA ELECTRONICA BROTHER PT-N10",
+      "precio": 764990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRayYOU9EzxeTvmiD7SlhflSRklfNZ5-w-dWw&s"
+    },
+    {
+      "id": "IMP6",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "L3210",
+      "especificaciones_texto": "RECARGA CONTINUA - MULTIFUNCIONAL - USB",
+      "precio": 779990,
+      "foto": "https://mediaserver.goepson.com/adaptivemedia/rendition?id=bc9e9d35c0c1b88ed4fb2a03736ece2ae9969c94&vid=bc9e9d35c0c1b88ed4fb2a03736ece2ae9969c94&prid=515Wx515H&clid=SAPDAM&prclid=productpictures&assetDescr=L3210_SPT_C11CJ68301_384x286"
+    },
+    {
+      "id": "IMP7",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASERJET M141W",
+      "especificaciones_texto": "MONOCROMATICA - WIFI - MULTIFUNCIONAL - 7MD74A#BGJ",
+      "precio": 799990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4Xx-ARViKVOfKIPEM2TaYjwmhRX-Xi_87kg&s"
+    },
+    {
+      "id": "IMP8",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "L3251",
+      "especificaciones_texto": "RECARGA CONTINUA - MULTIFUNCIONAL - WIFI",
+      "precio": 914990,
+      "foto": "https://puntonetinsuperablesas.com/wp-content/uploads/2024/06/ECO-TANK-L3251-1.jpg"
+    },
+    {
+      "id": "IMP9",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Canon_logo.svg/120px-Canon_logo.svg.png"
+      },
+      "marca": "CANON",
+      "modelo": "G3180",
+      "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - WIFI - AMPLIA Y REDUCE - PANEL LCD - DUPLEX",
+      "precio": 924990,
+      "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/09/descarga.jpg"
+    },
+    {
+      "id": "IMP10",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
+      },
+      "marca": "BROTHER",
+      "modelo": "DCP-T730DW",
+      "especificaciones_texto": "MULTIFUNCIONAL - DUPLEX - WIFI - ADF - AMPLIA Y REDUCE - USB - PANTALLA LCD - TINTA CONTINUA",
+      "precio": 924990,
+      "foto": "https://http2.mlstatic.com/D_Q_NP_976209-MCO92282990146_092025-F.webp"
+    },
+    {
+      "id": "IMP11",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
+      },
+      "marca": "BROTHER",
+      "modelo": "DCP-L2640DW",
+      "especificaciones_texto": "MONOCROMATICA - WIFI - MULTIFUNCIONAL - ADF - IMPRESIÓN DUPLEX - PUERTO ETHERNET",
+      "precio": 979990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs5N891_V9ZYUnJzDfaNyQfVzhxqOUNWS8nQ&s"
+    },
+    {
+      "id": "IMP12",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Canon_logo.svg/120px-Canon_logo.svg.png"
+      },
+      "marca": "CANON",
+      "modelo": "G4170",
+      "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - WIFI - ADF - FAX - AMPLIA Y REDUCE - PANEL LCD",
+      "precio": 979990,
+      "foto": "https://compubit.com.co/wp-content/uploads/2024/02/Muchos-mas-productos-para-la-web-08.jpg"
+    },
+    {
+      "id": "IMP13",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "SMART TANK 530",
+      "especificaciones_texto": "MULTIFUNCIONAL - ADF - WIFI - AMPLIA Y REDUCE - TINTA CONTINUA - 4SB24A#AKY",
+      "precio": 1014990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3WhgUvq0208zFWp0LEQvYlVn2_iEDgAeNGQ&s"
+    },
+    {
+      "id": "IMP14",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "L4360",
+      "especificaciones_texto": "RECARGA CONTINUA - MULTIFUNCIONAL - WIFI - IMPRESION DUPLEX",
+      "precio": 1169990,
+      "foto": "https://http2.mlstatic.com/D_NQ_NP_611907-MEC93719140633_092025-O.webp"
+    },
+    {
+      "id": "IMP15",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red) + USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
+      },
+      "marca": "BROTHER",
+      "modelo": "DCP-T830DW",
+      "especificaciones_texto": "MULTIFUNCIONAL - DUPLEX - WIFI - ADF - RED ETHERNET - PUERTO USB - 2 BANDEJAS + OBSEQUIO DE ROTULADORA ELEC",
+      "precio": 1229990,
+      "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2026/04/images-2.jpg"
+    },
+    {
+      "id": "IMP16",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "SMART TANK 750",
+      "especificaciones_texto": "MULTIFUNCIONAL - ADF - DUPLEX EN IMPRESION - WIFI - TINTA CONTINUA - 6UU47A#AKY",
+      "precio": 1259990,
+      "foto": "https://media.falabella.com/falabellaCO/128452848_01/w=1500,h=1500,fit=cover"
+    },
+    {
+      "id": "IMP17",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Matriz de Punto",
+        "color": "Monocromática",
+        "duplex": "No",
+        "conectividad": "No especificada",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "LX350",
+      "especificaciones_texto": "MATRIZ DE PUNTO",
+      "precio": 1339990,
+      "foto": "https://mediaserver.goepson.com/ImConvServlet/imconv/3f7e7e33d660c06814ed61bcc9b3d52ed549e99f/1200Wx1200H?use=banner&hybriIFd=B2C&assetDescr=C11CC24001_Matriciales_Epson%20LX-350_ES"
+    },
+    {
+      "id": "IMP18",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi + Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "L5590",
+      "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - WIFI - ADF - PUERTO LAN",
+      "precio": 1349990,
+      "foto": "https://http2.mlstatic.com/D_Q_NP_696469-MLA99990155389_112025-F.webp"
+    },
+    {
+      "id": "IMP19",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASER MFP 3103FDW",
+      "especificaciones_texto": "MONOCROMATICA - WIFI - MULTIFUNCIONAL - ADF - IMPRESIÓN DUPLEX - PUERTO ETHERNET - 3G632A#BGJ",
+      "precio": 1519990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS38-qjIZd8ymMTh_CT_u39eNWzoeqOEpe_TQ&s"
+    },
+    {
+      "id": "IMP20",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "L6270",
+      "especificaciones_texto": "MULTIFUNCIONAL - RECARGA CONTINUA - WIFI - ADF - DUPLEX - ETHERNET",
+      "precio": 2239990,
+      "foto": "https://mediaserver.goepson.com/ImConvServlet/imconv/7c57ee8b128be15a56b1c0b248c3e24a0203c361/515Wx515H?use=productpictures&hybriIFd=B2C&assetDescr=L6270_SPT_C11CJ61301_384x286"
+    },
+    {
+      "id": "IMP21",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "L8050",
+      "especificaciones_texto": "FOTOGRAFICA - RECARGA CONTINUA - WIFI - IMPRIME SOBRE CD",
+      "precio": 2489990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTRAKvKR3WaT6FvkTNU6qASZ9QGvh0reVRA&s"
+    },
+    {
+      "id": "IMP22",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red) + USB",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
+      },
+      "marca": "BROTHER",
+      "modelo": "MFCT4500DW",
+      "especificaciones_texto": "MULTIFUNCIONAL EN A3 - DUPLEX - WIFI - ADF - ETHERNET - AMPLIA Y REDUCE - USB FRONTAL - TINTA CONTINUA",
+      "precio": 3619990,
+      "foto": "https://http2.mlstatic.com/D_Q_NP_700339-MLA99943904573_112025-F.webp"
+    }
+  ],
+  "filters": {
+    "Marca": [
+      "BROTHER",
+      "CANON",
+      "EPSON",
+      "HP"
+    ],
+    "Tipo": [
+      "Multifuncional",
+      "Solo Impresión"
+    ],
+    "Tecnología": [
+      "Láser",
+      "Matriz de Punto",
+      "Tinta Continua"
+    ],
+    "Color": [
+      "A Color",
+      "Monocromática"
+    ],
+    "Doble Cara": [
+      "No",
+      "Sí"
+    ]
+  },
+  "rangos": {
+    "Precio": {
+      "min": 579990,
+      "max": 3619990
+    }
+  }
+}
