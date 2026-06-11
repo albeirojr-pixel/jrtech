@@ -387,6 +387,70 @@
     {
       "id": "TAB12",
       "marca": "Xiaomi",
+      "modelo": "Redmi Pad 2 KIT Estuche + vidrio",
+      "rom": "256GB",
+      "ram": "8GB",
+      "precio": 1049990,
+      "foto": "https://file.garden/Z8ITBPHZSzW2yH0y/TABLETS/kit%20RP2.png",
+      "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
+      "pantalla": "11",
+      "tipo_panel": "15",
+      "resolucion": "1600x2560",
+      "refresco": "90",
+      "peso": "7.4",
+      "grosor": "519",
+      "procesador": "Helio G100",
+      "litografia": "6",
+      "antutu": "455000",
+      "bateria": "9000",
+      "carga": "18",
+      "cam_ppal": "8",
+      "cam_selfie": "5",
+      "red_5g": "NO",
+      "android": "6",
+      "bluetooth": "5.3",
+      "wlan": "802,11 a/b/g/n/ac",
+      "nfc": "No",
+      "jack": "SI",
+      "proveedor": "RAFO",
+      "uso_recomendado": "Excelente para multitarea y uso diario fluido",
+      "fullText": "xiaomi redmi pad 2 kit estuche + vidrio 8gb 256gb helio g100"
+    },
+    {
+      "id": "TAB13",
+      "marca": "Xiaomi",
+      "modelo": "Redmi Pad 2  KIT LAPIZ + Estuche + vidrio",
+      "rom": "256GB",
+      "ram": "8GB",
+      "precio": 849990,
+      "foto": "https://file.garden/Z8ITBPHZSzW2yH0y/TABLETS/kit%20lapiz%20RP2.png",
+      "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
+      "pantalla": "11",
+      "tipo_panel": "15",
+      "resolucion": "1600x2560",
+      "refresco": "90",
+      "peso": "7.4",
+      "grosor": "519",
+      "procesador": "Helio G100",
+      "litografia": "6",
+      "antutu": "455000",
+      "bateria": "9000",
+      "carga": "18",
+      "cam_ppal": "8",
+      "cam_selfie": "5",
+      "red_5g": "NO",
+      "android": "6",
+      "bluetooth": "5.3",
+      "wlan": "802,11 a/b/g/n/ac",
+      "nfc": "No",
+      "jack": "SI",
+      "proveedor": "RAFO",
+      "uso_recomendado": "Excelente para multitarea y uso diario fluido",
+      "fullText": "xiaomi redmi pad 2  kit lapiz + estuche + vidrio 8gb 256gb helio g100"
+    },
+    {
+      "id": "TAB14",
+      "marca": "Xiaomi",
       "modelo": "Redmi Pad Pro",
       "rom": "256GB",
       "ram": "8GB",
@@ -417,7 +481,7 @@
       "fullText": "xiaomi redmi pad pro 8gb 256gb snapdragon 7s gen 4"
     },
     {
-      "id": "TAB13",
+      "id": "TAB15",
       "marca": "Samsung",
       "modelo": "Tab S10 Lite",
       "rom": "128GB",
@@ -449,7 +513,7 @@
       "fullText": "samsung tab s10 lite 6gb 128gb exynos 1380"
     },
     {
-      "id": "TAB14",
+      "id": "TAB16",
       "marca": "Samsung",
       "modelo": "Tab A11 plus",
       "rom": "128GB",
@@ -481,7 +545,7 @@
       "fullText": "samsung tab a11 plus 6gb 128gb dimensity 8775"
     },
     {
-      "id": "TAB15",
+      "id": "TAB17",
       "marca": "Samsung",
       "modelo": "Tab A11 plus",
       "rom": "256GB",
@@ -513,7 +577,7 @@
       "fullText": "samsung tab a11 plus 8gb 256gb dimensity 8775"
     },
     {
-      "id": "TAB16",
+      "id": "TAB18",
       "marca": "Samsung",
       "modelo": "Tab S10 FE",
       "rom": "128GB",
@@ -545,7 +609,7 @@
       "fullText": "samsung tab s10 fe 8gb 128gb exynos 1580"
     },
     {
-      "id": "TAB17",
+      "id": "TAB19",
       "marca": "Samsung",
       "modelo": "Tab S10 FE",
       "rom": "256GB",
@@ -577,7 +641,7 @@
       "fullText": "samsung tab s10 fe 12gb 256gb exynos 1580"
     },
     {
-      "id": "TAB18",
+      "id": "TAB20",
       "marca": "Samsung",
       "modelo": "Tab S10 FE plus",
       "rom": "256GB",
@@ -609,7 +673,7 @@
       "fullText": "samsung tab s10 fe plus 12gb 256gb exynos 1580"
     },
     {
-      "id": "TAB19",
+      "id": "TAB21",
       "marca": "Samsung",
       "modelo": "Tab S11 Ultra",
       "rom": "256GB",
