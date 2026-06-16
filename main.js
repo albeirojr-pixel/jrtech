@@ -101,6 +101,9 @@ function normalizeKey(key) {
 
 function getSpec(item, key, unit = '') {
     const targetKey = normalizeKey(key);
+    if (targetKey === 'sistema') {
+        return 'Win11Pro';
+    }
     let val = undefined;
 
     // 1. Buscar en nivel superior
@@ -286,7 +289,7 @@ function forzarRefrescoCatalogo() {
 }
 
 function prefetchOtrasCategorias() {
-    const categorias = ['celulares', 'tablets', 'portatiles', 'impresoras'];
+    const categorias = ['celulares', 'tablets', 'portatiles', 'impresoras', 'escritorio'];
     const cacheDuration = 10 * 60 * 1000; // 10 minutos
     
     categorias.forEach(cat => {
@@ -543,7 +546,7 @@ function aplicarFiltros() {
         // 3. Búsqueda de Texto (Sobre campos de la Lista Blanca)
         if (searchQuery) {
             let whitelist = [];
-            if (categoriaActual === 'portatiles') whitelist = WHITELIST_LAPTOPS;
+            if (categoriaActual === 'portatiles' || categoriaActual === 'escritorio') whitelist = WHITELIST_LAPTOPS;
             else if (categoriaActual === 'impresoras') whitelist = WHITELIST_PRINTERS;
             else whitelist = WHITELIST_MOBILE;
 
@@ -618,7 +621,7 @@ let filtroPerfilActivo = null;
 let filtroSoftwareActivo = null;
 
 function renderFiltrosPerfil() {
-    const esPortatil = categoriaActual === 'portatiles';
+    const esPortatil = categoriaActual === 'portatiles' || categoriaActual === 'escritorio';
     const esImpresora = categoriaActual === 'impresoras';
     const perfilesPortatil = [
         { id: 'gamer',       label: '🎮 Gamer' },
@@ -732,7 +735,7 @@ function renderFiltroSoftware() {
     const panel = document.getElementById('filtro-software-panel');
     const btnWrap = document.getElementById('software-filter-btn-container');
     if (!panel) return;
-    if (categoriaActual !== 'portatiles') {
+    if (categoriaActual !== 'portatiles' && categoriaActual !== 'escritorio') {
         panel.style.display = 'none';
         if (btnWrap) btnWrap.style.display = 'none';
         return;
@@ -856,6 +859,7 @@ function renderGrid(items) {
                 ${(ram || ssd) ? `<div class="producto-spec"><i class="fas fa-memory"></i> ${ram} RAM | ${ssd} Almacenamiento</div>` : ''}
                 ${pan ? `<div class="producto-spec"><i class="fas fa-laptop"></i> ${pan}</div>` : ''}
                 <div class="producto-spec"><i class="fas fa-gamepad"></i> ${grafText}</div>
+                <div class="producto-spec"><i class="fas fa-window-maximize"></i> Sistema: Win11Pro</div>
             `;
         }
 
@@ -2437,3 +2441,12 @@ function getBrandLogo(item) {
 
     return null;
 }
+
+// Cerrar dropdown si se hace click afuera
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-dropdown')) {
+        document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+            menu.classList.remove('show');
+        });
+    }
+});

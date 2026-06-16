@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#0f111a">
     <meta name="description" content="Catálogo de tablets en JRTech. Garantía real y atención personalizada por Albeiro López.">
     <title>JRTech | Tablets</title>
-    <link rel="stylesheet" href="styles.css?v=20250318">
+    <link rel="stylesheet" href="styles.css?v=20260615">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Configuración privada (Ignorada en Git para seguridad) -->
     <script src="config.js"></script>
@@ -71,10 +71,17 @@
                     <i class="fas fa-tablet-alt"></i>
                     <span>Tablets</span>
                 </a>
-                <a class="hub-btn" href="portatiles.html">
+                <div class="nav-dropdown">
+                <a class="hub-btn" style="cursor: pointer;" onclick="this.nextElementSibling.classList.toggle('show'); event.stopPropagation();">
                     <i class="fas fa-laptop"></i>
-                    <span>Portátiles</span>
+                    <span>Computadores</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.7em; margin-left: 4px;"></i>
                 </a>
+                <div class="dropdown-menu">
+                    <a href="portatiles.html"><i class="fas fa-laptop"></i> Portátiles</a>
+                    <a href="escritorio.html"><i class="fas fa-desktop"></i> De Escritorio</a>
+                </div>
+            </div>
                 <a class="hub-btn" href="impresoras.html">
                     <i class="fas fa-print"></i>
                     <span>Impresoras</span>
@@ -209,9 +216,17 @@
                 <a class="btn-wa" href="tablets.html" style="text-decoration: none;">
                     <i class="fas fa-tablet-alt"></i> Ver Tablets
                 </a>
-                <a class="btn-wa" href="portatiles.html" style="text-decoration: none;">
-                    <i class="fas fa-laptop"></i> Ver Portátiles
-                </a>
+                <!-- Dropdown Computadores en CTA -->
+                <div class="nav-dropdown cta-dropdown">
+                    <a class="btn-wa cta-dropdown-trigger" style="text-decoration: none; cursor: pointer;"
+                       onclick="this.nextElementSibling.classList.toggle('show'); event.stopPropagation();">
+                        <i class="fas fa-laptop"></i> Ver Computadores <i class="fas fa-chevron-down" style="font-size: 0.7em; margin-left: 4px;"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="portatiles.html"><i class="fas fa-laptop"></i> Portátiles</a>
+                        <a href="escritorio.html"><i class="fas fa-desktop"></i> De Escritorio</a>
+                    </div>
+                </div>
                 <a class="btn-wa" href="impresoras.html" style="text-decoration: none;">
                     <i class="fas fa-print"></i> Ver Impresoras
                 </a>

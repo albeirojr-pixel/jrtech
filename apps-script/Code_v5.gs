@@ -160,6 +160,131 @@ function getCatalogData() {
   }
 }
 
+function getEscritorioData() {
+  try {
+    const cached = getCacheLarge('catalog_escritorio');
+    if (cached) return cached;
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName("ESCRITORIO");
+    if (!sheet) return { error: "No existe la hoja ESCRITORIO." };
+
+    const data = sheet.getDataRange().getValues();
+    if (data.length < 2) return { error: "La hoja está vacía." };
+
+    // Mapeo dinámico por encabezados (misma estructura que PORTATILES)
+    const headers = data[0].map(h => String(h).trim().toLowerCase());
+    const rows = data.slice(1);
+
+    const idx = {
+      cod:            headers.indexOf('cod'),
+      marca:          headers.indexOf('marca'),
+      modelo:         headers.indexOf('modelo'),
+      procesador:     headers.indexOf('procesador'),
+      ram:            headers.indexOf('ram'),
+      tipo_ram:       headers.indexOf('tipo_ram'),
+      ssd:            headers.indexOf('ssd'),
+      sistema:        headers.indexOf('sistema'),
+      pantalla:       headers.indexOf('pantalla'),
+      tipo_pantalla:  headers.indexOf('tipo_pantalla'),
+      grafica:        headers.indexOf('grafica'),
+      modelo_grafica: headers.indexOf('modelo_grafica'),
+      vram:           headers.indexOf('vram'),
+      precio:         headers.indexOf('precio'),
+      enlace_foto:    headers.indexOf('enlace_foto'),
+      enlace_logo:    headers.indexOf('enlace_logo'),
+      enlace_banner:  headers.indexOf('enlace_banner'),
+    };
+
+    const get = (row, key) => {
+      const i = idx[key];
+      return i >= 0 && row[i] !== undefined && row[i] !== null
+        ? String(row[i]).trim()
+        : "N/A";
+    };
+
+    const catalog = rows.map((row, i) => {
+      if (!get(row, 'marca') || get(row, 'marca') === 'N/A') return null;
+
+      return {
+        id:      "ESC" + i,
+        cod:     get(row, 'cod'),
+        marca:   get(row, 'marca'),
+        modelo:  get(row, 'modelo'),
+        specs: {
+          "Procesador":     get(row, 'procesador'),
+          "RAM":            get(row, 'ram'),
+          "Tipo RAM":       get(row, 'tipo_ram'),
+          "SSD":            get(row, 'ssd'),
+          "Sistema":        get(row, 'sistema'),
+          "Pantalla": (() => {
+            const match = get(row, 'pantalla').match(/(\d+[.,]\d+|\d+)/);
+            return match ? match[1].replace(',', '.') + '"' : get(row, 'pantalla');
+          })(),
+          "Tipo Pantalla":  get(row, 'tipo_pantalla'),
+          "Gráfica":        get(row, 'grafica'),
+          "Modelo Gráfica": get(row, 'modelo_grafica'),
+          "Tamaño Gráfica": get(row, 'vram')
+        },
+        precio:   parseFloat(get(row, 'precio').replace(/[^0-9.]/g, '')) || 0,
+        foto:     get(row, 'enlace_foto') !== 'N/A' ? get(row, 'enlace_foto') : '',
+        logo:     get(row, 'enlace_logo') !== 'N/A' ? get(row, 'enlace_logo') : '',
+        banner:   get(row, 'enlace_banner') !== 'N/A' ? get(row, 'enlace_banner') : '',
+        fullText: row.join(" ").toLowerCase()
+      };
+    }).filter(Boolean);
+
+    const filters = {
+      "Marca":          [...new Set(catalog.map(it => it.marca))].filter(v => v && v !== "N/A").sort(),
+      "RAM": [...new Set(catalog.map(it => {
+          const match = String(it.specs["RAM"]).match(/(\d+)\s*GB/i);
+          return match ? match[1] + "GB" : null;
+        }))].filter(Boolean).sort((a, b) => parseInt(a) - parseInt(b)),
+      "Tipo RAM": [...new Set(catalog.map(it => it.specs["Tipo RAM"]))].filter(v => v && v !== "N/A" && v !== "N/D").sort(),
+      "SSD":            [...new Set(catalog.map(it => it.specs["SSD"]))].filter(v => v && v !== "N/A").sort(),
+      "Procesador":     [...new Set(catalog.map(it => it.specs["Procesador"]))].filter(v => v && v !== "N/A").sort(),
+      "Pantalla": [...new Set(catalog.map(it => {
+          return String(it.specs["Pantalla"]).replace(',', '.').replace(/"+$/, '"').trim();
+        }))].filter(v => v && v !== "N/A" && v !== "N/D").sort(),
+      "Tipo Pantalla":  [...new Set(catalog.map(it => it.specs["Tipo Pantalla"]))].filter(v => v && v !== "N/A").sort(),
+      "Sistema":        [...new Set(catalog.map(it => it.specs["Sistema"]))].filter(v => v && v !== "N/A").sort(),
+      "Gráfica":        [...new Set(catalog.map(it => it.specs["Gráfica"]))].filter(v => v && v !== "N/A").sort(),
+      "Modelo Gráfica": [...new Set(catalog.map(it => it.specs["Modelo Gráfica"]))].filter(v => v && v !== "N/A").sort()
+    };
+
+    const resultado = {
+      items: catalog,
+      filters: filters,
+      headers: Object.keys(catalog[0]?.specs || {}),
+      rangos: {
+        "RAM": {
+          min: Math.min(...catalog.map(it => parseInt(it.specs["RAM"]) || 0).filter(v => v > 0)),
+          max: Math.max(...catalog.map(it => parseInt(it.specs["RAM"]) || 0))
+        },
+        "SSD": {
+          min: Math.min(...catalog.map(it => parseInt(it.specs["SSD"]) || 0).filter(v => v > 0)),
+          max: Math.max(...catalog.map(it => parseInt(it.specs["SSD"]) || 0))
+        },
+        "Pantalla": {
+          min: Math.min(...catalog.map(it => parseFloat(String(it.specs["Pantalla"])) || 0).filter(v => v > 0)),
+          max: Math.max(...catalog.map(it => parseFloat(String(it.specs["Pantalla"])) || 0))
+        },
+        "Precio": {
+          min: Math.min(...catalog.map(it => it.precio || 0).filter(v => v > 0)),
+          max: Math.max(...catalog.map(it => it.precio || 0))
+        }
+      }
+    };
+
+    putCacheLarge('catalog_escritorio', resultado, 600);
+
+    return resultado;
+
+  } catch(e) {
+    return { error: "Error de Servidor: " + e.toString() };
+  }
+}
+
 function getCelularesData() {
   try {
     const cached = getCacheLarge('catalog_celulares');
@@ -588,219 +713,100 @@ function procesarSolicitudChat(historial) {
     if (!OPENAI_API_KEY) return "Error: API Key no configurada.";
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // 1. PRE-FILTRADO INTELIGENTE (Reduce el tamaño del prompt y aumenta precisión)
+    // Analizar el historial para detectar intención de categoría
+    const lastUserMessage = historial.length > 0 ? historial[historial.length - 1].content.toLowerCase() : "";
+    let categoriasRequeridas = {
+      portatiles: /port[aá]til|computador|laptop|pc/i.test(lastUserMessage),
+      celulares: /celular|tel[eé]fono|smartphone|iphone|movil|cel/i.test(lastUserMessage),
+      tablets: /tablet|ipad|tableta/i.test(lastUserMessage)
+    };
+    
+    // Si no detecta nada específico en este mensaje, miramos todo el historial rápidamente
+    const sinCategoriaClara = !categoriasRequeridas.portatiles && !categoriasRequeridas.celulares && !categoriasRequeridas.tablets;
+    if (sinCategoriaClara) {
+      const fullHistory = historial.map(h => h.content.toLowerCase()).join(" ");
+      categoriasRequeridas.portatiles = /port[aá]til|computador|laptop|pc/i.test(fullHistory);
+      categoriasRequeridas.celulares = /celular|tel[eé]fono|smartphone|iphone|movil|cel/i.test(fullHistory);
+      categoriasRequeridas.tablets = /tablet|ipad|tableta/i.test(fullHistory);
+      
+      // Si aún así no hay nada, cargamos todo por precaución
+      if (!categoriasRequeridas.portatiles && !categoriasRequeridas.celulares && !categoriasRequeridas.tablets) {
+        categoriasRequeridas = { portatiles: true, celulares: true, tablets: true };
+      }
+    }
 
-    // Cargar portátiles con todas las specs
-    let inventarioPortatiles = "";
-    const hojaPort = ss.getSheetByName('PORTATILES');
-    if (hojaPort) {
-      const dataPort = hojaPort.getDataRange().getValues();
-      const h = dataPort[0].map(x => String(x).trim().toLowerCase());
+    let inventarioFiltrado = {};
 
-      inventarioPortatiles = dataPort.slice(1)
-        .filter(r => {
-          if (!r[h.indexOf('marca')] || !r[h.indexOf('precio')]) return false;
-          const precio = parseFloat(String(r[h.indexOf('precio')]).replace(/[^0-9.]/g, '')) || 0;
-          return precio > 0;
-        })
-        .map(r => {
-          const g = (key) => {
-            const i = h.indexOf(key);
-            return i >= 0 && r[i] !== undefined && r[i] !== null ? String(r[i]).trim() : 'N/D';
-          };
-
-          // Análisis interno de portátil
-          const proc = g('procesador').toLowerCase();
-          const ram = parseInt(g('ram')) || 0;
-          const ssd = parseInt(g('ssd')) || 0;
+    // 2. EXTRACCIÓN EN FORMATO JSON MINIFICADO
+    const extractData = (sheetName, type) => {
+      const hoja = ss.getSheetByName(sheetName);
+      if (!hoja) return [];
+      const data = hoja.getDataRange().getValues();
+      const h = data[0].map(x => String(x).trim().toLowerCase());
+      
+      return data.slice(1).filter(r => {
+        if (!r[h.indexOf('marca')] || !r[h.indexOf('precio')]) return false;
+        const precio = parseFloat(String(r[h.indexOf('precio')]).replace(/[^0-9.]/g, '')) || 0;
+        return precio > 0;
+      }).map(r => {
+        const g = (key) => {
+          const i = h.indexOf(key);
+          return i >= 0 && r[i] !== undefined && r[i] !== null ? String(r[i]).trim() : '';
+        };
+        
+        // Claves súper cortas para ahorrar tokens: m=marca, mod=modelo, p=precio, cpu=procesador, etc.
+        let item = { m: g('marca'), mod: g('modelo'), p: parseFloat(String(g('precio')).replace(/[^0-9.]/g, '')) };
+        
+        if (type === 'portatil') {
+          item.cpu = g('procesador'); item.ram = parseInt(g('ram')) || 0; item.ssd = parseInt(g('ssd')) || 0;
           const grafica = g('grafica').toLowerCase();
+          item.gpu = (grafica !== 'no' && grafica !== 'n/a' && grafica !== '') ? g('grafica') : 'Int';
+        } else {
+          item.cpu = g('procesador'); item.ram = parseInt(g('ram')) || 0; item.rom = parseInt(g('rom')) || 0;
+          item.bat = parseInt(g('bateria')) || 0; item.antutu = parseInt(g('antutu')) || 0;
+          if (type === 'celular') { item.cam = parseInt(g('cam_ppal')) || 0; }
+        }
+        return item;
+      });
+    };
 
-          let rendimiento = '';
-          if (proc.includes('i7') || proc.includes('i9') || proc.includes('ryzen 7') || proc.includes('ryzen 9')) {
-            rendimiento = 'Alto rendimiento — ideal para diseño, edición de video, programming, gaming';
-          } else if (proc.includes('i5') || proc.includes('ryzen 5')) {
-            rendimiento = 'Rendimiento medio-alto — ideal para trabajo, estudio, multitarea exigente';
-          } else if (proc.includes('i3') || proc.includes('ryzen 3')) {
-            rendimiento = 'Rendimiento medio — ideal para ofimática, estudio, navegación';
-          } else {
-            rendimiento = 'Rendimiento básico — ideal para tareas simples, navegación, documentos';
-          }
+    if (categoriasRequeridas.portatiles) inventarioFiltrado.portatiles = extractData('PORTATILES', 'portatil');
+    if (categoriasRequeridas.celulares) inventarioFiltrado.celulares = extractData('CELULARES', 'celular');
+    if (categoriasRequeridas.tablets) inventarioFiltrado.tablets = extractData('TABLETS', 'tablet');
 
-          const tieneGrafica = grafica !== 'no' && grafica !== 'n/a' && grafica !== 'n/d' && grafica !== '';
-          const memoriaAdecuada = ram >= 16 ? 'RAM alta — multitarea fluida' : ram >= 8 ? 'RAM suficiente para uso general' : 'RAM limitada';
-          const almacenamiento = ssd >= 512 ? 'Almacenamiento amplio' : ssd >= 256 ? 'Almacenamiento suficiente' : 'Almacenamiento básico';
+    const jsonInventarioStr = JSON.stringify(inventarioFiltrado);
 
-          return `💻 ${g('marca')} ${g('modelo')}
-   Procesador: ${g('procesador')} | RAM: ${g('ram')}GB | SSD: ${g('ssd')}GB
-   Pantalla: ${g('pantalla')} ${g('tipo_pantalla')} | Sistema: ${g('sistema')}
-   Gráfica: ${tieneGrafica ? g('grafica') + ' ' + g('modelo_grafica') + ' ' + g('vram') : 'Integrada'}
-   Análisis: ${rendimiento} | ${memoriaAdecuada} | ${almacenamiento}
-   ${tieneGrafica ? 'Tiene gráfica dedicada — apta para gaming y diseño' : 'Sin gráfica dedicada — no apta para gaming exigente'}
-   Precio: $${g('precio')}
-   Valor agregado: Envío gratis + Soporte técnico remoto + Windows y Office licenciados + Equipo configurado`;
-        }).join('\n\n');
-    }
-
-    // Cargar celulares con todas las specs
-    let inventarioCelulares = "";
-    const hojaCel = ss.getSheetByName('CELULARES');
-    if (hojaCel) {
-      const dataCel = hojaCel.getDataRange().getValues();
-      const h = dataCel[0].map(x => String(x).trim().toLowerCase());
-
-      inventarioCelulares = dataCel.slice(1)
-        .filter(r => {
-          if (!r[h.indexOf('marca')] || !r[h.indexOf('precio')]) return false;
-          const precio = parseFloat(String(r[h.indexOf('precio')]).replace(/[^0-9.]/g, '')) || 0;
-          return precio > 0;
-        })
-        .map(r => {
-          const g = (key) => {
-            const i = h.indexOf(key);
-            return i >= 0 && r[i] !== undefined && r[i] !== null ? String(r[i]).trim() : 'N/D';
-          };
-
-          // Análisis interno de celular
-          const antutu = parseInt(g('antutu')) || 0;
-          const bateria = parseInt(g('bateria')) || 0;
-          const refresco = parseInt(g('refresco')) || 0;
-          const camPpal = parseInt(g('cam_ppal')) || 0;
-          const panel = g('tipo_panel').toLowerCase();
-
-          let rendimiento = '';
-          if (antutu >= 800000) rendimiento = 'Rendimiento premium — gaming exigente, multitarea pesada';
-          else if (antutu >= 500000) rendimiento = 'Rendimiento alto — gaming moderado, multitarea fluida';
-          else if (antutu >= 300000) rendimiento = 'Rendimiento medio — uso diario, redes, fotos';
-          else if (antutu >= 150000) rendimiento = 'Rendimiento básico-medio — uso sencillo, redes, llamadas';
-          else rendimiento = 'Rendimiento básico — llamadas, WhatsApp, navegación simple';
-
-          const calidadPanel = panel.includes('amoled') ? 'Pantalla AMOLED — colores vibrantes, ideal para fotos y videos' :
-                               panel.includes('ips') ? 'Pantalla IPS LCD — buena calidad, colores naturales' :
-                               'Pantalla estándar';
-
-          const calidadBateria = bateria >= 5000 ? 'Batería de larga duración — todo el día sin problema' :
-                                 bateria >= 4000 ? 'Batería suficiente — uso normal del día' :
-                                 'Batería limitada — carga frecuente';
-
-          const calidadCamara = camPpal >= 108 ? 'Cámara principal 108MP — fotografía de alta resolución' :
-                                camPpal >= 64 ? 'Cámara principal 64MP — fotografía detallada' :
-                                camPpal >= 48 ? 'Cámara principal 48MP — buena fotografía' :
-                                camPpal >= 13 ? 'Cámara principal ' + camPpal + 'MP — fotografía básica' :
-                                'Cámara básica';
-
-          return `📱 ${g('marca')} ${g('modelo')}
-   Procesador: ${g('procesador')} (${g('litografia')}nm) | AnTuTu: ${g('antutu')}
-   RAM: ${g('ram')}GB | Almacenamiento: ${g('rom')}GB
-   Pantalla: ${g('pantalla')}" ${g('tipo_panel')} | Resolución: ${g('resolucion')} | Refresco: ${g('refresco')}Hz
-   Cámara ppal: ${g('cam_ppal')}MP | Cámara selfie: ${g('cam_selfie')}MP
-   Batería: ${g('bateria')}mAh | Carga rápida: ${g('carga')}W
-   5G: ${g('red_5g')} | NFC: ${g('nfc')} | Android: ${g('android')} | Jack 3.5mm: ${g('jack')}
-   Análisis: ${rendimiento}
-   ${calidadPanel}
-   ${calidadCamara}
-   ${calidadBateria}
-   Precio: $${g('precio')}`;
-        }).join('\n\n');
-    }
-    // Cargar tablets con todas las specs
-    let inventarioTablets = "";
-    const hojaTab = ss.getSheetByName('TABLETS');
-    if (hojaTab) {
-      const dataTab = hojaTab.getDataRange().getValues();
-      const h = dataTab[0].map(x => String(x).trim().toLowerCase());
-
-      inventarioTablets = dataTab.slice(1)
-        .filter(r => {
-          if (!r[h.indexOf('marca')] || !r[h.indexOf('precio')]) return false;
-          const precio = parseFloat(String(r[h.indexOf('precio')]).replace(/[^0-9.]/g, '')) || 0;
-          return precio > 0;
-        })
-        .map(r => {
-          const g = (key) => {
-            const i = h.indexOf(key);
-            return i >= 0 && r[i] !== undefined && r[i] !== null ? String(r[i]).trim() : 'N/D';
-          };
-
-          // Análisis interno de tablet (igual que celulares)
-          const antutu = parseInt(g('antutu')) || 0;
-          const bateria = parseInt(g('bateria')) || 0;
-          const refresco = parseInt(g('refresco')) || 0;
-          const camPpal = parseInt(g('cam_ppal')) || 0;
-          const panel = g('tipo_panel').toLowerCase();
-
-          let rendimiento = '';
-          if (antutu >= 800000) rendimiento = 'Rendimiento premium — gaming exigente, multitarea pesada';
-          else if (antutu >= 500000) rendimiento = 'Rendimiento alto — gaming moderado, multitarea fluida';
-          else if (antutu >= 300000) rendimiento = 'Rendimiento medio — uso diario, redes, multimedia';
-          else if (antutu >= 150000) rendimiento = 'Rendimiento básico-medio — uso sencillo, redes, lectura';
-          else rendimiento = 'Rendimiento básico — navegación, videos, lectura';
-
-          const calidadPanel = panel.includes('amoled') ? 'Pantalla AMOLED — colores vibrantes, ideal para multimedia' :
-                               panel.includes('ips') ? 'Pantalla IPS LCD — buena calidad, colores naturales' :
-                               'Pantalla estándar';
-
-          const calidadBateria = bateria >= 8000 ? 'Batería de larga duración — días de uso sin problema' :
-                                 bateria >= 6000 ? 'Batería suficiente — día completo sin problema' :
-                                 'Batería moderada';
-
-          return `📱 ${g('marca')} ${g('modelo')}
-   Procesador: ${g('procesador')} (${g('litografia')}nm) | AnTuTu: ${g('antutu')}
-   RAM: ${g('ram')}GB | Almacenamiento: ${g('rom')}GB
-   Pantalla: ${g('pantalla')}" ${g('tipo_panel')} | Resolución: ${g('resolucion')} | Refresco: ${g('refresco')}Hz
-   Cámara ppal: ${g('cam_ppal')}MP | Batería: ${g('bateria')}mAh | Carga: ${g('carga')}W
-   5G: ${g('red_5g')} | NFC: ${g('nfc')} | Android: ${g('android')}
-   Análisis: ${rendimiento}
-   ${calidadPanel}
-   ${calidadBateria}
-   Precio: $${g('precio')}`;
-        }).join('\n\n');
-    }
-
+    // 3. PROMPT OPTIMIZADO PARA RAZONAMIENTO ESTRUCTURADO
     const sistemaPrompt = `
-Eres Camilo, asesor comercial senior de JR TECH — tienda de tecnología colombiana.
+Eres Camilo, asesor comercial senior de JR TECH — tienda de tecnología colombiana. Eres un experto apasionado por la tecnología y te tomas el tiempo de asesorar de forma detallada, profunda y muy persuasiva a cada cliente.
 
 DIFERENCIADORES DE JR TECH:
-- Honestidad absoluta: prefieres NO vender antes que vender algo que no le sirve
-- En portátiles: envío gratis, soporte técnico remoto, Windows y Office licenciados, equipo configurado y listo para usar
-- Garantías atendidas con diligencia
+- Honestidad absoluta: prefieres NO vender antes que vender algo que no le sirve al cliente.
+- En portátiles: envío gratis, soporte técnico remoto, Windows y Office licenciados, equipo configurado.
+- Garantías atendidas con diligencia.
 
 TU MÉTODO DE TRABAJO:
-1. 1. Identifica desde el primer mensaje si el cliente busca celular, tablet o portátil. Si no es claro, pregúntalo primero.
-2. Una vez definida la categoría, SOLO recomiendas productos de esa categoría. Nunca mezcles.
-3. Antes de recomendar SIEMPRE debes conocer:
-   - Para qué va a usar el equipo
-   - Cuál es su presupuesto disponible
-   Si no los tienes, pregúntalos de forma natural en un solo mensaje.
-4. Nunca hagas más de 2 preguntas en toda la conversación.
-5. Cuando vayas a recomendar, ANALIZA TODO EL INVENTARIO usando el análisis incluido en cada equipo.
-   Escoge el que MEJOR satisfaga la necesidad específica del cliente dentro de su presupuesto.
-   - Si necesita fotos → prioriza megapixeles, calidad de panel, batería
-   - Si necesita gaming → prioriza AnTuTu, RAM, gráfica dedicada
-   - Si necesita trabajo/estudio → prioriza procesador, RAM, SSD
-   - Si necesita redes sociales → prioriza pantalla AMOLED, cámara selfie, batería
-   - Si necesita todo el día de uso → prioriza batería grande y carga rápida
-6. REGLA DE PRESUPUESTO ESTRICTA: Nunca recomiendes un equipo que supere el presupuesto.
-   Dentro del presupuesto, recomienda el MEJOR, no el más barato.
-   Si ningún equipo cabe en el presupuesto, díselo honestamente y muéstrale la opción más cercana.
-7. Al recomendar sé específico: menciona los megapixeles de la cámara, el AnTuTu, la batería,
-   el tipo de pantalla — los datos concretos que justifican por qué ese equipo satisface su necesidad.
-8. Cierra siempre invitando al cliente a hablar con Albeiro. Construye el enlace reemplazando
-   [EQUIPO] con el nombre real: https://wa.me/573128590469?text=Hola+Albeiro%2C+Camilo+me+recomendó+el+[EQUIPO]
+1. IDENTIFICA: Asegúrate de saber qué busca, uso principal y presupuesto disponible. Si no los tienes, consúltalos amablemente.
+2. RECOMIENDA EL MEJOR EQUIPO: Usa el JSON de INVENTARIO para encontrar el equipo perfecto que no supere el presupuesto.
+3. ASESORÍA PROFUNDA Y CONVINCENTE (MUY IMPORTANTE): ¡No seas breve! Toma la información del JSON y crea un argumento de venta sólido, completo y persuasivo. 
+   - Tómate el tiempo de listar y explicar sus características (Procesador, Batería, RAM, Almacenamiento, Cámara, Pantalla).
+   - EXPRIME LOS DATOS: Si tiene batería de 5000mAh, explícale que "le durará el día entero sin preocuparse por el cargador". Si es para fotos, resalta los megapíxeles y cómo eso mejorará sus redes. Si tiene RAM alta, menciónale que "podrá abrir muchas aplicaciones al tiempo sin que se trabe".
+   - Hazle sentir al cliente que analizaste todo el catálogo y elegiste este equipo específicamente para resolver SU necesidad puntual.
+   - Menciona el precio del equipo y demuestra por qué es una inversión excelente por todo el valor que aporta.
+4. REGLA ESTRICTA DE PRESUPUESTO: NUNCA recomiendes un equipo más caro que el presupuesto indicado. Si no hay, ofrécele la alternativa más cercana y justifícala.
+5. NO INVENTES: Recomienda SOLO los modelos incluidos en el JSON adjunto.
+6. CIERRE: Siempre finaliza invitando a contactar a Albeiro para ver fotos reales o concretar la compra. Genera el enlace así (cambiando [EQUIPO] por el nombre del modelo): https://wa.me/573128590469?text=Hola+Albeiro%2C+Camilo+me+recomendó+el+[EQUIPO]
 
-INVENTARIO PORTÁTILES:
-${inventarioPortatiles}
+INVENTARIO DISPONIBLE (JSON - m:marca, mod:modelo, p:precio, cpu:procesador, bat:batería mAh, cam:cámara MP, gpu:gráfica):
+${jsonInventarioStr}
 
-INVENTARIO CELULARES:
-${inventarioCelulares}
-
-INVENTARIO TABLETS:
-${inventarioTablets}
-
-REGLAS FINALES:
-- Nunca inventes productos que no estén en el inventario
-- Responde en español colombiano, cálido y profesional
-- Respuestas concisas — el cliente está en un chat, no leyendo un informe
-- Sin markdown, sin asteriscos, sin negrillas. Solo texto plano y emojis ocasionales
-- Recuerda TODO lo que el cliente ha dicho y nunca repitas preguntas
+REGLAS DE TONO:
+- Español colombiano, muy cálido, empático y servicial.
+- Evita el uso de Markdown como asteriscos (*) o negrillas. Escribe texto limpio, separado por párrafos cortos para facilitar la lectura.
+- Usa emojis de manera estratégica para hacer la lectura agradable.
+- Esfuérzate en dar una respuesta completa, entusiasta y muy bien argumentada. ¡Demuestra todo tu conocimiento técnico!
 `;
 
     const messages = [
@@ -815,12 +821,13 @@ REGLAS FINALES:
       payload: JSON.stringify({
         model: "gpt-4o-mini",
         messages: messages,
-        temperature: 0.7,
+        temperature: 0.5, // Más precisión lógica
         max_tokens: 500
       }),
       muteHttpExceptions: true
     };
-    console.log("Tamaño del prompt:", JSON.stringify(messages).length, "caracteres");
+    
+    console.log("Tamaño del prompt optimizado:", JSON.stringify(messages).length, "caracteres");
     const response = UrlFetchApp.fetch("https://api.openai.com/v1/chat/completions", opciones);
     const json = JSON.parse(response.getContentText());
 
@@ -852,8 +859,11 @@ function doGet(e) {
   } else if (apiParam === 'tablets') {
     return ContentService.createTextOutput(JSON.stringify(getTabletsData()))
       .setMimeType(ContentService.MimeType.JSON);
-  } else if (apiParam === 'impresoras') {  // <--- ESTO ES LO QUE AGREGAS
+  } else if (apiParam === 'impresoras') {
     return ContentService.createTextOutput(JSON.stringify(getImpresorasData()))
+      .setMimeType(ContentService.MimeType.JSON);
+  } else if (apiParam === 'escritorio') {
+    return ContentService.createTextOutput(JSON.stringify(getEscritorioData()))
       .setMimeType(ContentService.MimeType.JSON);
   }
 
@@ -1373,6 +1383,7 @@ function onOpen() {
     .createMenu('🛒 Catálogo')
     .addItem('🔄 Actualizar catálogo ahora', 'invalidarCache')
     .addItem('🔡 Convertir selección a minúsculas', 'convertirSeleccionAMinusculas')
+    .addItem('🔑 Probar conexión GitHub', 'probarConexionGitHub')
     .addSeparator()
     .addItem('🤖 Abrir asistente', 'abrirAsistente')
     .addToUi();
@@ -1450,16 +1461,36 @@ function invalidarCache() {
     const impresoras = getImpresorasData();
 
     // 3. Subir a GitHub
-    const cellsOk = subirArchivoAGitHub('data/celulares.json', celulares);
-    const portOk = subirArchivoAGitHub('data/portatiles.json', portatiles);
-    const tabOk = subirArchivoAGitHub('data/tablets.json', tablets);
-    const impOk = subirArchivoAGitHub('data/impresoras.json', impresoras);
+    const cellsRes = subirArchivoAGitHub('data/celulares.json', celulares);
+    const portRes = subirArchivoAGitHub('data/portatiles.json', portatiles);
+    const tabRes = subirArchivoAGitHub('data/tablets.json', tablets);
+    const impRes = subirArchivoAGitHub('data/impresoras.json', impresoras);
+
+    const results = [
+      { name: 'celulares.json', res: cellsRes },
+      { name: 'portatiles.json', res: portRes },
+      { name: 'tablets.json', res: tabRes },
+      { name: 'impresoras.json', res: impRes }
+    ];
+
+    const failures = results.filter(r => !r.res.success);
 
     let statusMsg = '✅ Caché del servidor limpiado.';
-    if (cellsOk && portOk && tabOk && impOk) {
+    if (failures.length === 0) {
       statusMsg += '\n\n🚀 ¡Archivos de catálogo subidos exitosamente a GitHub! En 1-2 minutos se reflejarán los cambios para todos los usuarios.';
     } else {
-      statusMsg += '\n\n⚠️ Los archivos no pudieron subirse a GitHub (esto es normal si aún no has configurado tu GITHUB_TOKEN en las Propiedades del Script). Los usuarios verán las actualizaciones vía la API de fallback.';
+      statusMsg += '\n\n⚠️ Los archivos no pudieron subirse a GitHub.';
+      statusMsg += '\n\nDetalles del error:';
+      const uniqueErrors = [];
+      failures.forEach(f => {
+        if (!uniqueErrors.includes(f.res.error)) {
+          uniqueErrors.push(f.res.error);
+        }
+      });
+      uniqueErrors.forEach(err => {
+        statusMsg += `\n❌ ${err}`;
+      });
+      statusMsg += '\n\nNota: Los usuarios seguirán viendo actualizaciones usando la API de fallback desde la hoja de cálculo.';
     }
     
     SpreadsheetApp.getUi().alert(statusMsg);
@@ -1469,14 +1500,14 @@ function invalidarCache() {
 }
 
 function subirArchivoAGitHub(path, contentJson) {
-  const GITHUB_TOKEN = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
-  const GITHUB_OWNER = PropertiesService.getScriptProperties().getProperty('GITHUB_OWNER') || 'albeirojr-pixel';
-  const GITHUB_REPO = PropertiesService.getScriptProperties().getProperty('GITHUB_REPO') || 'jrtech';
-  const GITHUB_BRANCH = PropertiesService.getScriptProperties().getProperty('GITHUB_BRANCH') || 'main';
+  const rawToken = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
+  const GITHUB_TOKEN = rawToken ? rawToken.trim() : '';
+  const GITHUB_OWNER = (PropertiesService.getScriptProperties().getProperty('GITHUB_OWNER') || 'albeirojr-pixel').trim();
+  const GITHUB_REPO = (PropertiesService.getScriptProperties().getProperty('GITHUB_REPO') || 'jrtech').trim();
+  const GITHUB_BRANCH = (PropertiesService.getScriptProperties().getProperty('GITHUB_BRANCH') || 'main').trim();
 
   if (!GITHUB_TOKEN) {
-    Logger.log('No GITHUB_TOKEN configured in Script Properties. Skipping GitHub push.');
-    return false;
+    return { success: false, error: 'No se encontró el GITHUB_TOKEN (o está vacío) en las Propiedades del Script.' };
   }
 
   const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`;
@@ -1493,9 +1524,16 @@ function subirArchivoAGitHub(path, contentJson) {
       muteHttpExceptions: true
     });
     
-    if (getResponse.getResponseCode() === 200) {
+    const getCode = getResponse.getResponseCode();
+    if (getCode === 200) {
       const getJson = JSON.parse(getResponse.getContentText());
       sha = getJson.sha;
+    } else if (getCode === 401) {
+      return { success: false, error: 'GitHub retornó 401 Unauthorized. Es probable que tu GITHUB_TOKEN haya expirado o sea inválido.' };
+    } else if (getCode === 403) {
+      return { success: false, error: 'GitHub retornó 403 Forbidden. El token puede no tener permisos de escritura (repo/workflow scopes) o haber alcanzado límites.' };
+    } else if (getCode === 404) {
+      Logger.log(`El archivo ${path} no existe en GitHub, se intentará crear de cero.`);
     }
   } catch (e) {
     Logger.log(`Error al obtener SHA para ${path}: ` + e.toString());
@@ -1531,14 +1569,67 @@ function subirArchivoAGitHub(path, contentJson) {
     const putCode = putResponse.getResponseCode();
     if (putCode === 200 || putCode === 201) {
       Logger.log(`Archivo ${path} subido exitosamente a GitHub.`);
-      return true;
+      return { success: true };
     } else {
-      Logger.log(`Error al subir ${path} a GitHub (HTTP ${putCode}): ` + putResponse.getContentText());
-      return false;
+      let extra = '';
+      try {
+        const errObj = JSON.parse(putResponse.getContentText());
+        extra = ` - ${errObj.message}`;
+      } catch(ex) {}
+      return { success: false, error: `Error HTTP ${putCode} al subir: ${putResponse.getContentText() || 'Sin respuesta'}` };
     }
   } catch (e) {
-    Logger.log(`Excepción al subir ${path} a GitHub: ` + e.toString());
-    return false;
+    return { success: false, error: `Excepción de red/Apps Script: ${e.toString()}` };
+  }
+}
+
+function probarConexionGitHub() {
+  const ui = SpreadsheetApp.getUi();
+  const props = PropertiesService.getScriptProperties();
+  const rawToken = props.getProperty('GITHUB_TOKEN');
+  const token = rawToken ? rawToken.trim() : '';
+  const owner = (props.getProperty('GITHUB_OWNER') || 'albeirojr-pixel').trim();
+  const repo = (props.getProperty('GITHUB_REPO') || 'jrtech').trim();
+  
+  if (!token) {
+    ui.alert('❌ Error: El GITHUB_TOKEN no está configurado (o está vacío) en las Propiedades del Script.');
+    return;
+  }
+  
+  let diagInfo = `\n\n🔍 Información de diagnóstico:\n` +
+                 `- Longitud del token: ${rawToken.length} caracteres.\n` +
+                 `- Espacios/saltos de línea al inicio/final: ${rawToken.length !== token.length ? '⚠️ Sí (fueron recortados)' : 'No'}.\n` +
+                 `- Formato del token: ${token.startsWith('ghp_') ? 'Clásico (ghp_...)' : token.startsWith('github_pat_') ? 'Fine-grained (github_pat_...)' : '⚠️ Formato desconocido'}.\n` +
+                 `- Propietario (owner): "${owner}"\n` +
+                 `- Repositorio (repo): "${repo}"`;
+
+  const url = `https://api.github.com/repos/${owner}/${repo}`;
+  try {
+    const response = UrlFetchApp.fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      muteHttpExceptions: true
+    });
+    
+    const code = response.getResponseCode();
+    const body = response.getContentText();
+    
+    if (code === 200) {
+      ui.alert(`✅ ¡Conexión exitosa! El token es válido y tiene acceso al repositorio "${owner}/${repo}".` + diagInfo);
+    } else if (code === 401) {
+      ui.alert(`❌ Error 401: No autorizado. El GITHUB_TOKEN ha expirado, fue revocado, es incorrecto o tiene caracteres extraños.` + diagInfo);
+    } else if (code === 403) {
+      ui.alert(`❌ Error 403: Prohibido. El token no tiene los permisos suficientes o se alcanzó el límite de peticiones.` + diagInfo);
+    } else if (code === 404) {
+      ui.alert(`❌ Error 404: No encontrado. El repositorio "${owner}/${repo}" no existe, es privado y el token no lo ve, o el nombre de usuario/repositorio está mal configurado.` + diagInfo);
+    } else {
+      ui.alert(`❌ Error de conexión (HTTP ${code}):\n\n${body}` + diagInfo);
+    }
+  } catch (e) {
+    ui.alert(`❌ Error al conectar con GitHub:\n\n${e.toString()}` + diagInfo);
   }
 }
 

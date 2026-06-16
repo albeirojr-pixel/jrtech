@@ -6,35 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#0f111a">
-    <meta name="description" content="Tecnología de última generación en Colombia. Celulares, laptops y tablets con garantía real. Atención personalizada por Albeiro López.">
-    <title>JRTech | Tecnología amable</title>
+    <meta name="description" content="Catálogo de computadores de escritorio en JRTech. Garantía real y atención personalizada por Albeiro López.">
+    <title>JRTech | De Escritorio</title>
     <link rel="stylesheet" href="styles.css?v=20260615">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Configuración privada (Ignorada en Git para seguridad) -->
     <script src="config.js"></script>
     <script src="logo-base64.js"></script>
     <script src="textos.js"></script>
+    <script>
+        window.PAGE_CATEGORY = 'escritorio';
+    </script>
 </head>
 
-    <header class="header">
-        <div class="header-content header-content-flex">
-            <div class="header-text-block">
-                <div class="header-title-container">
+<body>
+    <header class="header" style="padding: 40px 0; min-height: auto; background: linear-gradient(135deg, #0b0c16 0%, #151829 100%);">
+        <div class="header-content" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+            <div class="header-text-block" style="flex: 1; min-width: 300px; padding: 0;">
+                <div class="header-title-container" style="margin-bottom: 5px;">
                     <div class="header-logo-container" id="header-logo-placeholder"></div>
-                    <h1 id="hero-title">TECNOLOGÍA HUMANIZADA</h1>
+                    <h1 style="font-size: 2.2rem; margin: 0; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">
+                        De Escritorio
+                    </h1>
                 </div>
-                <p id="hero-subtitle">¿Busca calidad y buen precio? Aquí no somos robots ni empresas frías. Habla directo con Albeiro, el dueño, y llévese lo mejor sin intermediarios.</p>
-                <div style="margin-top: 40px;">
-                    <a href="#beneficios" class="btn-wa hero-btn-custom" id="hero-btn-beneficios">
-                        <i class="fas fa-arrow-down"></i> Pille por qué comprar acá
-                    </a>
-                </div>
+                <p style="color: var(--text-dim); font-size: 0.95rem; margin: 0;">
+                    Equipos de última tecnología con garantía real. Habla directo con Albeiro López.
+                </p>
             </div>
-            
-            <div id="random-product-container" class="random-prod-card">
-                <div class="loader-card-inner">
-                    <i class="fas fa-spinner fa-spin fa-2x"></i><br><br>Buscando equipo estrella...
-                </div>
+            <div style="display: flex; gap: 12px;">
+                <a href="index.html" class="btn-secundario" style="padding: 10px 20px; border-radius: 12px; font-size: 0.85rem; text-decoration: none;">
+                    <i class="fas fa-home"></i> Volver a Inicio
+                </a>
             </div>
         </div>
     </header>
@@ -42,34 +44,34 @@
     <nav>
         <div class="nav-container">
             <div class="menu">
+                <button type="button" id="nav-btn-inicio" onclick="window.location.href='index.html'">
+                    <i class="fas fa-home"></i> Inicio
+                </button>
                 <button type="button" id="nav-btn-bondades" onclick="mostrar('beneficios')">
                     <i class="fas fa-sparkles"></i> Bondades
                 </button>
+                <button type="button" id="nav-btn-testimonios" onclick="mostrar('testimonios')">
+                    <i class="fas fa-star"></i> Opiniones
+                </button>
+                <button type="button" id="nav-btn-faq" onclick="mostrar('faq')">
+                    <i class="fas fa-question-circle"></i> Dudas
+                </button>
+                <button type="button" id="nav-btn-perfil" onclick="mostrar('perfil')">
+                    <i class="fas fa-user-astronaut"></i> ¿Quién soy?
+                </button>
+            </div>
 
-            <button type="button" id="nav-btn-testimonios" onclick="mostrar('testimonios')">
-                <i class="fas fa-star"></i> Opiniones
-            </button>
-
-            <button type="button" id="nav-btn-faq" onclick="mostrar('faq')">
-                <i class="fas fa-question-circle"></i> Dudas
-            </button>
-
-            <button type="button" id="nav-btn-perfil" onclick="mostrar('perfil')">
-                <i class="fas fa-user-astronaut"></i> ¿Quién soy?
-            </button>
-        </div>
-
-        <!-- Fila 2: Categorías de Catálogo (Aparece dinámicamente) -->
-        <div class="menu-catalog" id="catalog-nav-row">
-            <a class="hub-btn" href="celulares.html">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Celulares</span>
-            </a>
-            <a class="hub-btn" href="tablets.html">
-                <i class="fas fa-tablet-alt"></i>
-                <span>Tablets</span>
-            </a>
-            <div class="nav-dropdown">
+            <!-- Fila 2: Categorías de Catálogo -->
+            <div class="menu-catalog visible" id="catalog-nav-row">
+                <a class="hub-btn" href="celulares.html">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Celulares</span>
+                </a>
+                <a class="hub-btn" href="tablets.html">
+                    <i class="fas fa-tablet-alt"></i>
+                    <span>Tablets</span>
+                </a>
+                <div class="nav-dropdown">
                 <a class="hub-btn" style="cursor: pointer;" onclick="this.nextElementSibling.classList.toggle('show'); event.stopPropagation();">
                     <i class="fas fa-laptop"></i>
                     <span>Computadores</span>
@@ -77,159 +79,21 @@
                 </a>
                 <div class="dropdown-menu">
                     <a href="portatiles.html"><i class="fas fa-laptop"></i> Portátiles</a>
-                    <a href="escritorio.html"><i class="fas fa-desktop"></i> De Escritorio</a>
+                    <a href="escritorio.html" class="active"><i class="fas fa-desktop"></i> De Escritorio</a>
                 </div>
             </div>
-            <a class="hub-btn" href="impresoras.html">
-                <i class="fas fa-print"></i>
-                <span>Impresoras</span>
-            </a>
-        </div>
+                <a class="hub-btn" href="impresoras.html">
+                    <i class="fas fa-print"></i>
+                    <span>Impresoras</span>
+                </a>
+            </div>
         </div> <!-- End .nav-container -->
     </nav>
 
     <main class="container">
 
-        <section id="beneficios">
-            <h2 id="bondades-title">POR QUÉ NO SOMOS IGUAL A LOS DEMÁS</h2>
-            <div class="beneficios-grid">
-                <div class="beneficio-card">
-                    <i id="bondad-1-icon"></i>
-                    <h3 id="bondad-1-title"></h3>
-                    <p id="bondad-1-desc"></p>
-                </div>
-                <div class="beneficio-card">
-                    <i id="bondad-2-icon"></i>
-                    <h3 id="bondad-2-title"></h3>
-                    <p id="bondad-2-desc"></p>
-                </div>
-                <div class="beneficio-card">
-                    <i id="bondad-3-icon"></i>
-                    <h3 id="bondad-3-title"></h3>
-                    <p id="bondad-3-desc"></p>
-                </div>
-                <div class="beneficio-card">
-                    <i id="bondad-4-icon"></i>
-                    <h3 id="bondad-4-title"></h3>
-                    <p id="bondad-4-desc"></p>
-                </div>
-                <div class="beneficio-card">
-                    <i id="bondad-5-icon"></i>
-                    <h3 id="bondad-5-title"></h3>
-                    <p id="bondad-5-desc"></p>
-                </div>
-                <div class="beneficio-card">
-                    <i id="bondad-6-icon"></i>
-                    <h3 id="bondad-6-title"></h3>
-                    <p id="bondad-6-desc"></p>
-                </div>
-            </div>
-
-        </section>
-
-        <section id="testimonios">
-            <h2 id="testimonios-title">LO QUE DICEN MIS CLIENTES</h2>
-            <div id="google-reviews-container" class="testimonios-grid">
-                <!-- Se cargan dinámicamente desde Google Business -->
-                <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
-                    <p style="margin-top: 15px;">Cargando reseñas verificadas...</p>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="btn-secundario" onclick="abrirModalResenas()">
-                    <i class="fab fa-google"></i> Ver todas las reseñas
-                </button>
-            </div>
-            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-dim);">
-                <i class="fab fa-google"></i> Reseñas en vivo desde Google Business
-            </p>
-        </section>
-
-        <section id="faq">
-            <h2 id="faq-title">PREGUNTAS FRECUENTES</h2>
-            <div class="faq-accordion">
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3 id="faq-1-q">¿Tienen tienda física?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p id="faq-1-a">Somos 100% virtuales. Eso nos permite ahorrar en arriendos costosos y pasarte ese ahorro a ti en el precio final.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3 id="faq-2-q">¿Cómo es el proceso de compra?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p id="faq-2-a">Eliges tu equipo, llenas el formulario o me escribes al WhatsApp. Coordinamos el pago (Contraentrega o transferencia) y te lo envío asegurado.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h3 id="faq-3-q">¿Qué pasa si falla el equipo?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p id="faq-3-a">Tienes garantía real de 1 año. Me escribes y yo mismo gestiono la solución, sin que tengas que pelear con marcas.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="perfil">
-            <h2 id="perfil-title">LA PERSONA DETRÁS DE JRTECH</h2>
-            <div class="perfil-content">
-                <div class="perfil-img">
-                    <img src="albeiro_real_office_portrait.png" alt="Albeiro López" style="border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--sombra-premium);">
-                </div>
-                <div>
-                    <h3 id="perfil-nombre" style="font-size: 2.5rem; margin-bottom: 10px;">Albeiro López</h3>
-                    <p id="perfil-rol" style="color: var(--primary); font-weight: 600; font-size: 1.2rem; margin-bottom: 20px;">El que te asesora de verdad</p>
-                    <p id="perfil-cita" style="font-size: 1.1rem; margin-bottom: 30px;">
-                        <i>"En este mundo de robots, yo prefiero el contacto humano. Mi meta es que te llevés un equipazo a excelente precio y quedés con un amigo más."</i>
-                    </p>
-                    <div class="perfil-contacto">
-                        <a href="#" id="perfil-contacto" onclick="window.open('https://wa.me/'+CONFIG.TEL_WHATSAPP, '_blank')">
-                            <i class="fab fa-whatsapp"></i> Háblame de una
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA FINAL PARA EL CATÁLOGO -->
-        <section id="catalog-cta" class="catalog-cta-section" style="text-align: center; background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(188, 19, 254, 0.1)); border: 2px solid var(--primary);">
-            <h2 id="catalog-cta-title">¿LISTO PARA TU PRÓXIMO EQUIPAZO?</h2>
-            <p id="catalog-cta-subtitle" style="font-size: 1.2rem; margin-bottom: 40px; color: var(--text-dim);">Después de conocer cómo trabajamos, pilla lo que tenemos disponible para entrega inmediata.</p>
-            <div class="cta-buttons-grid">
-                <a class="btn-wa" href="celulares.html" style="text-decoration: none;">
-                    <i class="fas fa-mobile-alt"></i> Ver Celulares
-                </a>
-                <a class="btn-wa" href="tablets.html" style="text-decoration: none;">
-                    <i class="fas fa-tablet-alt"></i> Ver Tablets
-                </a>
-                <!-- Dropdown Computadores en CTA -->
-                <div class="nav-dropdown cta-dropdown">
-                    <a class="btn-wa cta-dropdown-trigger" style="text-decoration: none; cursor: pointer;"
-                       onclick="this.nextElementSibling.classList.toggle('show'); event.stopPropagation();">
-                        <i class="fas fa-laptop"></i> Ver Computadores <i class="fas fa-chevron-down" style="font-size: 0.7em; margin-left: 4px;"></i>
-                    </a>
-                    <div class="dropdown-menu">
-                        <a href="portatiles.html"><i class="fas fa-laptop"></i> Portátiles</a>
-                        <a href="escritorio.html"><i class="fas fa-desktop"></i> De Escritorio</a>
-                    </div>
-                </div>
-                <a class="btn-wa" href="impresoras.html" style="text-decoration: none;">
-                    <i class="fas fa-print"></i> Ver Impresoras
-                </a>
-            </div>
-        </section>
-
-        <section id="catalogo" style="display:none">
-            <h2 id="catalogo-title">EL CATÁLOGO</h2>
+        <section id="catalogo" style="display:block">
+            <h2 id="catalogo-title">DE ESCRITORIO</h2>
 
             <!-- ── BOTÓN ASISTENTE DESTACADO ────────────────────────── -->
             <div style="text-align: center; margin: 0 0 28px 0;">
@@ -238,23 +102,20 @@
                 </button>
             </div>
 
-            
             <div id="catalogo-loader" style="display:none; text-align:center; padding: 40px;">
                 <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
                 <p style="margin-top: 15px; font-weight: 600;">Cargando inventario desde la bodega...</p>
             </div>
 
-            <!-- ══════════════════════════════════════════════════════════ -->
-            <!-- PANEL DE CONTROL UNIFICADO                                 -->
-            <!-- ══════════════════════════════════════════════════════════ -->
+            <!-- PANEL DE CONTROL UNIFICADO -->
             <div id="catalogo-controls" class="filtro-panel-unificado">
 
-                <!-- ── MARCAS (logos) ──────────────────────────────────── -->
+                <!-- Marcas (logos) -->
                 <div class="filtro-seccion filtro-seccion-marcas">
                     <div id="catalogo-filtros-marcas" class="filtro-chips-row"></div>
                 </div>
 
-                <!-- ── BARRA "FILTRAR POR" ────────────────────────────── -->
+                <!-- Barra "Filtrar por" -->
                 <div class="filtro-por-bar">
                     <span class="filtrar-por-label"><i class="fas fa-filter"></i> Filtrar por</span>
                     <div class="filtrar-por-btns">
@@ -293,7 +154,7 @@
                     </div>
                 </div>
 
-                <!-- ── PANEL: PRESUPUESTO ─────────────────────────────── -->
+                <!-- PANEL: PRESUPUESTO -->
                 <div id="panel-presupuesto" class="filtrar-por-panel">
                     <div class="filtro-seccion">
                         <label class="filtro-seccion-header" style="cursor:default;">
@@ -304,29 +165,29 @@
                     </div>
                 </div>
 
-                <!-- ── PANEL: ESPECIFICACIONES ─────────────────────────── -->
+                <!-- PANEL: ESPECIFICACIONES -->
                 <div id="panel-especificaciones" class="filtrar-por-panel">
                     <div id="filtros-avanzados" class="filtro-expandible" style="display:flex;"></div>
                 </div>
 
-                <!-- ── PANEL: REFERENCIA ───────────────────────────────── -->
+                <!-- PANEL: REFERENCIA -->
                 <div id="panel-referencia" class="filtrar-por-panel">
                     <div class="filtro-seccion">
                         <div class="filtro-search-wrap">
                             <i class="fas fa-search filtro-search-icon"></i>
-                            <input type="text" id="catalogo-search" class="filtro-search-input" placeholder="Buscar por marca, modelo o referencia..." oninput="aplicarFiltros()" autofocus>
+                            <input type="text" id="catalogo-search" class="filtro-search-input" placeholder="Buscar por marca, modelo o referencia..." oninput="aplicarFiltros()">
                         </div>
                     </div>
                 </div>
 
-                <!-- ── PANEL: TIPO DE USUARIO ─────────────────────────── -->
+                <!-- PANEL: TIPO DE USUARIO -->
                 <div id="panel-tipo-usuario" class="filtrar-por-panel">
                     <div class="filtro-seccion">
                         <div id="search-suggestions" class="filtro-chips-row"></div>
                     </div>
                 </div>
 
-                <!-- ── PANEL: USO RECOMENDADO ─────────────────────────── -->
+                <!-- PANEL: USO RECOMENDADO -->
                 <div id="panel-uso-recomendado" class="filtrar-por-panel">
                     <div class="filtro-seccion">
                         <span id="sw-filter-label" class="filtro-sw-active-label"></span>
@@ -341,6 +202,34 @@
             </div>
             
             <div id="catalogo-error" style="display:none; text-align:center; padding: 40px; color: red;">
+            </div>
+        </section>
+
+        <!-- CTA FINAL PARA OTRAS CATEGORÍAS -->
+        <section id="catalog-cta" class="catalog-cta-section" style="text-align: center; background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(188, 19, 254, 0.1)); border: 2px solid var(--primary); margin-top: 60px; padding: 40px 20px; border-radius: 20px; margin-bottom: 40px;">
+            <h2 id="catalog-cta-title">¿BUSCAS OTRO EQUIPO?</h2>
+            <p id="catalog-cta-subtitle" style="font-size: 1.2rem; margin-bottom: 40px; color: var(--text-dim);">Explora nuestras otras categorías de productos.</p>
+            <div class="cta-buttons-grid">
+                <a class="btn-wa" href="celulares.html" style="text-decoration: none;">
+                    <i class="fas fa-mobile-alt"></i> Ver Celulares
+                </a>
+                <a class="btn-wa" href="tablets.html" style="text-decoration: none;">
+                    <i class="fas fa-tablet-alt"></i> Ver Tablets
+                </a>
+                <!-- Dropdown Computadores en CTA -->
+                <div class="nav-dropdown cta-dropdown">
+                    <a class="btn-wa cta-dropdown-trigger" style="text-decoration: none; cursor: pointer;"
+                       onclick="this.nextElementSibling.classList.toggle('show'); event.stopPropagation();">
+                        <i class="fas fa-laptop"></i> Ver Computadores <i class="fas fa-chevron-down" style="font-size: 0.7em; margin-left: 4px;"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="portatiles.html"><i class="fas fa-laptop"></i> Portátiles</a>
+                        <a href="escritorio.html"><i class="fas fa-desktop"></i> De Escritorio</a>
+                    </div>
+                </div>
+                <a class="btn-wa" href="impresoras.html" style="text-decoration: none;">
+                    <i class="fas fa-print"></i> Ver Impresoras
+                </a>
             </div>
         </section>
 
@@ -443,7 +332,7 @@
                             </div>
                             <div>
                                 <label class="form-label">Municipio / Ciudad *</label>
-                                <input type="text" id="pedido-municipio" class="form-input" placeholder="Ej: Medellín" required>
+                                <input type="text" id="pedido-nombre-municipio" class="form-input" placeholder="Ej: Medellín" required>
                             </div>
                             <div>
                                 <label class="form-label">Departamento *</label>
@@ -576,7 +465,7 @@
                 <!-- PRECIO -->
                 <div class="poster-precio" id="p-price">$ 0</div>
 
-                <!-- 6. Especificaciones (Ahora debajo del precio) -->
+                <!-- 6. Especificaciones -->
                 <div class="poster-specs-list" id="p-specs">
                     <!-- Se llena dinámicamente con iconos -->
                 </div>
@@ -606,4 +495,5 @@
     <script src="poster-generator.js"></script>
     <script src="admin.js"></script>
 </body>
+
 </html>
