@@ -16,6 +16,7 @@
     <script src="textos.js"></script>
 </head>
 
+<body>
     <header class="header">
         <div class="header-content header-content-flex">
             <div class="header-text-block">
@@ -255,9 +256,29 @@
                 </div>
 
                 <!-- ── BARRA "FILTRAR POR" ────────────────────────────── -->
-                <div class="filtro-por-bar">
-                    <span class="filtrar-por-label"><i class="fas fa-filter"></i> Filtrar por</span>
-                    <div class="filtrar-por-btns">
+                <div class="filtro-por-bar" style="flex-direction: column; align-items: stretch; gap: 18px;">
+                    <!-- Fila Superior: Título y Acciones -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; width: 100%;">
+                        <span class="filtrar-por-label" style="font-size: 0.85rem;"><i class="fas fa-filter"></i> Explorador de Catálogo</span>
+                        <div class="filtrar-por-actions" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <span style="font-size:0.7rem; font-weight:800; color:var(--text-dim); text-transform:uppercase;">Ordenar por:</span>
+                            <select id="catalogo-sort" class="filtro-select-order" onchange="aplicarFiltros()" style="margin-right: 8px;">
+                                <option value="precio-asc">Precio: Menor a Mayor</option>
+                                <option value="precio-desc">Precio: Mayor a Menor</option>
+                                <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
+                                <option value="marca-asc">Marca (A-Z)</option>
+                            </select>
+                            <button id="refrescar-catalogo-btn" onclick="forzarRefrescoCatalogo()" class="filtro-btn-refrescar" title="Actualizar inventario desde el servidor">
+                                <i class="fas fa-redo-alt"></i> Actualizar Inventario
+                            </button>
+                            <button id="limpiar-filtros-btn" onclick="limpiarFiltros()" class="filtro-btn-limpiar" title="Limpiar todos los filtros">
+                                <i class="fas fa-sync-alt"></i> Limpiar Filtros
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Fila Inferior: Botones de Filtro -->
+                    <div class="filtrar-por-btns" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: flex-start;">
                         <button class="filtrar-por-btn" id="fpb-presupuesto" onclick="toggleFiltrarPor('presupuesto')">
                             <i class="fas fa-wallet"></i> Presupuesto <i class="fas fa-chevron-down fp-chevron"></i>
                         </button>
@@ -270,26 +291,11 @@
                         <button class="filtrar-por-btn" id="fpb-tipo-usuario" onclick="toggleFiltrarPor('tipo-usuario')">
                             <i class="fas fa-user-tag"></i> Tipo de Usuario <i class="fas fa-chevron-down fp-chevron"></i>
                         </button>
-                        <div id="software-filter-btn-container" style="display:none;">
+                        <div id="software-filter-btn-container" style="display:none; margin:0; padding:0;">
                             <button class="filtrar-por-btn" id="fpb-uso-recomendado" onclick="toggleFiltrarPor('uso-recomendado')">
                                 <i class="fas fa-laptop-code"></i> Uso Recomendado <i class="fas fa-chevron-down fp-chevron"></i>
                             </button>
                         </div>
-                    </div>
-                    <div class="filtrar-por-actions">
-                        <span style="font-size:0.7rem; font-weight:800; color:var(--text-dim); text-transform:uppercase;">Ordenar por:</span>
-                        <select id="catalogo-sort" class="filtro-select-order" onchange="aplicarFiltros()">
-                            <option value="precio-asc">Precio: Menor a Mayor</option>
-                            <option value="precio-desc">Precio: Mayor a Menor</option>
-                            <option value="antutu-desc" id="opt-antutu" style="display:none;">Potencia (AnTuTu) ⚡</option>
-                            <option value="marca-asc">Marca (A-Z)</option>
-                        </select>
-                        <button id="limpiar-filtros-btn" onclick="limpiarFiltros()" class="filtro-btn-limpiar" title="Limpiar todos los filtros">
-                            <i class="fas fa-sync-alt"></i> Limpiar todos los filtros
-                        </button>
-                        <button id="refrescar-catalogo-btn" onclick="forzarRefrescoCatalogo()" class="filtro-btn-refrescar" title="Actualizar inventario desde el servidor">
-                            <i class="fas fa-redo-alt"></i> Actualizar Inventario
-                        </button>
                     </div>
                 </div>
 
@@ -602,8 +608,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoRD9yHPbKGkJfTj2neSHxyTm-O5Jxiww&libraries=places&v=weekly&loading=async"></script>
     <script src="reviews.js"></script>
-    <script src="main.js?v=20250609"></script>
-    <script src="poster-generator.js"></script>
+    <script src="main.js?v=20260616m"></script>
+    <script src="poster-generator.js?v=20260616"></script>
     <script src="admin.js"></script>
 </body>
 </html>

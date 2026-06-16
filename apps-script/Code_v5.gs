@@ -36,13 +36,21 @@ function getConfig() {
 }
 
 function getCatalogData() {
+  return getLaptopStyleData('PORTATILES', 'catalog_portatiles_v2', 'ITM');
+}
+
+function getEscritorioData() {
+  return getLaptopStyleData('ESCRITORIO', 'catalog_escritorio_v2', 'ESC');
+}
+
+function getLaptopStyleData(sheetName, cacheKey, idPrefix) {
   try {
-    const cached = getCacheLarge('catalog_portatiles');
+    const cached = getCacheLarge(cacheKey);
     if (cached) return cached;
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName("PORTATILES");
-    if (!sheet) return { error: "No existe la hoja PORTATILES." };
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) return { error: `No existe la hoja ${sheetName}.` };
 
     const data = sheet.getDataRange().getValues();
     if (data.length < 2) return { error: "La hoja está vacía." };
@@ -69,6 +77,7 @@ function getCatalogData() {
       enlace_foto:    headers.indexOf('enlace_foto'),
       enlace_logo:    headers.indexOf('enlace_logo'),
       enlace_banner:  headers.indexOf('enlace_banner'),
+      uso_recomendado: headers.indexOf('uso recomendado')
     };
 
     const get = (row, key) => {
@@ -82,7 +91,7 @@ function getCatalogData() {
       if (!get(row, 'marca') || get(row, 'marca') === 'N/A') return null;
 
       return {
-        id:      "ITM" + i,
+        id:      idPrefix + i,
         cod:     get(row, 'cod'),
         marca:   get(row, 'marca'),
         modelo:  get(row, 'modelo'),
@@ -105,8 +114,12 @@ function getCatalogData() {
         foto:     get(row, 'enlace_foto') !== 'N/A' ? get(row, 'enlace_foto') : '',
         logo:     get(row, 'enlace_logo') !== 'N/A' ? get(row, 'enlace_logo') : '',
         banner:   get(row, 'enlace_banner') !== 'N/A' ? get(row, 'enlace_banner') : '',
+        uso_recomendado: get(row, 'uso_recomendado') !== 'N/A' ? get(row, 'uso_recomendado') : '',
         fullText: row.join(" ").toLowerCase()
       };
+
+      item.aiInsight = generarComentarioPortatilIA(item);
+      return item;
     }).filter(Boolean);
 
     const filters = {
@@ -151,132 +164,7 @@ function getCatalogData() {
       }
     };
 
-    putCacheLarge('catalog_portatiles', resultado, 600);
-
-    return resultado;
-
-  } catch(e) {
-    return { error: "Error de Servidor: " + e.toString() };
-  }
-}
-
-function getEscritorioData() {
-  try {
-    const cached = getCacheLarge('catalog_escritorio');
-    if (cached) return cached;
-
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName("ESCRITORIO");
-    if (!sheet) return { error: "No existe la hoja ESCRITORIO." };
-
-    const data = sheet.getDataRange().getValues();
-    if (data.length < 2) return { error: "La hoja está vacía." };
-
-    // Mapeo dinámico por encabezados (misma estructura que PORTATILES)
-    const headers = data[0].map(h => String(h).trim().toLowerCase());
-    const rows = data.slice(1);
-
-    const idx = {
-      cod:            headers.indexOf('cod'),
-      marca:          headers.indexOf('marca'),
-      modelo:         headers.indexOf('modelo'),
-      procesador:     headers.indexOf('procesador'),
-      ram:            headers.indexOf('ram'),
-      tipo_ram:       headers.indexOf('tipo_ram'),
-      ssd:            headers.indexOf('ssd'),
-      sistema:        headers.indexOf('sistema'),
-      pantalla:       headers.indexOf('pantalla'),
-      tipo_pantalla:  headers.indexOf('tipo_pantalla'),
-      grafica:        headers.indexOf('grafica'),
-      modelo_grafica: headers.indexOf('modelo_grafica'),
-      vram:           headers.indexOf('vram'),
-      precio:         headers.indexOf('precio'),
-      enlace_foto:    headers.indexOf('enlace_foto'),
-      enlace_logo:    headers.indexOf('enlace_logo'),
-      enlace_banner:  headers.indexOf('enlace_banner'),
-    };
-
-    const get = (row, key) => {
-      const i = idx[key];
-      return i >= 0 && row[i] !== undefined && row[i] !== null
-        ? String(row[i]).trim()
-        : "N/A";
-    };
-
-    const catalog = rows.map((row, i) => {
-      if (!get(row, 'marca') || get(row, 'marca') === 'N/A') return null;
-
-      return {
-        id:      "ESC" + i,
-        cod:     get(row, 'cod'),
-        marca:   get(row, 'marca'),
-        modelo:  get(row, 'modelo'),
-        specs: {
-          "Procesador":     get(row, 'procesador'),
-          "RAM":            get(row, 'ram'),
-          "Tipo RAM":       get(row, 'tipo_ram'),
-          "SSD":            get(row, 'ssd'),
-          "Sistema":        get(row, 'sistema'),
-          "Pantalla": (() => {
-            const match = get(row, 'pantalla').match(/(\d+[.,]\d+|\d+)/);
-            return match ? match[1].replace(',', '.') + '"' : get(row, 'pantalla');
-          })(),
-          "Tipo Pantalla":  get(row, 'tipo_pantalla'),
-          "Gráfica":        get(row, 'grafica'),
-          "Modelo Gráfica": get(row, 'modelo_grafica'),
-          "Tamaño Gráfica": get(row, 'vram')
-        },
-        precio:   parseFloat(get(row, 'precio').replace(/[^0-9.]/g, '')) || 0,
-        foto:     get(row, 'enlace_foto') !== 'N/A' ? get(row, 'enlace_foto') : '',
-        logo:     get(row, 'enlace_logo') !== 'N/A' ? get(row, 'enlace_logo') : '',
-        banner:   get(row, 'enlace_banner') !== 'N/A' ? get(row, 'enlace_banner') : '',
-        fullText: row.join(" ").toLowerCase()
-      };
-    }).filter(Boolean);
-
-    const filters = {
-      "Marca":          [...new Set(catalog.map(it => it.marca))].filter(v => v && v !== "N/A").sort(),
-      "RAM": [...new Set(catalog.map(it => {
-          const match = String(it.specs["RAM"]).match(/(\d+)\s*GB/i);
-          return match ? match[1] + "GB" : null;
-        }))].filter(Boolean).sort((a, b) => parseInt(a) - parseInt(b)),
-      "Tipo RAM": [...new Set(catalog.map(it => it.specs["Tipo RAM"]))].filter(v => v && v !== "N/A" && v !== "N/D").sort(),
-      "SSD":            [...new Set(catalog.map(it => it.specs["SSD"]))].filter(v => v && v !== "N/A").sort(),
-      "Procesador":     [...new Set(catalog.map(it => it.specs["Procesador"]))].filter(v => v && v !== "N/A").sort(),
-      "Pantalla": [...new Set(catalog.map(it => {
-          return String(it.specs["Pantalla"]).replace(',', '.').replace(/"+$/, '"').trim();
-        }))].filter(v => v && v !== "N/A" && v !== "N/D").sort(),
-      "Tipo Pantalla":  [...new Set(catalog.map(it => it.specs["Tipo Pantalla"]))].filter(v => v && v !== "N/A").sort(),
-      "Sistema":        [...new Set(catalog.map(it => it.specs["Sistema"]))].filter(v => v && v !== "N/A").sort(),
-      "Gráfica":        [...new Set(catalog.map(it => it.specs["Gráfica"]))].filter(v => v && v !== "N/A").sort(),
-      "Modelo Gráfica": [...new Set(catalog.map(it => it.specs["Modelo Gráfica"]))].filter(v => v && v !== "N/A").sort()
-    };
-
-    const resultado = {
-      items: catalog,
-      filters: filters,
-      headers: Object.keys(catalog[0]?.specs || {}),
-      rangos: {
-        "RAM": {
-          min: Math.min(...catalog.map(it => parseInt(it.specs["RAM"]) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseInt(it.specs["RAM"]) || 0))
-        },
-        "SSD": {
-          min: Math.min(...catalog.map(it => parseInt(it.specs["SSD"]) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseInt(it.specs["SSD"]) || 0))
-        },
-        "Pantalla": {
-          min: Math.min(...catalog.map(it => parseFloat(String(it.specs["Pantalla"])) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseFloat(String(it.specs["Pantalla"])) || 0))
-        },
-        "Precio": {
-          min: Math.min(...catalog.map(it => it.precio || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => it.precio || 0))
-        }
-      }
-    };
-
-    putCacheLarge('catalog_escritorio', resultado, 600);
+    putCacheLarge(cacheKey, resultado, 600);
 
     return resultado;
 
@@ -286,13 +174,35 @@ function getEscritorioData() {
 }
 
 function getCelularesData() {
+  return getMobileStyleData({
+    sheetName: "CELULARES",
+    cacheKey: "catalog_celulares",
+    idPrefix: "CEL",
+    colE: 5,
+    fallbackStr: "N/A",
+    isTablet: false
+  });
+}
+
+function getTabletsData() {
+  return getMobileStyleData({
+    sheetName: "TABLETS",
+    cacheKey: "catalog_tablets",
+    idPrefix: "TAB",
+    colE: 4,
+    fallbackStr: "N/D",
+    isTablet: true
+  });
+}
+
+function getMobileStyleData(config) {
   try {
-    const cached = getCacheLarge('catalog_celulares');
+    const cached = getCacheLarge(config.cacheKey);
     if (cached) return cached;
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName("CELULARES");
-    if (!sheet) return { error: "No existe la hoja CELULARES." };
+    const sheet = ss.getSheetByName(config.sheetName);
+    if (!sheet) return { error: `No existe la hoja ${config.sheetName}.` };
 
     const data = sheet.getDataRange().getValues();
     if (data.length < 2) return { error: "La hoja está vacía." };
@@ -324,11 +234,13 @@ function getCelularesData() {
       precio: headers.indexOf('precio'),
       enlace_foto: headers.indexOf('enlace_foto'),
       enlace_logo: headers.indexOf('enlace_logo'),
-      uso_recomendado: headers.indexOf('uso recomendado')
+      uso_recomendado: headers.indexOf('uso recomendado'),
+      peso: headers.indexOf('peso'),
+      grosor: headers.indexOf('grosor'),
+      wlan: headers.indexOf('wlan')
     };
 
-    // Identificar columnas de proveedores (desde columna E hasta antes de antutu)
-    const colE = 5;
+    const colE = config.colE;
     const colAntutu = idx.antutu;
     const proveedoresHeaders = headers.slice(colE, colAntutu).filter(h => h && h !== '');
 
@@ -336,13 +248,12 @@ function getCelularesData() {
       const i = idx[key];
       return i >= 0 && row[i] !== undefined && row[i] !== null
         ? String(row[i]).trim()
-        : "N/A";
+        : config.fallbackStr;
     };
 
     const catalog = rows.map((row, i) => {
-      if (!get(row, 'marca') || get(row, 'marca') === 'N/A') return null;
+      if (!get(row, 'marca') || get(row, 'marca') === config.fallbackStr) return null;
 
-      // 🔥 Recopilar TODOS los proveedores con sus precios
       let proveedoresConPrecio = [];
       
       proveedoresHeaders.forEach((provHeader, idx) => {
@@ -357,15 +268,12 @@ function getCelularesData() {
         }
       });
 
-      // Ordenar por precio (menor a mayor)
       proveedoresConPrecio.sort((a, b) => a.precio - b.precio);
-
-      // Concatenar todas las iniciales en orden
       const palabraProveedores = proveedoresConPrecio.map(p => p.iniciales).join('');
 
-      return {
-        id: "CEL" + i,
-        marca: get(row, 'marca').toUpperCase(),
+      const item = {
+        id: config.idPrefix + i,
+        marca: config.isTablet ? get(row, 'marca') : get(row, 'marca').toUpperCase(),
         modelo: get(row, 'modelo'),
         procesador: get(row, 'procesador'),
         ram: get(row, 'ram'),
@@ -385,28 +293,41 @@ function getCelularesData() {
         litografia: get(row, 'litografia'),
         jack: get(row, 'jack'),
         antutu: get(row, 'antutu'),
-        precio: parseFloat(get(row, 'precio').replace(/[^0-9.]/g, '')) || 0, // ✅ PRECIO ORIGINAL
-        foto: get(row, 'enlace_foto') !== 'N/A' ? get(row, 'enlace_foto') : '',
-        logo: get(row, 'enlace_logo') !== 'N/A' ? get(row, 'enlace_logo') : '',
-        proveedor: palabraProveedores, // 🔥 Palabra completa con todas las iniciales
-        uso_recomendado: get(row, 'uso_recomendado') !== 'N/A' ? get(row, 'uso_recomendado') : '',
-        fullText: row.join(" ").toLowerCase()
+        precio: parseFloat(get(row, 'precio').replace(/[^0-9.]/g, '')) || 0,
+        foto: get(row, 'enlace_foto') !== config.fallbackStr ? get(row, 'enlace_foto') : '',
+        logo: get(row, 'enlace_logo') !== config.fallbackStr ? get(row, 'enlace_logo') : '',
+        proveedor: palabraProveedores,
+        uso_recomendado: get(row, 'uso_recomendado') !== config.fallbackStr ? get(row, 'uso_recomendado') : '',
+        fullText: config.isTablet ? `${get(row,'marca')} ${get(row,'modelo')} ${get(row,'ram')} ${get(row,'rom')} ${get(row,'procesador')}`.toLowerCase() : row.join(" ").toLowerCase()
       };
+
+      if (config.isTablet) {
+        item.peso = get(row, 'peso');
+        item.grosor = get(row, 'grosor');
+        item.wlan = get(row, 'wlan');
+      }
+
+      return item;
     }).filter(Boolean);
 
-    const filters = {
-      "Marca": [...new Set(catalog.map(it => it.marca))].filter(v => v && v !== "N/A").sort(),
-      "Procesador": [...new Set(catalog.map(it => it.procesador))].filter(v => v && v !== "N/A").sort(),
-      "RAM": [...new Set(catalog.map(it => it.ram))].filter(v => v && v !== "N/A").sort(),
-      "Almacenamiento": [...new Set(catalog.map(it => it.rom))].filter(v => v && v !== "N/A").sort(),
-      "Pantalla": [...new Set(catalog.map(it => it.pantalla))].filter(v => v && v !== "N/A").sort(),
-      "Tipo Panel": [...new Set(catalog.map(it => it.tipo_panel))].filter(v => v && v !== "N/A").sort(),
-      "Batería": [...new Set(catalog.map(it => it.bateria))].filter(v => v && v !== "N/A").sort(),
-      "AnTuTu": [...new Set(catalog.map(it => it.antutu))].filter(v => v && v !== "N/A").sort(),
+    let filters = {
+      "Marca": [...new Set(catalog.map(it => it.marca))].filter(v => v && v !== config.fallbackStr).sort(),
+      "Procesador": [...new Set(catalog.map(it => it.procesador))].filter(v => v && v !== config.fallbackStr).sort(),
+      "RAM": [...new Set(catalog.map(it => it.ram))].filter(v => v && v !== config.fallbackStr).sort(),
+      "Almacenamiento": [...new Set(catalog.map(it => it.rom))].filter(v => v && v !== config.fallbackStr).sort(),
+      "Pantalla": [...new Set(catalog.map(it => it.pantalla))].filter(v => v && v !== config.fallbackStr).sort(),
+      "Tipo Panel": [...new Set(catalog.map(it => it.tipo_panel))].filter(v => v && v !== config.fallbackStr).sort(),
+      "Batería": [...new Set(catalog.map(it => it.bateria))].filter(v => v && v !== config.fallbackStr).sort(),
       "5G": [...new Set(catalog.map(it => it.red_5g))].filter(v => v).sort(),
       "NFC": [...new Set(catalog.map(it => it.nfc))].filter(v => v).sort(),
-      "Android": [...new Set(catalog.map(it => it.android))].filter(v => v && v !== "N/A").sort()
+      "Android": [...new Set(catalog.map(it => it.android))].filter(v => v && v !== config.fallbackStr).sort()
     };
+
+    if (config.isTablet) {
+      filters["Carga"] = [...new Set(catalog.map(it => it.carga))].filter(v => v && v !== config.fallbackStr).sort();
+    } else {
+      filters["AnTuTu"] = [...new Set(catalog.map(it => it.antutu))].filter(v => v && v !== config.fallbackStr).sort();
+    }
 
     const resultado = {
       items: catalog,
@@ -439,179 +360,11 @@ function getCelularesData() {
       }
     };
 
-    putCacheLarge('catalog_celulares', resultado, 600);
+    putCacheLarge(config.cacheKey, resultado, 600);
     return resultado;
 
   } catch(e) {
     return { error: "Error de Servidor: " + e.toString() };
-  }
-}
-
-function getTabletsData() {
-  try {
-    const cached = getCacheLarge('catalog_tablets');
-    if (cached) return cached;
-
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName("TABLETS");
-    if (!sheet) return { error: "No existe la hoja TABLETS" };
-
-    const data = sheet.getDataRange().getValues();
-    if (data.length < 2) return { error: "La hoja está vacía." };
-
-    const headers = data[0].map(h => String(h).trim().toLowerCase());
-    const rows = data.slice(1);
-
-    const idx = {
-      marca: headers.indexOf('marca'),
-      modelo: headers.indexOf('modelo'),
-      rom: headers.indexOf('rom'),
-      ram: headers.indexOf('ram'),
-      precio: headers.indexOf('precio'),
-      enlace_foto: headers.indexOf('enlace_foto'),
-      enlace_logo: headers.indexOf('enlace_logo'),
-      pantalla: headers.indexOf('pantalla'),
-      tipo_panel: headers.indexOf('tipo_panel'),
-      resolucion: headers.indexOf('resolucion'),
-      refresco: headers.indexOf('refresco'),
-      peso: headers.indexOf('peso'),
-      grosor: headers.indexOf('grosor'),
-      procesador: headers.indexOf('procesador'),
-      litografia: headers.indexOf('litografia'),
-      antutu: headers.indexOf('antutu'),
-      bateria: headers.indexOf('bateria'),
-      carga: headers.indexOf('carga'),
-      cam_ppal: headers.indexOf('cam_ppal'),
-      cam_selfie: headers.indexOf('cam_selfie'),
-      red_5g: headers.indexOf('red_5g'),
-      android: headers.indexOf('android'),
-      bluetooth: headers.indexOf('bluetooth'),
-      wlan: headers.indexOf('wlan'),
-      nfc: headers.indexOf('nfc'),
-      jack: headers.indexOf('jack'),
-      uso_recomendado: headers.indexOf('uso recomendado')
-    };
-
-    // Identificar columnas de proveedores (desde columna E hasta antes de antutu)
-    const colE = 4;
-    const colAntutu = idx.antutu;
-    const proveedoresHeaders = headers.slice(colE, colAntutu).filter(h => h && h !== '');
-
-    const get = (row, key) => {
-      const i = idx[key];
-      return i >= 0 && row[i] !== undefined && row[i] !== null
-        ? String(row[i]).trim()
-        : "N/D";
-    };
-
-    const catalog = rows.map((row, i) => {
-      if (!get(row, 'marca') || get(row, 'marca') === 'N/D') return null;
-
-      // 🔥 Recopilar TODOS los proveedores con sus precios
-      let proveedoresConPrecio = [];
-      
-      proveedoresHeaders.forEach((provHeader, idx) => {
-        const colIndex = colE + idx;
-        const precio = parseFloat(String(row[colIndex] || '0').replace(/[^0-9.]/g, '')) || 0;
-        if (precio > 0) {
-          proveedoresConPrecio.push({
-            nombre: provHeader,
-            precio: precio,
-            iniciales: provHeader.substring(0, 2).toUpperCase()
-          });
-        }
-      });
-
-      // Ordenar por precio (menor a mayor)
-      proveedoresConPrecio.sort((a, b) => a.precio - b.precio);
-
-      // Concatenar todas las iniciales en orden
-      const palabraProveedores = proveedoresConPrecio.map(p => p.iniciales).join('');
-
-      return {
-        id: "TAB" + i,
-        marca: get(row, 'marca'),
-        modelo: get(row, 'modelo'),
-        rom: get(row, 'rom'),
-        ram: get(row, 'ram'),
-        precio: parseFloat(get(row, 'precio').replace(/[^0-9.]/g, '')) || 0, // ✅ PRECIO ORIGINAL
-        foto: get(row, 'enlace_foto') !== 'N/D' ? get(row, 'enlace_foto') : '',
-        logo: get(row, 'enlace_logo') !== 'N/D' ? get(row, 'enlace_logo') : '',
-        pantalla: get(row, 'pantalla'),
-        tipo_panel: get(row, 'tipo_panel'),
-        resolucion: get(row, 'resolucion'),
-        refresco: get(row, 'refresco'),
-        peso: get(row, 'peso'),
-        grosor: get(row, 'grosor'),
-        procesador: get(row, 'procesador'),
-        litografia: get(row, 'litografia'),
-        antutu: get(row, 'antutu'),
-        bateria: get(row, 'bateria'),
-        carga: get(row, 'carga'),
-        cam_ppal: get(row, 'cam_ppal'),
-        cam_selfie: get(row, 'cam_selfie'),
-        red_5g: get(row, 'red_5g'),
-        android: get(row, 'android'),
-        bluetooth: get(row, 'bluetooth'),
-        wlan: get(row, 'wlan'),
-        nfc: get(row, 'nfc'),
-        jack: get(row, 'jack'),
-        proveedor: palabraProveedores, // 🔥 Palabra completa con todas las iniciales
-        uso_recomendado: get(row, 'uso_recomendado') !== 'N/D' ? get(row, 'uso_recomendado') : '',
-        fullText: `${get(row,'marca')} ${get(row,'modelo')} ${get(row,'ram')} ${get(row,'rom')} ${get(row,'procesador')}`.toLowerCase()
-      };
-    }).filter(Boolean);
-
-    const filters = {
-      "Marca": [...new Set(catalog.map(it => it.marca))].filter(v => v && v !== "N/D").sort(),
-      "RAM": [...new Set(catalog.map(it => it.ram))].filter(v => v && v !== "N/D").sort(),
-      "Almacenamiento": [...new Set(catalog.map(it => it.rom))].filter(v => v && v !== "N/D").sort(),
-      "Procesador": [...new Set(catalog.map(it => it.procesador))].filter(v => v && v !== "N/D").sort(),
-      "Pantalla": [...new Set(catalog.map(it => it.pantalla))].filter(v => v && v !== "N/D").sort(),
-      "Tipo Panel": [...new Set(catalog.map(it => it.tipo_panel))].filter(v => v && v !== "N/D").sort(),
-      "Batería": [...new Set(catalog.map(it => it.bateria))].filter(v => v && v !== "N/D").sort(),
-      "Carga": [...new Set(catalog.map(it => it.carga))].filter(v => v && v !== "N/D").sort(),
-      "5G": [...new Set(catalog.map(it => it.red_5g))].filter(v => v).sort(),
-      "NFC": [...new Set(catalog.map(it => it.nfc))].filter(v => v).sort(),
-      "Android": [...new Set(catalog.map(it => it.android))].filter(v => v && v !== "N/D").sort()
-    };
-
-    const resultado = {
-      items: catalog,
-      filters: filters,
-      rangos: {
-        "Precio": {
-          min: Math.min(...catalog.map(it => it.precio || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => it.precio || 0))
-        },
-        "Batería": {
-          min: Math.min(...catalog.map(it => parseInt(it.bateria) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseInt(it.bateria) || 0))
-        },
-        "RAM": {
-          min: Math.min(...catalog.map(it => parseInt(it.ram) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseInt(it.ram) || 0))
-        },
-        "Almacenamiento": {
-          min: Math.min(...catalog.map(it => parseInt(it.rom) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseInt(it.rom) || 0))
-        },
-        "AnTuTu": {
-          min: Math.min(...catalog.map(it => parseInt(it.antutu) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseInt(it.antutu) || 0))
-        },
-        "Cámara principal": {
-          min: Math.min(...catalog.map(it => parseInt(it.cam_ppal) || 0).filter(v => v > 0)),
-          max: Math.max(...catalog.map(it => parseInt(it.cam_ppal) || 0))
-        }
-      }
-    };
-
-    putCacheLarge('catalog_tablets', resultado, 600);
-    return resultado;
-
-  } catch(e) {
-    return { error: e.toString() };
   }
 }
 function getImpresorasData() {
@@ -865,6 +618,25 @@ function doGet(e) {
   } else if (apiParam === 'escritorio') {
     return ContentService.createTextOutput(JSON.stringify(getEscritorioData()))
       .setMimeType(ContentService.MimeType.JSON);
+  } else if (apiParam === 'proxy') {
+    const proxyUrl = (e && e.parameter && e.parameter.url) ? e.parameter.url : '';
+    if (proxyUrl) {
+      try {
+        const response = UrlFetchApp.fetch(proxyUrl, { muteHttpExceptions: true });
+        if (response.getResponseCode() === 200) {
+          const blob = response.getBlob();
+          const b64 = Utilities.base64Encode(blob.getBytes());
+          const contentType = blob.getContentType();
+          return ContentService.createTextOutput(`data:${contentType};base64,${b64}`)
+            .setMimeType(ContentService.MimeType.TEXT);
+        } else {
+          return ContentService.createTextOutput("ERROR_HTTP_" + response.getResponseCode()).setMimeType(ContentService.MimeType.TEXT);
+        }
+      } catch(err) {
+        return ContentService.createTextOutput("ERROR_" + err.toString()).setMimeType(ContentService.MimeType.TEXT);
+      }
+    }
+    return ContentService.createTextOutput("ERROR_NO_URL").setMimeType(ContentService.MimeType.TEXT);
   }
 
   // 3. LÓGICA ANTERIOR: Si no hay parámetro API, cargamos la página web normal
@@ -1228,6 +1000,11 @@ function generarComentarioPortatilIA(item) {
     }
   }
 
+  // ================= USO RECOMENDADO MANUAL =================
+  if (item && item.uso_recomendado && item.uso_recomendado !== 'N/A' && item.uso_recomendado !== '') {
+    idealPara = item.uso_recomendado.split(',').map(s => s.trim());
+  }
+
   const resumen = puntosFuertes.length
     ? puntosFuertes.slice(0, 3).join(". ") + "."
     : "Equipo funcional para tareas generales.";
@@ -1245,7 +1022,7 @@ function generarComentarioPortatilIA(item) {
     resumen: resumen,
     idealPara: idealFinal,
     noRecomendado: noRecFinal,
-    veredicto: `Portátil de gama ${gama} bien orientado a ${idealFinal.split(",")[0] || "uso general"}, con limitaciones previsibles en escenarios extremos.`
+    veredicto: `Equipo de gama ${gama} bien orientado a ${idealFinal.split(",")[0] || "uso general"}, con limitaciones previsibles en escenarios extremos.`
   };
 }
 

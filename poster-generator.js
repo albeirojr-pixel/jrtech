@@ -8,7 +8,11 @@ async function generatePoster(productId) {
     if (!item) return;
 
     const template = document.getElementById('poster-template');
-    if (categoriaActual === 'portatiles') {
+    const catSafe = (categoriaActual || '').toLowerCase().trim();
+    const catManual = (item.categoria_manual || '').toLowerCase().trim();
+    const isLaptop = catSafe === 'portatiles' || catSafe === 'escritorio' || catManual === 'portátil' || catManual === 'escritorio';
+
+    if (isLaptop) {
         template.classList.add('categoria-portatiles');
     } else {
         template.classList.remove('categoria-portatiles');
@@ -210,6 +214,28 @@ async function getBase64Image(url) {
     }
 
     const encodedUrl = encodeURIComponent(directUrl);
+
+    // 1. INTENTO PRIMARIO: Proxy Privado (Google Apps Script)
+    try {
+        const gasProxyUrl = `${CONFIG.API_URL}?api=proxy&url=${encodedUrl}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const response = await fetch(gasProxyUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+            const text = await response.text();
+            if (text.startsWith('data:image/')) {
+                return text; // Es la imagen en Base64 lista para usar
+            } else {
+                console.warn("GAS Proxy devolvió error o texto inválido:", text);
+            }
+        }
+    } catch(e) {
+        console.warn("Falló el Proxy Privado de GAS:", e.message);
+    }
+
+    // 2. FALLBACK: Proxies públicos gratuitos
     const proxies = [
         `https://images.weserv.nl/?url=${encodedUrl}&maxage=31d`,
         `https://api.allorigins.win/raw?url=${encodedUrl}`,
@@ -248,7 +274,11 @@ async function getBase64Image(url) {
 
 
 function getPosterSpecs(item, category) {
-    if (category === 'portatiles') {
+    const catSafe = (category || '').toLowerCase().trim();
+    const catManual = (item.categoria_manual || '').toLowerCase().trim();
+    const isLaptop = catSafe === 'portatiles' || catSafe === 'escritorio' || catManual === 'portátil' || catManual === 'escritorio';
+
+    if (isLaptop) {
         const proc = getSpec(item, 'Procesador') || getSpec(item, 'procesador');
         const ramVal = getSpec(item, 'RAM') || getSpec(item, 'ram');
         const ramType = getSpec(item, 'tipo_ram') || getSpec(item, 'tipo ram');
@@ -284,8 +314,26 @@ function getPosterSpecs(item, category) {
         });
 
         return specs.filter(s => s.val);
+    } else if (category === 'impresoras') {
+        const tipo = getSpec(item, 'tipo');
+        const tec = getSpec(item, 'tecnologia');
+        const color = getSpec(item, 'color');
+        const duplex = getSpec(item, 'duplex');
+        
+        let connRaw = getSpec(item, 'conectividad') || '';
+        let connText = 'USB';
+        if (connRaw.toLowerCase().includes('wi-fi') || connRaw.toLowerCase().includes('wifi')) {
+            connText = 'Wi-Fi + USB';
+        }
+
+        return [
+            { icon: 'fas fa-print', val: tipo ? `Tipo: ${tipo}` : '' },
+            { icon: 'fas fa-cogs', val: tec ? `Tecnología: ${tec}` : '' },
+            { icon: 'fas fa-palette', val: color ? `Color: ${color}` : '' },
+            { icon: 'fas fa-wifi', val: `Conectividad: ${connText}` },
+            { icon: 'fas fa-copy', val: duplex === 'Sí' ? 'Impresión Doble Cara' : '' }
+        ].filter(s => s.val);
     } else {
-        // Celulares y Tablets
         const proc = getSpec(item, 'procesador') || getSpec(item, 'Procesador');
         const ram = getSpec(item, 'ram', 'GB');
         const rom = getSpec(item, 'rom', 'GB') || getSpec(item, 'almacenamiento', 'GB');
@@ -319,7 +367,11 @@ function getFullSpecsText(item, category) {
     const posterSpecsObj = getPosterSpecs(item, category);
     const valuesInPoster = posterSpecsObj.map(s => String(s.val).toLowerCase());
 
-    const groups = SPECS_GROUPS[category === 'portatiles' ? 'portatiles' : 'mobile'];
+    const catSafe = (category || '').toLowerCase().trim();
+    const catManual = (item.categoria_manual || '').toLowerCase().trim();
+    const isLaptop = catSafe === 'portatiles' || catSafe === 'escritorio' || catManual === 'portátil' || catManual === 'escritorio';
+
+    const groups = SPECS_GROUPS[isLaptop ? 'portatiles' : 'mobile'];
     if (!groups) return "";
 
     let text = "";

@@ -3246,11 +3246,14 @@ main section {
     position: relative;
     display: inline-block;
 }
-.dropdown-menu.show,
-.nav-dropdown:hover .dropdown-menu,
-.nav-dropdown:focus-within .dropdown-menu,
-.nav-dropdown:active .dropdown-menu {
+.dropdown-menu.show {
     display: flex !important;
+}
+@media (hover: hover) {
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu {
+        display: flex !important;
+    }
 }
 .dropdown-menu {
     display: none;

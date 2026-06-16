@@ -1,3 +1,14 @@
+function escapeHTML(str) {
+    if (typeof str !== 'string') return str;
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+    }[tag] || tag));
+}
+
 /**
  * main.js - Innovación Digital JRTech
  * Client-side logic for catalog loading, modals, and order processing.
@@ -137,7 +148,15 @@ function getSpec(item, key, unit = '') {
         return reverseString(cleanStr);
     }
 
-    return cleanStr + unit;
+    if (unit) {
+        const strLower = cleanStr.toLowerCase().replace(/\s/g, '');
+        const unitLower = unit.toLowerCase().replace(/\s/g, '');
+        if (!strLower.endsWith(unitLower)) {
+            return cleanStr + (cleanStr.endsWith(' ') ? '' : ' ') + unit;
+        }
+    }
+
+    return cleanStr;
 }
 
 function mostrar(id) {
@@ -191,8 +210,8 @@ async function cargarCatalogo(categoria, forceRefresh = false) {
     // Mostrar AnTuTu solo si es categoría con potencia (ahora lo habilitamos siempre por petición del usuario si hay dato, pero por defecto lo mostramos en celulares/tablets)
     optAntutu.style.display = (categoria === 'impresoras') ? 'none' : 'block';
 
-    const cacheKey = `jrtech_catalog_${categoria}`;
-    const cacheTimeKey = `jrtech_catalog_${categoria}_time`;
+    const cacheKey = `jrtech_catalog_v2_${categoria}`;
+    const cacheTimeKey = `jrtech_catalog_v2_${categoria}_time`;
     const cacheDuration = 10 * 60 * 1000; // 10 minutos
 
     if (forceRefresh) {
@@ -795,6 +814,7 @@ function renderGrid(items) {
         errorDiv.style.display = 'none';
     }
 
+    const fragment = document.createDocumentFragment();
     items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'producto-card';
@@ -906,13 +926,13 @@ function renderGrid(items) {
 
         card.innerHTML = `
             <div class="producto-img-container">
-                <img src="${imgSrc}" alt="${item.marca} ${item.modelo}" class="producto-img" onerror="this.src='${imgFallback}'">
+                <img src="${imgSrc}" alt="${escapeHTML(item.marca)} ${escapeHTML(item.modelo)}" class="producto-img" onerror="this.src='${imgFallback}'">
                 ${provSyllable ? `<span class="prov-tag-discreto">${provSyllable}</span>` : ''}
             </div>
             <div class="producto-marca-container">
-                ${logoSrc ? `<img src="${logoSrc}" alt="${item.marca}" class="producto-marca-logo">` : `<div class="producto-marca-text">${item.marca}</div>`}
+                ${logoSrc ? `<img src="${logoSrc}" alt="${escapeHTML(item.marca)}" class="producto-marca-logo">` : `<div class="producto-marca-text">${escapeHTML(item.marca)}</div>`}
             </div>
-            <h3 class="producto-modelo">${item.modelo}</h3>
+            <h3 class="producto-modelo">${escapeHTML(item.modelo)}</h3>
             ${badgeHtml}
             ${swCompatHtml}
             <div class="producto-specs">
@@ -938,8 +958,9 @@ function renderGrid(items) {
                 <i class="fas fa-share-nodes"></i>
             </button>
         `;
-        grid.appendChild(card);
+        fragment.appendChild(card);
     });
+    grid.appendChild(fragment);
 }
 
 function abrirModal(itemId) {
@@ -955,6 +976,7 @@ function abrirModal(itemId) {
 
     const grid = document.getElementById('modal-specs-grid');
     grid.innerHTML = '';
+    let specsHtmlAccumulator = '';
 
     // Inyectar JRTech Intel (Solo si tiene AI Insight)
     if (item.aiInsight) {
@@ -988,7 +1010,7 @@ function abrirModal(itemId) {
                 ` : ''}
             </div>
         `;
-        grid.insertAdjacentHTML('afterbegin', intelHtml);
+        specsHtmlAccumulator += intelHtml;
     }
 
     const allEntries = [];
@@ -1008,8 +1030,11 @@ function abrirModal(itemId) {
         }
     };
 
-    const isLaptop = categoriaActual === 'portatiles';
-    const groups = isLaptop ? SPECS_GROUPS.portatiles : (categoriaActual === 'impresoras' ? SPECS_GROUPS.impresoras : SPECS_GROUPS.mobile);
+    const catSafe = (categoriaActual || '').toLowerCase().trim();
+    const catManual = (item.categoria_manual || '').toLowerCase().trim();
+    const isLaptop = catSafe === 'portatiles' || catSafe === 'escritorio' || catManual === 'portátil' || catManual === 'escritorio';
+    const isImpresora = catSafe === 'impresoras' || catManual === 'impresora';
+    const groups = isLaptop ? SPECS_GROUPS.portatiles : (isImpresora ? SPECS_GROUPS.impresoras : SPECS_GROUPS.mobile);
 
     groups.forEach(group => {
         // Filtrar campos del grupo que tengan valor
@@ -1017,17 +1042,17 @@ function abrirModal(itemId) {
             .filter(f => f.val && f.val.trim() !== '' && f.val.toLowerCase() !== 'undefined');
 
         if (groupFields.length > 0) {
-            grid.innerHTML += `<div class="spec-group-header" style="grid-column: 1/-1; margin-top: 20px; padding-bottom: 5px; border-bottom: 1px solid var(--primary); color: var(--primary); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+            specsHtmlAccumulator += `<div class="spec-group-header" style="grid-column: 1/-1; margin-top: 20px; padding-bottom: 5px; border-bottom: 1px solid var(--primary); color: var(--primary); font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
                 ${group.name}
             </div>`;
 
             groupFields.forEach(f => {
-                let displayVal = f.val;
+                let displayVal = escapeHTML(f.val);
 
                 let label = f.key.replace(/_/g, ' ');
-                label = label.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                label = escapeHTML(label.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '));
 
-                grid.innerHTML += `
+                specsHtmlAccumulator += `
                     <div class="spec-item">
                         <label>${label}</label>
                         <span>${displayVal}</span>
@@ -1038,7 +1063,7 @@ function abrirModal(itemId) {
     });
 
     // Botón de compra central en la ficha
-    grid.innerHTML += `
+    specsHtmlAccumulator += `
         <div style="grid-column: 1/-1; margin-top: 30px; text-align: center;">
             <button class="producto-btn" onclick="cerrarModal(true); abrirModalPedido('${item.id}')" style="max-width: 400px; margin: 0 auto; padding: 18px; font-size: 1.1rem; margin-bottom: 15px;">
                 <i class="fab fa-whatsapp"></i> Lo quiero de una
@@ -1046,6 +1071,8 @@ function abrirModal(itemId) {
             <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-dim);">Entrega inmediata y garantía real de 1 año.</p>
         </div>
     `;
+
+    grid.innerHTML = specsHtmlAccumulator;
 
     // Inyectar sección de productos relacionados
     renderRelacionados(item);
@@ -1124,7 +1151,7 @@ function calcularPuntajeSimilitud(itemA, itemB) {
     if (itemA.marca === itemB.marca) score += 15;
 
     // 3. Similitud Técnica (Máximo 45 puntos)
-    if (categoriaActual === 'portatiles') {
+    if (categoriaActual === 'portatiles' || categoriaActual === 'escritorio') {
         // Comparar RAM (15 pts)
         if (getSpec(itemA, 'ram') === getSpec(itemB, 'ram')) score += 15;
         // Comparar Procesador/Gama (30 pts)
@@ -1168,8 +1195,11 @@ function copiarEstilo(estilo, itemId) {
     const item = catalogoActual.find(i => i.id === itemId);
     if (!item) return;
 
-    const isLaptop = categoriaActual === 'portatiles';
-    const icon = isLaptop ? '💻 Portátil' : (categoriaActual === 'celulares' ? '📱 Celular' : (categoriaActual === 'impresoras' ? '🖨️ Impresora' : '📱 Tablet'));
+    const isLaptop = categoriaActual === 'portatiles' || categoriaActual === 'escritorio';
+    const catSafeCopy = (categoriaActual || '').toLowerCase().trim();
+    const catManualCopy = (item.categoria_manual || '').toLowerCase().trim();
+    const isLaptopCopy = catSafeCopy === 'portatiles' || catSafeCopy === 'escritorio' || catManualCopy === 'portátil' || catManualCopy === 'escritorio';
+    const icon = isLaptopCopy ? '💻 Equipo' : (catSafeCopy === 'celulares' || catManualCopy === 'celular' ? '📱 Celular' : (catSafeCopy === 'impresoras' || catManualCopy === 'impresora' ? '🖨️ Impresora' : '📱 Tablet'));
 
     let specsTxt = '';
     if (isLaptop) {
@@ -1270,7 +1300,7 @@ function renderHeaderVersus(items) {
                     <img src="${item.enlace_foto || item.foto || item.enlace_logo || item.logo || imgFallback}" alt="${item.modelo}" onerror="this.src='${imgFallback}'">
                 </div>
                 <div class="versus-item-info">
-                    <div style="font-weight: 800; color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">${item.marca}</div>
+                    <div style="font-weight: 800; color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">${escapeHTML(item.marca)}</div>
                     <div style="font-weight: 700; font-size: 1.1rem; color: white;">${item.modelo}</div>
                 </div>
             </div>
@@ -1393,7 +1423,7 @@ function abrirModalComparar() {
             <td>
                 <div class="comparar-item-header">
                     <img src="${item.enlace_logo || item.logo || item.enlace_foto || item.foto || ''}" class="comparar-item-img" onerror="this.src='https://placehold.co/100x100?text=SIN+FOTO'">
-                    <div class="comparar-item-nombre">${item.marca} ${item.modelo}</div>
+                    <div class="comparar-item-nombre">${escapeHTML(item.marca)} ${escapeHTML(item.modelo)}</div>
                     <div class="comparar-item-precio">${formatMoneda(item[priceField])}</div>
                 </div>
             </td>
@@ -1401,8 +1431,9 @@ function abrirModalComparar() {
     });
     html += `</tr></thead><tbody>`;
 
-    const isLaptop = categoriaActual === 'portatiles';
-    const groups = isLaptop ? SPECS_GROUPS.portatiles : SPECS_GROUPS.mobile;
+    const catSafeComp = (categoriaActual || '').toLowerCase().trim();
+    const isLaptopComp = catSafeComp === 'portatiles' || catSafeComp === 'escritorio';
+    const groups = isLaptopComp ? SPECS_GROUPS.portatiles : SPECS_GROUPS.mobile;
     // priceField already declared above at line 551
 
     groups.forEach(group => {
@@ -1415,7 +1446,7 @@ function abrirModalComparar() {
 
         group.fields.forEach(key => {
             let label = key.replace(/_/g, ' ');
-            label = label.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+            label = escapeHTML(label.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '));
 
             html += `<tr><th>${label}</th>`;
             items.forEach(item => {
@@ -1513,10 +1544,10 @@ function renderHeroRandomProduct(item) {
     container.innerHTML = `
         <div class="producto-card" style="margin: 0; transform: translateY(0); opacity: 0; transition: opacity 0.5s ease-in-out;">
             <div class="producto-img-container" style="height: 180px;">
-                <img src="${imgSrc}" alt="${item.marca} ${item.modelo}" class="producto-img" onerror="this.src='${imgFallback}'">
+                <img src="${imgSrc}" alt="${escapeHTML(item.marca)} ${escapeHTML(item.modelo)}" class="producto-img" onerror="this.src='${imgFallback}'">
             </div>
             <div class="producto-marca" style="color: var(--primary); font-weight: 800; font-size: 1rem;"><i class="fas fa-star"></i> ${item.categoria_manual?.toUpperCase() || 'EQUIPO'} DESTACADO</div>
-            <h3 class="producto-modelo">${item.marca} ${item.modelo}</h3>
+            <h3 class="producto-modelo">${escapeHTML(item.marca)} ${escapeHTML(item.modelo)}</h3>
             
             ${specsHtml}
 
@@ -1990,7 +2021,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function procesarCatalogoConIA() {
     catalogoActual = catalogoActual.map(item => {
-        const isLaptop = categoriaActual === 'portatiles';
+        const catSafe = (categoriaActual || '').toLowerCase().trim();
+        const catManual = (item.categoria_manual || '').toLowerCase().trim();
+        const isLaptop = catSafe === 'portatiles' || catSafe === 'escritorio' || catManual === 'portátil' || catManual === 'escritorio';
         const itemWithIA = { ...item };
 
         if (categoriaActual === 'impresoras') {
@@ -2383,10 +2416,87 @@ document.addEventListener('DOMContentLoaded', () => {
         cargarTextos();
     }
 
-    // Si es una página de categoría, cargar catálogo correspondiente
-    if (typeof window.PAGE_CATEGORY !== 'undefined' && window.PAGE_CATEGORY) {
-        cargarCatalogo(window.PAGE_CATEGORY);
+    // SPA: Interceptar clicks en enlaces del menú
+    document.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link) return;
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('http')) return;
+        
+        // Ignorar anclas internas regulares que no son de catálogo
+        if (href.startsWith('#') && !href.startsWith('#cat=')) return;
+
+        const catMatch = href.match(/^(celulares|tablets|portatiles|escritorio|impresoras)(?:\.html)?$/);
+        if (catMatch) {
+            e.preventDefault();
+            
+            // Cerrar cualquier dropdown abierto al seleccionar una opción
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+            
+            // Quitar el foco para evitar que :focus-within lo mantenga abierto en PC
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+
+            const cat = catMatch[1];
+            // Cambiar URL limpia sin recargar
+            window.history.pushState({ category: cat }, '', '/' + cat);
+            cargarCatalogo(cat);
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        } else if (href === 'index.html' || href === '/') {
+            e.preventDefault();
+            window.history.pushState({}, '', '/');
+            // Restaurar vista de landing page
+            document.querySelectorAll("main section").forEach(sec => sec.style.display = "block");
+            const catSec = document.getElementById('catalogo');
+            if (catSec) catSec.style.display = "none";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    });
+
+    // SPA: Detectar cambios en el Hash (Atrás/Adelante o clics)
+    // Cargar catálogo inicial (soporta Hash antiguo y URLs limpias)
+    const redirectCat = sessionStorage.getItem('redirect_cat');
+    if (redirectCat) {
+        sessionStorage.removeItem('redirect_cat');
+        window.history.replaceState({ category: redirectCat }, '', '/' + redirectCat);
+        cargarCatalogo(redirectCat);
+    } else {
+        const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+        const validCats = ['celulares', 'tablets', 'portatiles', 'escritorio', 'impresoras'];
+        
+        if (validCats.includes(path)) {
+            cargarCatalogo(path);
+        } else if (window.location.hash.startsWith('#cat=')) {
+            const cat = window.location.hash.substring(5);
+            window.history.replaceState({ category: cat }, '', '/' + cat);
+            cargarCatalogo(cat);
+        } else if (typeof window.PAGE_CATEGORY !== 'undefined' && window.PAGE_CATEGORY) {
+            cargarCatalogo(window.PAGE_CATEGORY);
+        }
     }
+    
+    // Manejar botones de atrás/adelante del navegador para URLs limpias
+    window.addEventListener('popstate', (e) => {
+        if (e.state && e.state.category) {
+            cargarCatalogo(e.state.category);
+        } else if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+            document.querySelectorAll("main section").forEach(sec => sec.style.display = "block");
+            const catSec = document.getElementById('catalogo');
+            if (catSec) catSec.style.display = "none";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        } else {
+            // Intenta leer de URL si popstate no tiene data
+            const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+            const validCats = ['celulares', 'tablets', 'portatiles', 'escritorio', 'impresoras'];
+            if (validCats.includes(path)) {
+                cargarCatalogo(path);
+            }
+        }
+    });
+
 });
 
 function inyectarLogo() {
@@ -2407,10 +2517,16 @@ function toggleFaq(el) {
 }
 
 function mostrarCatalogAction() {
+    // Ocultar todas las secciones de la landing page
+    document.querySelectorAll("main section").forEach(sec => {
+        sec.style.display = "none";
+    });
+    
     const catalogo = document.getElementById('catalogo');
     if (catalogo) {
         catalogo.style.display = 'block';
-        catalogo.scrollIntoView({ behavior: 'smooth' });
+        // Subir al tope de la página en lugar de hacer scroll al final
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     const hub = document.getElementById('catalog-nav-row');
     if (hub) hub.classList.add('visible');
