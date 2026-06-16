@@ -4,8 +4,8 @@
       "id": "TAB0",
       "marca": "Lenovo",
       "modelo": "Tab M8",
-      "rom": "32GB",
-      "ram": "3GB",
+      "rom": "32",
+      "ram": "3",
       "precio": 535990,
       "foto": "https://http2.mlstatic.com/D_NQ_NP_874751-MCO43005859880_082020-O.webp",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
@@ -30,14 +30,14 @@
       "jack": "SI",
       "proveedor": "RAFO",
       "uso_recomendado": "Uso básico: Redes, WhatsApp y tareas simples",
-      "fullText": "lenovo tab m8 3gb 32gb helio a22"
+      "fullText": "lenovo tab m8 3 32 helio a22"
     },
     {
       "id": "TAB1",
       "marca": "Lenovo",
       "modelo": "Tab M9",
-      "rom": "128GB",
-      "ram": "4GB",
+      "rom": "128",
+      "ram": "4",
       "precio": 771990,
       "foto": "https://technologystore2006.com/wp-content/uploads/2023/09/3820485-1.webp",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
@@ -62,14 +62,14 @@
       "jack": "SI",
       "proveedor": "RAFO",
       "uso_recomendado": "Uso básico: Redes, WhatsApp y tareas simples",
-      "fullText": "lenovo tab m9 4gb 128gb helio g80"
+      "fullText": "lenovo tab m9 4 128 helio g80"
     },
     {
       "id": "TAB2",
       "marca": "Lenovo",
       "modelo": "Tab ONE",
-      "rom": "128GB",
-      "ram": "4GB",
+      "rom": "128",
+      "ram": "4",
       "precio": 619990,
       "foto": "https://technologystore2006.com/wp-content/uploads/2025/07/7YL118-IMG2.jpg",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
@@ -94,14 +94,14 @@
       "jack": "SI",
       "proveedor": "RACE",
       "uso_recomendado": "Uso básico: Redes, WhatsApp y tareas simples",
-      "fullText": "lenovo tab one 4gb 128gb helio g85"
+      "fullText": "lenovo tab one 4 128 helio g85"
     },
     {
       "id": "TAB3",
       "marca": "Lenovo",
       "modelo": "Idea Tab 11",
-      "rom": "128GB",
-      "ram": "4GB",
+      "rom": "128",
+      "ram": "4",
       "precio": 883990,
       "foto": "https://fdn2.gsmarena.com/vv/pics/lenovo/lenovo-idea-tab-0.jpg",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
@@ -126,14 +126,14 @@
       "jack": "SI",
       "proveedor": "RACE",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "lenovo idea tab 11 4gb 128gb dimensity 6300"
+      "fullText": "lenovo idea tab 11 4 128 dimensity 6300"
     },
     {
       "id": "TAB4",
       "marca": "Lenovo",
       "modelo": "Idea Tab 11",
-      "rom": "128GB",
-      "ram": "8GB",
+      "rom": "128",
+      "ram": "8",
       "precio": 682990,
       "foto": "https://fdn2.gsmarena.com/vv/pics/lenovo/lenovo-idea-tab-0.jpg",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
@@ -158,14 +158,14 @@
       "jack": "SI",
       "proveedor": "RACEFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "lenovo idea tab 11 8gb 128gb dimensity 6300"
+      "fullText": "lenovo idea tab 11 8 128 dimensity 6300"
     },
     {
       "id": "TAB5",
       "marca": "Lenovo",
       "modelo": "Idea Tab 11 + Teclado",
-      "rom": "128GB",
-      "ram": "8GB",
+      "rom": "128",
+      "ram": "8",
       "precio": 1003990,
       "foto": "https://media.falabella.com/falabellaCO/147394157_01/w=800,h=800,fit=pad",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
@@ -190,14 +190,14 @@
       "jack": "",
       "proveedor": "RACEFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "lenovo idea tab 11 + teclado 8gb 128gb dimensity 6300"
+      "fullText": "lenovo idea tab 11 + teclado 8 128 dimensity 6300"
     },
     {
       "id": "TAB6",
       "marca": "Samsung",
       "modelo": "Tab A11",
-      "rom": "128GB",
-      "ram": "8GB",
+      "rom": "128",
+      "ram": "8",
       "precio": 568990,
       "foto": "https://media.falabella.com/falabellaCO/73447854_1/w=1004,h=1500,fit=pad",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -222,14 +222,14 @@
       "jack": "SI",
       "proveedor": "RABYVEFOCE",
       "uso_recomendado": "Redes sociales, estudio y multimedia",
-      "fullText": "samsung tab a11 8gb 128gb helio g99"
+      "fullText": "samsung tab a11 8 128 helio g99"
     },
     {
       "id": "TAB7",
       "marca": "Lenovo",
       "modelo": "Tab PLUS",
-      "rom": "256GB",
-      "ram": "8GB",
+      "rom": "256",
+      "ram": "8",
       "precio": 1061990,
       "foto": "https://www.compupartescali.com/wp-content/uploads/2025/11/TAB11PLUS.jpg",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
@@ -254,14 +254,14 @@
       "jack": "No",
       "proveedor": "RACEFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "lenovo tab plus 8gb 256gb dimensity 6400"
+      "fullText": "lenovo tab plus 8 256 dimensity 6400"
     },
     {
       "id": "TAB8",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2",
-      "rom": "128GB",
-      "ram": "4GB",
+      "rom": "128",
+      "ram": "4",
       "precio": 557990,
       "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/12/Xiaomi-Redmi-Pad-2-11-2.5K-25040RP0AL-Mint-Green.jpg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
@@ -286,14 +286,14 @@
       "jack": "SI",
       "proveedor": "RAFOVEBY",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "xiaomi redmi pad 2 4gb 128gb helio g100"
+      "fullText": "xiaomi redmi pad 2 4 128 helio g100"
     },
     {
       "id": "TAB9",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2 LTE",
-      "rom": "128GB",
-      "ram": "4GB",
+      "rom": "128",
+      "ram": "4",
       "precio": 782990,
       "foto": "https://exitocol.vtexassets.com/arquivos/ids/31307279/tablet-xiaomi-redmi-pad-2-256gb-gris.jpg?v=638961850898330000",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
@@ -318,14 +318,14 @@
       "jack": "SI",
       "proveedor": "RAFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "xiaomi redmi pad 2 lte 4gb 128gb helio g100"
+      "fullText": "xiaomi redmi pad 2 lte 4 128 helio g100"
     },
     {
       "id": "TAB10",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2",
-      "rom": "128GB",
-      "ram": "8GB",
+      "rom": "128",
+      "ram": "8",
       "precio": 591990,
       "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/12/Xiaomi-Redmi-Pad-2-11-2.5K-25040RP0AL-Mint-Green.jpg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
@@ -350,14 +350,14 @@
       "jack": "SI",
       "proveedor": "RACE",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "xiaomi redmi pad 2 8gb 128gb helio g100"
+      "fullText": "xiaomi redmi pad 2 8 128 helio g100"
     },
     {
       "id": "TAB11",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2",
-      "rom": "256GB",
-      "ram": "8GB",
+      "rom": "256",
+      "ram": "8",
       "precio": 785990,
       "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/12/Xiaomi-Redmi-Pad-2-11-2.5K-25040RP0AL-Mint-Green.jpg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
@@ -382,14 +382,14 @@
       "jack": "SI",
       "proveedor": "RACEFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "xiaomi redmi pad 2 8gb 256gb helio g100"
+      "fullText": "xiaomi redmi pad 2 8 256 helio g100"
     },
     {
       "id": "TAB12",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2 KIT Estuche + vidrio",
-      "rom": "256GB",
-      "ram": "8GB",
+      "rom": "256",
+      "ram": "8",
       "precio": 849990,
       "foto": "https://file.garden/Z8ITBPHZSzW2yH0y/TABLETS/kit%20RP2.png",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
@@ -414,14 +414,14 @@
       "jack": "SI",
       "proveedor": "RAFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "xiaomi redmi pad 2 kit estuche + vidrio 8gb 256gb helio g100"
+      "fullText": "xiaomi redmi pad 2 kit estuche + vidrio 8 256 helio g100"
     },
     {
       "id": "TAB13",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2  KIT LAPIZ + Estuche + vidrio",
-      "rom": "256GB",
-      "ram": "8GB",
+      "rom": "256",
+      "ram": "8",
       "precio": 1049990,
       "foto": "https://file.garden/Z8ITBPHZSzW2yH0y/TABLETS/kit%20lapiz%20RP2.png",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
@@ -446,14 +446,14 @@
       "jack": "SI",
       "proveedor": "RAFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "xiaomi redmi pad 2  kit lapiz + estuche + vidrio 8gb 256gb helio g100"
+      "fullText": "xiaomi redmi pad 2  kit lapiz + estuche + vidrio 8 256 helio g100"
     },
     {
       "id": "TAB14",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad Pro",
-      "rom": "256GB",
-      "ram": "8GB",
+      "rom": "256",
+      "ram": "8",
       "precio": 1153990,
       "foto": "https://gsmphone.co/wp-content/uploads/2024/10/xiaomi_redmi_pad_pro_04_ad_l.jpg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
@@ -478,14 +478,14 @@
       "jack": "SI",
       "proveedor": "RABY",
       "uso_recomendado": "Gaming avanzado, edición y alto rendimiento",
-      "fullText": "xiaomi redmi pad pro 8gb 256gb snapdragon 7s gen 4"
+      "fullText": "xiaomi redmi pad pro 8 256 snapdragon 7s gen 4"
     },
     {
       "id": "TAB15",
       "marca": "Samsung",
       "modelo": "Tab S10 Lite",
-      "rom": "128GB",
-      "ram": "6GB",
+      "rom": "128",
+      "ram": "6",
       "precio": 1379990,
       "foto": "https://media.falabella.com/falabellaCO/73385960_1/w=1500,h=1500,fit=cover",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -510,14 +510,14 @@
       "jack": "No",
       "proveedor": "RABY",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "samsung tab s10 lite 6gb 128gb exynos 1380"
+      "fullText": "samsung tab s10 lite 6 128 exynos 1380"
     },
     {
       "id": "TAB16",
       "marca": "Samsung",
       "modelo": "Tab A11 plus",
-      "rom": "128GB",
-      "ram": "6GB",
+      "rom": "128",
+      "ram": "6",
       "precio": 814990,
       "foto": "https://images.samsung.com/is/image/samsung/p6pim/co/feature/166754075/co-feature--nbsp-550031757?$FB_TYPE_I_JPG$",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -542,14 +542,14 @@
       "jack": "SI",
       "proveedor": "RACEFO",
       "uso_recomendado": "#N/A",
-      "fullText": "samsung tab a11 plus 6gb 128gb dimensity 8775"
+      "fullText": "samsung tab a11 plus 6 128 dimensity 8775"
     },
     {
       "id": "TAB17",
       "marca": "Samsung",
       "modelo": "Tab A11 plus",
-      "rom": "256GB",
-      "ram": "8GB",
+      "rom": "256",
+      "ram": "8",
       "precio": 854990,
       "foto": "https://images.samsung.com/is/image/samsung/p6pim/co/feature/166754075/co-feature--nbsp-550031757?$FB_TYPE_I_JPG$",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -574,14 +574,14 @@
       "jack": "SI",
       "proveedor": "RACEBYFO",
       "uso_recomendado": "#N/A",
-      "fullText": "samsung tab a11 plus 8gb 256gb dimensity 8775"
+      "fullText": "samsung tab a11 plus 8 256 dimensity 8775"
     },
     {
       "id": "TAB18",
       "marca": "Samsung",
       "modelo": "Tab S10 FE",
-      "rom": "128GB",
-      "ram": "8GB",
+      "rom": "128",
+      "ram": "8",
       "precio": 2058990,
       "foto": "https://http2.mlstatic.com/D_NQ_NP_2X_832017-MLA99969795955_112025-F.webp",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -606,14 +606,14 @@
       "jack": "No",
       "proveedor": "RABYCE",
       "uso_recomendado": "Gaming avanzado, edición y alto rendimiento",
-      "fullText": "samsung tab s10 fe 8gb 128gb exynos 1580"
+      "fullText": "samsung tab s10 fe 8 128 exynos 1580"
     },
     {
       "id": "TAB19",
       "marca": "Samsung",
       "modelo": "Tab S10 FE",
-      "rom": "256GB",
-      "ram": "12GB",
+      "rom": "256",
+      "ram": "12",
       "precio": 2670990,
       "foto": "https://http2.mlstatic.com/D_NQ_NP_2X_832017-MLA99969795955_112025-F.webp",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -638,14 +638,14 @@
       "jack": "No",
       "proveedor": "RACE",
       "uso_recomendado": "Gaming avanzado, edición y alto rendimiento",
-      "fullText": "samsung tab s10 fe 12gb 256gb exynos 1580"
+      "fullText": "samsung tab s10 fe 12 256 exynos 1580"
     },
     {
       "id": "TAB20",
       "marca": "Samsung",
       "modelo": "Tab S10 FE plus",
-      "rom": "256GB",
-      "ram": "12GB",
+      "rom": "256",
+      "ram": "12",
       "precio": 2766990,
       "foto": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-tab-s10-fe-plus-2.jpg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -670,14 +670,14 @@
       "jack": "No",
       "proveedor": "RAFOCE",
       "uso_recomendado": "Gaming avanzado, edición y alto rendimiento",
-      "fullText": "samsung tab s10 fe plus 12gb 256gb exynos 1580"
+      "fullText": "samsung tab s10 fe plus 12 256 exynos 1580"
     },
     {
       "id": "TAB21",
       "marca": "Samsung",
       "modelo": "Tab S11 Ultra",
-      "rom": "256GB",
-      "ram": "12GB",
+      "rom": "256",
+      "ram": "12",
       "precio": 4987990,
       "foto": "https://http2.mlstatic.com/D_NQ_NP_2X_861603-MLA99966880057_112025-F.webp",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
@@ -702,7 +702,7 @@
       "jack": "No",
       "proveedor": "RAFOCE",
       "uso_recomendado": "Nivel flagship: gaming extremo e IA avanzada",
-      "fullText": "samsung tab s11 ultra 12gb 256gb dimensity 9400+"
+      "fullText": "samsung tab s11 ultra 12 256 dimensity 9400+"
     }
   ],
   "filters": {
@@ -712,16 +712,16 @@
       "Xiaomi"
     ],
     "RAM": [
-      "12GB",
-      "3GB",
-      "4GB",
-      "6GB",
-      "8GB"
+      "12",
+      "3",
+      "4",
+      "6",
+      "8"
     ],
     "Almacenamiento": [
-      "128GB",
-      "256GB",
-      "32GB"
+      "128",
+      "256",
+      "32"
     ],
     "Procesador": [
       "Dimensity 6300",
