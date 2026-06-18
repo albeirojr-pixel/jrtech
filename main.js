@@ -140,9 +140,6 @@ function getSpec(item, key, unit = '') {
     const cleanStr = String(val).trim();
     if (cleanStr === '' || cleanStr.toLowerCase() === 'undefined') return '';
 
-    // Si queremos ser exhaustivos, devolvemos N/A o N/D si el usuario los ve en el Excel
-    // pero para la GRID principal preferimos ocultarlos. 
-    // Por simplicidad, los permitimos aquí y filtramos en renderGrid si es necesario.
     // Si es un código (COD o cod), lo devolvemos invertido por confidencialidad
     if (targetKey === 'cod' || targetKey === 'codigo') {
         return reverseString(cleanStr);
@@ -445,7 +442,7 @@ function configurarControles(filters, rangos) {
 function getFiltroIcono(key) {
     const k = key.toLowerCase();
     if (k.includes('ram')) return 'fas fa-memory';
-    if (k.includes('rom') || k.includes('ssd')) return 'fas fa-hdd';
+    if (k.includes('rom') || k.includes('ssd') || k.includes('almacenamiento')) return 'fas fa-hdd';
     if (k.includes('procesador')) return 'fas fa-microchip';
     if (k.includes('pantalla')) return 'fas fa-laptop';
     if (k.includes('sistema') || k.includes('android')) return 'fab fa-android';
@@ -831,9 +828,17 @@ function renderGrid(items) {
             const ram = getSpec(item, 'ram', 'GB');
             const rom = getSpec(item, 'rom', 'GB') || getSpec(item, 'almacenamiento', 'GB');
             const bat = getSpec(item, 'bateria') || getSpec(item, 'capacidad_bateria');
+            const carga = getSpec(item, 'carga');
+            let batDisplay = bat ? `${bat}mAh` : '';
+            if (carga) batDisplay = batDisplay ? `${batDisplay} @ ${carga}W` : `${carga}W`;
+
             const camP = getSpec(item, 'camppal') || getSpec(item, 'camara_ppal') || getSpec(item, 'camara_principal') || getSpec(item, 'camara');
             const camS = getSpec(item, 'camselfie') || getSpec(item, 'camara_selfie') || getSpec(item, 'camara_frontal');
+            
             const pan = getSpec(item, 'pantalla');
+            const ref = getSpec(item, 'refresco') || getSpec(item, 'tasa_refresco');
+            let panDisplay = pan ? `${pan}${pan.includes('"') ? '' : '"'}` : '';
+            if (ref) panDisplay = panDisplay ? `${panDisplay} @ ${ref}${ref.toLowerCase().includes('hz') ? '' : 'Hz'}` : `${ref}${ref.toLowerCase().includes('hz') ? '' : 'Hz'}`;
 
             specsHtml = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -844,8 +849,8 @@ function renderGrid(items) {
                 </div>
                 ${camP ? `<div class="producto-spec"><i class="fas fa-camera"></i> Principal: ${camP} MP</div>` : ''}
                 ${camS ? `<div class="producto-spec"><i class="fas fa-camera"></i> Selfie: ${camS} MP</div>` : ''}
-                ${bat ? `<div class="producto-spec"><i class="fas fa-battery-full"></i> ${bat} mAh</div>` : ''}
-                ${pan ? `<div class="producto-spec"><i class="fas fa-mobile-alt"></i> ${pan}</div>` : ''}
+                ${batDisplay ? `<div class="producto-spec"><i class="fas fa-battery-full"></i> ${batDisplay}</div>` : ''}
+                ${panDisplay ? `<div class="producto-spec"><i class="fas fa-mobile-alt"></i> ${panDisplay}</div>` : ''}
             `;
         } else if (categoriaActual === 'impresoras') {
             const tipo = getSpec(item, 'tipo') || getSpec(item, 'Tipo');
@@ -963,6 +968,42 @@ function renderGrid(items) {
     grid.appendChild(fragment);
 }
 
+function getUnitForSpec(key) {
+    const k = normalizeKey(key);
+    switch (k) {
+        case 'ram':
+        case 'rom':
+        case 'ssd':
+        case 'almacenamiento':
+        case 'vram':
+            return 'GB';
+        case 'pantalla':
+            return '"';
+        case 'litografia':
+            return 'nm';
+        case 'refresco':
+        case 'tasarefresco':
+            return 'Hz';
+        case 'bateria':
+        case 'capacidadbateria':
+            return 'mAh';
+        case 'carga':
+            return 'W';
+        case 'camppal':
+        case 'camaraselfie':
+        case 'camselfie':
+        case 'camarappal':
+        case 'camaraprincipal':
+            return 'MP';
+        case 'grosor':
+            return 'mm';
+        case 'peso':
+            return 'g';
+        default:
+            return '';
+    }
+}
+
 function abrirModal(itemId) {
     const item = catalogoActual.find(i => i.id === itemId);
     if (!item) return;
@@ -1038,7 +1079,7 @@ function abrirModal(itemId) {
 
     groups.forEach(group => {
         // Filtrar campos del grupo que tengan valor
-        const groupFields = group.fields.map(k => ({ key: k, val: getSpec(item, k) }))
+        const groupFields = group.fields.map(k => ({ key: k, val: getSpec(item, k, getUnitForSpec(k)) }))
             .filter(f => f.val && f.val.trim() !== '' && f.val.toLowerCase() !== 'undefined');
 
         if (groupFields.length > 0) {

@@ -337,14 +337,20 @@ function getPosterSpecs(item, category) {
         const proc = getSpec(item, 'procesador') || getSpec(item, 'Procesador');
         const ram = getSpec(item, 'ram', 'GB');
         const rom = getSpec(item, 'rom', 'GB') || getSpec(item, 'almacenamiento', 'GB');
-        const bat = getSpec(item, 'bateria') || getSpec(item, 'capacidad_bateria');
-        const camP = getSpec(item, 'camppal') || getSpec(item, 'camara_ppal') || getSpec(item, 'camara_principal') || getSpec(item, 'camara');
-        const camS = getSpec(item, 'camselfie') || getSpec(item, 'camara_selfie') || getSpec(item, 'camara_frontal');
-        const pan = getSpec(item, 'pantalla');
-        const ref = getSpec(item, 'refresco') || getSpec(item, 'tasa_refresco');
         const ant = getSpec(item, 'antutu');
         const nfc = getSpec(item, 'nfc');
+        const camP = getSpec(item, 'camppal') || getSpec(item, 'camara_ppal') || getSpec(item, 'camara_principal') || getSpec(item, 'camara');
+        const camS = getSpec(item, 'camselfie') || getSpec(item, 'camara_selfie') || getSpec(item, 'camara_frontal');
+
+        const bat = getSpec(item, 'bateria') || getSpec(item, 'capacidad_bateria');
         const cga = getSpec(item, 'carga');
+        let batDisplay = bat ? `${bat}mAh` : '';
+        if (cga) batDisplay = batDisplay ? `${batDisplay} @ ${cga}W` : `${cga}W`;
+
+        const pan = getSpec(item, 'pantalla');
+        const ref = getSpec(item, 'refresco') || getSpec(item, 'tasa_refresco');
+        let panDisplay = pan ? `${pan}${pan.includes('"') ? '' : '"'}` : '';
+        if (ref) panDisplay = panDisplay ? `${panDisplay} @ ${ref}${ref.toLowerCase().includes('hz') ? '' : 'Hz'}` : `${ref}${ref.toLowerCase().includes('hz') ? '' : 'Hz'}`;
 
         return [
             { icon: 'fas fa-microchip', val: proc },
@@ -352,9 +358,8 @@ function getPosterSpecs(item, category) {
             { icon: 'fas fa-rocket', val: ant ? `Antutu: ${ant}` : '' },
             { icon: 'fas fa-camera', val: camP ? `Principal: ${camP} MP` : '' },
             { icon: 'fas fa-camera', val: camS ? `Selfie: ${camS} MP` : '' },
-            { icon: 'fas fa-battery-full', val: bat ? `Batería: ${bat} mAh` : '' },
-            { icon: 'fas fa-bolt', val: cga ? `Carga: ${cga}` : '' },
-            { icon: 'fas fa-mobile-alt', val: pan && ref ? `${pan} @ ${ref}` : (pan || ref) },
+            { icon: 'fas fa-battery-full', val: batDisplay ? `Batería: ${batDisplay}` : '' },
+            { icon: 'fas fa-mobile-alt', val: panDisplay ? `Pantalla: ${panDisplay}` : '' },
             { icon: 'fas fa-rss', val: (nfc && nfc.toLowerCase() !== 'no' && nfc !== '') ? 'NFC: Sí' : '' }
         ].filter(s => s.val);
     }

@@ -100,6 +100,7 @@ function getLaptopStyleData(sheetName, cacheKey, idPrefix) {
           "RAM":            get(row, 'ram'),
           "Tipo RAM":       get(row, 'tipo_ram'),
           "SSD":            get(row, 'ssd'),
+          "Almacenamiento": get(row, 'ssd'),
           "Sistema":        get(row, 'sistema'),
           "Pantalla": (() => {
             const match = get(row, 'pantalla').match(/(\d+[.,]\d+|\d+)/);
@@ -108,7 +109,8 @@ function getLaptopStyleData(sheetName, cacheKey, idPrefix) {
           "Tipo Pantalla":  get(row, 'tipo_pantalla'),
           "Gráfica":        get(row, 'grafica'),
           "Modelo Gráfica": get(row, 'modelo_grafica'),
-          "Tamaño Gráfica": get(row, 'vram')
+          "Tamaño Gráfica": get(row, 'vram'),
+          "VRAM":           get(row, 'vram')
         },
         precio:   parseFloat(get(row, 'precio').replace(/[^0-9.]/g, '')) || 0,
         foto:     get(row, 'enlace_foto') !== 'N/A' ? get(row, 'enlace_foto') : '',
@@ -124,12 +126,9 @@ function getLaptopStyleData(sheetName, cacheKey, idPrefix) {
 
     const filters = {
       "Marca":          [...new Set(catalog.map(it => it.marca))].filter(v => v && v !== "N/A").sort(),
-      "RAM": [...new Set(catalog.map(it => {
-          const match = String(it.specs["RAM"]).match(/(\d+)\s*GB/i);
-          return match ? match[1] + "GB" : null;
-        }))].filter(Boolean).sort((a, b) => parseInt(a) - parseInt(b)),
+      "RAM": [...new Set(catalog.map(it => it.specs["RAM"]))].filter(v => v && v !== "N/A" && v !== "0").sort((a, b) => parseInt(a) - parseInt(b)),
       "Tipo RAM": [...new Set(catalog.map(it => it.specs["Tipo RAM"]))].filter(v => v && v !== "N/A" && v !== "N/D").sort(),
-      "SSD":            [...new Set(catalog.map(it => it.specs["SSD"]))].filter(v => v && v !== "N/A").sort(),
+      "Almacenamiento": [...new Set(catalog.map(it => it.specs["Almacenamiento"]))].filter(v => v && v !== "N/A").sort(),
       "Procesador":     [...new Set(catalog.map(it => it.specs["Procesador"]))].filter(v => v && v !== "N/A").sort(),
       "Pantalla": [...new Set(catalog.map(it => {
           return String(it.specs["Pantalla"]).replace(',', '.').replace(/"+$/, '"').trim();
@@ -137,7 +136,8 @@ function getLaptopStyleData(sheetName, cacheKey, idPrefix) {
       "Tipo Pantalla":  [...new Set(catalog.map(it => it.specs["Tipo Pantalla"]))].filter(v => v && v !== "N/A").sort(),
       "Sistema":        [...new Set(catalog.map(it => it.specs["Sistema"]))].filter(v => v && v !== "N/A").sort(),
       "Gráfica":        [...new Set(catalog.map(it => it.specs["Gráfica"]))].filter(v => v && v !== "N/A").sort(),
-      "Modelo Gráfica": [...new Set(catalog.map(it => it.specs["Modelo Gráfica"]))].filter(v => v && v !== "N/A").sort()
+      "Modelo Gráfica": [...new Set(catalog.map(it => it.specs["Modelo Gráfica"]))].filter(v => v && v !== "N/A").sort(),
+      "VRAM":           [...new Set(catalog.map(it => it.specs["VRAM"]))].filter(v => v && v !== "N/A").sort()
     };
 
     const resultado = {
@@ -228,7 +228,7 @@ function getMobileStyleData(config) {
       nfc: headers.indexOf('nfc'),
       android: headers.indexOf('android'),
       bluetooth: headers.indexOf('bluetooth'),
-      litografia: headers.indexOf('litografia'),
+      litografia: headers.indexOf('litografia') !== -1 ? headers.indexOf('litografia') : headers.indexOf('nm'),
       jack: headers.indexOf('jack'),
       antutu: headers.indexOf('antutu'),
       precio: headers.indexOf('precio'),
