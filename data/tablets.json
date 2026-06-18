@@ -281,7 +281,7 @@
       "precio": 557990,
       "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/12/Xiaomi-Redmi-Pad-2-11-2.5K-25040RP0AL-Mint-Green.jpg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
-      "proveedor": "RAFOVEBY",
+      "proveedor": "RAFOVECEBY",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
       "fullText": "xiaomi redmi pad 2 4 128 helio g100",
       "peso": "7.4",
@@ -326,38 +326,6 @@
       "modelo": "Redmi Pad 2",
       "procesador": "Helio G100",
       "ram": "8",
-      "rom": "128",
-      "pantalla": "11",
-      "tipo_panel": "15",
-      "resolucion": "1600x2560",
-      "refresco": "90",
-      "bateria": "9000",
-      "carga": "18",
-      "cam_ppal": "8",
-      "cam_selfie": "5",
-      "red_5g": "NO",
-      "nfc": "No",
-      "android": "6",
-      "bluetooth": "5.3",
-      "litografia": "6",
-      "jack": "SI",
-      "antutu": "455000",
-      "precio": 591990,
-      "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/12/Xiaomi-Redmi-Pad-2-11-2.5K-25040RP0AL-Mint-Green.jpg",
-      "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
-      "proveedor": "RACE",
-      "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "xiaomi redmi pad 2 8 128 helio g100",
-      "peso": "7.4",
-      "grosor": "519",
-      "wlan": "802,11 a/b/g/n/ac"
-    },
-    {
-      "id": "TAB11",
-      "marca": "Xiaomi",
-      "modelo": "Redmi Pad 2",
-      "procesador": "Helio G100",
-      "ram": "8",
       "rom": "256",
       "pantalla": "11",
       "tipo_panel": "15",
@@ -385,7 +353,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB12",
+      "id": "TAB11",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2 KIT Estuche + vidrio",
       "procesador": "Helio G100",
@@ -417,7 +385,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB13",
+      "id": "TAB12",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad 2  KIT LAPIZ + Estuche + vidrio",
       "procesador": "Helio G100",
@@ -449,7 +417,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB14",
+      "id": "TAB13",
       "marca": "Xiaomi",
       "modelo": "Redmi Pad Pro",
       "procesador": "Snapdragon 7s Gen 4",
@@ -481,7 +449,7 @@
       "wlan": "802,11 a/b/g/n/a/b"
     },
     {
-      "id": "TAB15",
+      "id": "TAB14",
       "marca": "Samsung",
       "modelo": "Tab S10 Lite",
       "procesador": "Exynos 1380",
@@ -513,7 +481,7 @@
       "wlan": "802,11 a/b/g/n/ac/6"
     },
     {
-      "id": "TAB16",
+      "id": "TAB15",
       "marca": "Samsung",
       "modelo": "Tab A11 plus",
       "procesador": "Dimensity 8775",
@@ -545,7 +513,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB17",
+      "id": "TAB16",
       "marca": "Samsung",
       "modelo": "Tab A11 plus",
       "procesador": "Dimensity 8775",
@@ -577,7 +545,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB18",
+      "id": "TAB17",
       "marca": "Samsung",
       "modelo": "Tab S10 FE",
       "procesador": "Exynos 1580",
@@ -609,7 +577,7 @@
       "wlan": "802,11 a/b/g/n/ac/6e"
     },
     {
-      "id": "TAB19",
+      "id": "TAB18",
       "marca": "Samsung",
       "modelo": "Tab S10 FE",
       "procesador": "Exynos 1580",
@@ -641,7 +609,7 @@
       "wlan": "802,11 a/b/g/n/ac/6e"
     },
     {
-      "id": "TAB20",
+      "id": "TAB19",
       "marca": "Samsung",
       "modelo": "Tab S10 FE plus",
       "procesador": "Exynos 1580",
@@ -673,7 +641,7 @@
       "wlan": "802,11 a/b/g/n/ac/6e"
     },
     {
-      "id": "TAB21",
+      "id": "TAB20",
       "marca": "Samsung",
       "modelo": "Tab S11 Ultra",
       "procesador": "Dimensity 9400+",
