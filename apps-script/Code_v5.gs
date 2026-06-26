@@ -1373,6 +1373,7 @@ function onOpen() {
     .createMenu('🛒 Catálogo')
     .addItem('🔄 Actualizar catálogo ahora', 'invalidarCache')
     .addItem('🔡 Convertir selección a minúsculas', 'convertirSeleccionAMinusculas')
+    .addItem('🔑 Probar conexión GitHub', 'probarConexionGitHub')
     .addSeparator()
     .addItem('🤖 Abrir asistente', 'abrirAsistente')
     .addToUi();
@@ -1450,16 +1451,36 @@ function invalidarCache() {
     const impresoras = getImpresorasData();
 
     // 3. Subir a GitHub
-    const cellsOk = subirArchivoAGitHub('data/celulares.json', celulares);
-    const portOk = subirArchivoAGitHub('data/portatiles.json', portatiles);
-    const tabOk = subirArchivoAGitHub('data/tablets.json', tablets);
-    const impOk = subirArchivoAGitHub('data/impresoras.json', impresoras);
+    const cellsRes = subirArchivoAGitHub('data/celulares.json', celulares);
+    const portRes = subirArchivoAGitHub('data/portatiles.json', portatiles);
+    const tabRes = subirArchivoAGitHub('data/tablets.json', tablets);
+    const impRes = subirArchivoAGitHub('data/impresoras.json', impresoras);
+
+    const results = [
+      { name: 'celulares.json', res: cellsRes },
+      { name: 'portatiles.json', res: portRes },
+      { name: 'tablets.json', res: tabRes },
+      { name: 'impresoras.json', res: impRes }
+    ];
+
+    const failures = results.filter(r => !r.res.success);
 
     let statusMsg = '✅ Caché del servidor limpiado.';
-    if (cellsOk && portOk && tabOk && impOk) {
+    if (failures.length === 0) {
       statusMsg += '\n\n🚀 ¡Archivos de catálogo subidos exitosamente a GitHub! En 1-2 minutos se reflejarán los cambios para todos los usuarios.';
     } else {
-      statusMsg += '\n\n⚠️ Los archivos no pudieron subirse a GitHub (esto es normal si aún no has configurado tu GITHUB_TOKEN en las Propiedades del Script). Los usuarios verán las actualizaciones vía la API de fallback.';
+      statusMsg += '\n\n⚠️ Los archivos no pudieron subirse a GitHub.';
+      statusMsg += '\n\nDetalles del error:';
+      const uniqueErrors = [];
+      failures.forEach(f => {
+        if (!uniqueErrors.includes(f.res.error)) {
+          uniqueErrors.push(f.res.error);
+        }
+      });
+      uniqueErrors.forEach(err => {
+        statusMsg += `\n❌ ${err}`;
+      });
+      statusMsg += '\n\nNota: Los usuarios seguirán viendo actualizaciones usando la API de fallback desde la hoja de cálculo.';
     }
     
     SpreadsheetApp.getUi().alert(statusMsg);
@@ -1469,14 +1490,14 @@ function invalidarCache() {
 }
 
 function subirArchivoAGitHub(path, contentJson) {
-  const GITHUB_TOKEN = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
-  const GITHUB_OWNER = PropertiesService.getScriptProperties().getProperty('GITHUB_OWNER') || 'albeirojr-pixel';
-  const GITHUB_REPO = PropertiesService.getScriptProperties().getProperty('GITHUB_REPO') || 'jrtech';
-  const GITHUB_BRANCH = PropertiesService.getScriptProperties().getProperty('GITHUB_BRANCH') || 'main';
+  const rawToken = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
+  const GITHUB_TOKEN = rawToken ? rawToken.trim() : '';
+  const GITHUB_OWNER = (PropertiesService.getScriptProperties().getProperty('GITHUB_OWNER') || 'albeirojr-pixel').trim();
+  const GITHUB_REPO = (PropertiesService.getScriptProperties().getProperty('GITHUB_REPO') || 'jrtech').trim();
+  const GITHUB_BRANCH = (PropertiesService.getScriptProperties().getProperty('GITHUB_BRANCH') || 'main').trim();
 
   if (!GITHUB_TOKEN) {
-    Logger.log('No GITHUB_TOKEN configured in Script Properties. Skipping GitHub push.');
-    return false;
+    return { success: false, error: 'No se encontró el GITHUB_TOKEN (o está vacío) en las Propiedades del Script.' };
   }
 
   const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`;
@@ -1493,9 +1514,16 @@ function subirArchivoAGitHub(path, contentJson) {
       muteHttpExceptions: true
     });
     
-    if (getResponse.getResponseCode() === 200) {
+    const getCode = getResponse.getResponseCode();
+    if (getCode === 200) {
       const getJson = JSON.parse(getResponse.getContentText());
       sha = getJson.sha;
+    } else if (getCode === 401) {
+      return { success: false, error: 'GitHub retornó 401 Unauthorized. Es probable que tu GITHUB_TOKEN haya expirado o sea inválido.' };
+    } else if (getCode === 403) {
+      return { success: false, error: 'GitHub retornó 403 Forbidden. El token puede no tener permisos de escritura (repo/workflow scopes) o haber alcanzado límites.' };
+    } else if (getCode === 404) {
+      Logger.log(`El archivo ${path} no existe en GitHub, se intentará crear de cero.`);
     }
   } catch (e) {
     Logger.log(`Error al obtener SHA para ${path}: ` + e.toString());
@@ -1531,14 +1559,67 @@ function subirArchivoAGitHub(path, contentJson) {
     const putCode = putResponse.getResponseCode();
     if (putCode === 200 || putCode === 201) {
       Logger.log(`Archivo ${path} subido exitosamente a GitHub.`);
-      return true;
+      return { success: true };
     } else {
-      Logger.log(`Error al subir ${path} a GitHub (HTTP ${putCode}): ` + putResponse.getContentText());
-      return false;
+      let extra = '';
+      try {
+        const errObj = JSON.parse(putResponse.getContentText());
+        extra = ` - ${errObj.message}`;
+      } catch(ex) {}
+      return { success: false, error: `Error HTTP ${putCode} al subir: ${putResponse.getContentText() || 'Sin respuesta'}` };
     }
   } catch (e) {
-    Logger.log(`Excepción al subir ${path} a GitHub: ` + e.toString());
-    return false;
+    return { success: false, error: `Excepción de red/Apps Script: ${e.toString()}` };
+  }
+}
+
+function probarConexionGitHub() {
+  const ui = SpreadsheetApp.getUi();
+  const props = PropertiesService.getScriptProperties();
+  const rawToken = props.getProperty('GITHUB_TOKEN');
+  const token = rawToken ? rawToken.trim() : '';
+  const owner = (props.getProperty('GITHUB_OWNER') || 'albeirojr-pixel').trim();
+  const repo = (props.getProperty('GITHUB_REPO') || 'jrtech').trim();
+  
+  if (!token) {
+    ui.alert('❌ Error: El GITHUB_TOKEN no está configurado (o está vacío) en las Propiedades del Script.');
+    return;
+  }
+  
+  let diagInfo = `\n\n🔍 Información de diagnóstico:\n` +
+                 `- Longitud del token: ${rawToken.length} caracteres.\n` +
+                 `- Espacios/saltos de línea al inicio/final: ${rawToken.length !== token.length ? '⚠️ Sí (fueron recortados)' : 'No'}.\n` +
+                 `- Formato del token: ${token.startsWith('ghp_') ? 'Clásico (ghp_...)' : token.startsWith('github_pat_') ? 'Fine-grained (github_pat_...)' : '⚠️ Formato desconocido'}.\n` +
+                 `- Propietario (owner): "${owner}"\n` +
+                 `- Repositorio (repo): "${repo}"`;
+
+  const url = `https://api.github.com/repos/${owner}/${repo}`;
+  try {
+    const response = UrlFetchApp.fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      muteHttpExceptions: true
+    });
+    
+    const code = response.getResponseCode();
+    const body = response.getContentText();
+    
+    if (code === 200) {
+      ui.alert(`✅ ¡Conexión exitosa! El token es válido y tiene acceso al repositorio "${owner}/${repo}".` + diagInfo);
+    } else if (code === 401) {
+      ui.alert(`❌ Error 401: No autorizado. El GITHUB_TOKEN ha expirado, fue revocado, es incorrecto o tiene caracteres extraños.` + diagInfo);
+    } else if (code === 403) {
+      ui.alert(`❌ Error 403: Prohibido. El token no tiene los permisos suficientes o se alcanzó el límite de peticiones.` + diagInfo);
+    } else if (code === 404) {
+      ui.alert(`❌ Error 404: No encontrado. El repositorio "${owner}/${repo}" no existe, es privado y el token no lo ve, o el nombre de usuario/repositorio está mal configurado.` + diagInfo);
+    } else {
+      ui.alert(`❌ Error de conexión (HTTP ${code}):\n\n${body}` + diagInfo);
+    }
+  } catch (e) {
+    ui.alert(`❌ Error al conectar con GitHub:\n\n${e.toString()}` + diagInfo);
   }
 }
 

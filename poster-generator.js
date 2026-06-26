@@ -8,6 +8,11 @@ async function generatePoster(productId) {
     if (!item) return;
 
     const template = document.getElementById('poster-template');
+    if (categoriaActual === 'portatiles') {
+        template.classList.add('categoria-portatiles');
+    } else {
+        template.classList.remove('categoria-portatiles');
+    }
 
     // Rellenar datos básicos
     document.getElementById('p-marca').innerText = item.marca;
@@ -61,8 +66,11 @@ async function generatePoster(productId) {
             document.getElementById('p-marca').style.display = 'block';
         }
 
-        // 3. Logo JRTech (Footer)
-        if (typeof LOGO_BASE64 !== 'undefined') {
+        // 3. Logo/Banner JRTech (Footer)
+        if (typeof BANNER_BASE64 !== 'undefined') {
+            footerLogoEl.src = BANNER_BASE64;
+            imagesToLoad.push(waitImg(footerLogoEl));
+        } else if (typeof LOGO_BASE64 !== 'undefined') {
             footerLogoEl.src = LOGO_BASE64;
             imagesToLoad.push(waitImg(footerLogoEl));
         }
@@ -250,8 +258,7 @@ function getPosterSpecs(item, category) {
         const ssd = getSpec(item, 'SSD') || getSpec(item, 'ssd') || getSpec(item, 'almacenamiento');
         const panVal = getSpec(item, 'Pantalla') || getSpec(item, 'pantalla');
         const panType = getSpec(item, 'tipo_pantalla') || getSpec(item, 'tipo pantalla');
-        const graf = getSpec(item, 'grafica') || getSpec(item, 'Gráfica');
-        const sist = getSpec(item, 'Sistema') || getSpec(item, 'sistema');
+        const sist = 'Win11Pro';
 
         const specs = [
             { icon: 'fas fa-microchip', val: proc },
@@ -260,15 +267,23 @@ function getPosterSpecs(item, category) {
             { icon: 'fas fa-hdd', val: ssd ? `Almacenamiento SSD: ${ssd}${ssd.toLowerCase().includes('gb') || ssd.toLowerCase().includes('tb') ? '' : ' GB'}` : '' },
             { icon: 'fas fa-laptop', val: panVal ? `Tamaño de Pantalla: ${panVal}${panVal.includes('"') ? '' : '"'}` : '' },
             { icon: 'fas fa-tv', val: panType ? `Tipo de pantalla: ${panType}` : '' },
-            { icon: 'fas fa-window-maximize', val: sist ? `Sistema operativo: ${sist}` : '' },
+            { icon: 'fas fa-window-maximize', val: `Sistema operativo: ${sist}` },
             { icon: 'fas fa-file-invoice', val: 'Office licenciado: SI' }
         ];
 
-        // Lógica para Tarjeta Gráfica SI/NO
-        const tieneGrafica = (graf && graf.toLowerCase() !== 'integrada' && graf.toLowerCase() !== 'no' && graf !== '');
+        // Lógica para Tarjeta Gráfica
+        const grafFlag = (getSpec(item, 'grafica') || getSpec(item, 'Gráfica') || '').toString().trim().toUpperCase();
+        const grafModelo = (getSpec(item, 'modelo_grafica') || getSpec(item, 'Modelo Gráfica') || '').toString().trim();
+        const grafVram = (getSpec(item, 'vram') || getSpec(item, 'Tamaño Gráfica') || '').toString().trim();
+
+        let grafText = 'INTEGRADA';
+        if (grafFlag === 'SI') {
+            grafText = (grafModelo + ' ' + grafVram).trim() || 'DEDICADA';
+        }
+
         specs.push({
             icon: 'fas fa-image',
-            val: tieneGrafica ? `Tarjeta grafica: SI (${graf})` : 'Tarjeta grafica: NO'
+            val: `Tarjeta grafica: ${grafText}`
         });
 
         return specs.filter(s => s.val);

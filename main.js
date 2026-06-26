@@ -101,6 +101,9 @@ function normalizeKey(key) {
 
 function getSpec(item, key, unit = '') {
     const targetKey = normalizeKey(key);
+    if (targetKey === 'sistema') {
+        return 'Win11Pro';
+    }
     let val = undefined;
 
     // 1. Buscar en nivel superior
@@ -856,6 +859,7 @@ function renderGrid(items) {
                 ${(ram || ssd) ? `<div class="producto-spec"><i class="fas fa-memory"></i> ${ram} RAM | ${ssd} Almacenamiento</div>` : ''}
                 ${pan ? `<div class="producto-spec"><i class="fas fa-laptop"></i> ${pan}</div>` : ''}
                 <div class="producto-spec"><i class="fas fa-gamepad"></i> ${grafText}</div>
+                <div class="producto-spec"><i class="fas fa-window-maximize"></i> Sistema: Win11Pro</div>
             `;
         }
 
