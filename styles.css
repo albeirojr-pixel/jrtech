@@ -2308,56 +2308,52 @@ button,
 /* Tools row / Filtrar Por Bar */
 .filtro-por-bar {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 15px;
-    padding: 16px 22px;
+    padding: 15px 20px;
     background: rgba(255, 255, 255, 0.015);
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-@media (min-width: 900px) {
-    .filtro-por-bar {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
+    align-items: center;
+    justify-content: space-between;
 }
 
 .filtrar-por-label {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     color: var(--text-dim);
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
 .filtrar-por-label i {
     color: var(--primary);
-    font-size: 0.75rem;
+    font-size: 0.85rem;
 }
 
 .filtrar-por-btns {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    flex: 1;
+    align-items: center;
+    flex: 1 1 auto;
 }
 
 .filtrar-por-btn {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-dim);
-    padding: 10px 18px;
-    border-radius: 12px;
+    padding: 8px 14px;
+    border-radius: 20px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     transition: var(--transition);
     font-family: 'Outfit', sans-serif;
 }
@@ -2365,18 +2361,20 @@ button,
 .filtrar-por-btn:hover {
     border-color: var(--primary);
     color: var(--primary);
+    background: rgba(188, 19, 254, 0.05);
 }
 
 .filtrar-por-btn.active {
-    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(188, 19, 254, 0.1));
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(188, 19, 254, 0.12));
     border-color: var(--primary);
     color: var(--text-main);
-    box-shadow: 0 0 15px rgba(176, 38, 255, 0.2);
+    box-shadow: 0 0 10px rgba(176, 38, 255, 0.15);
 }
 
 .filtrar-por-btn .fp-chevron {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     transition: transform 0.3s ease;
+    margin-left: 2px;
 }
 
 .filtrar-por-btn.active .fp-chevron {
@@ -2385,9 +2383,11 @@ button,
 
 .filtrar-por-actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
     flex-wrap: wrap;
+    justify-content: flex-end;
+    flex-shrink: 0;
 }
 
 .filtrar-por-panel {

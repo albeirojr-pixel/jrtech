@@ -565,18 +565,24 @@ function aplicarFiltros() {
 
         // 4. Filtros Avanzados Dinámicos
         for (let prop in filtrosElegidos) {
-            const targetKey = normalizeKey(prop);
+            const baseTargetKey = normalizeKey(prop);
+            let targetKeys = [baseTargetKey];
+            
+            if (baseTargetKey === 'almacenamiento') targetKeys = ['almacenamiento', 'rom', 'ssd'];
+            if (baseTargetKey === '5g') targetKeys = ['5g', 'red5g'];
+            if (baseTargetKey === 'ram') targetKeys = ['ram', 'memoria'];
+
             let itemVal = undefined;
 
             // Buscar en nivel superior del item
             for (let k in item) {
-                if (normalizeKey(k) === targetKey) { itemVal = item[k]; break; }
+                if (targetKeys.includes(normalizeKey(k))) { itemVal = item[k]; break; }
             }
 
             // Buscar en .specs si no se encontró
             if ((itemVal === undefined || itemVal === null) && item.specs) {
                 for (let k in item.specs) {
-                    if (normalizeKey(k) === targetKey) { itemVal = item.specs[k]; break; }
+                    if (targetKeys.includes(normalizeKey(k))) { itemVal = item.specs[k]; break; }
                 }
             }
 
@@ -708,13 +714,20 @@ function matchesPerfil(item, perfilId) {
         'oficina':     () => ideal.includes('admin') || ideal.includes('abogad') || ideal.includes('médico') || ideal.includes('secretar') || ideal.includes('corporat'),
         'estudiante':  () => ideal.includes('universit') || ideal.includes('bachiller') || ideal.includes('estudi') || ideal.includes('docente'),
         'basico':      () => ideal.includes('domést') || ideal.includes('básic') || ideal.includes('netflix') || ideal.includes('primeros'),
-        // Celulares
-        'fotografo':   () => ideal.includes('fotógraf') || ideal.includes('creador') || ideal.includes('youtuber'),
-        'gamer_cel':   () => ideal.includes('gamer') || ideal.includes('gaming'),
-        'bateria':     () => ideal.includes('viajero') || ideal.includes('batería') || ideal.includes('campo'),
-        'pro_cel':     () => gama === 'alta' && (ideal.includes('profesional') || ideal.includes('serie pro') || ideal.includes('5g')),
-        'equilibrado': () => ideal.includes('equilibrad') || ideal.includes('universitar') || ideal.includes('oficina'),
-        'basico_cel':  () => ideal.includes('whatsapp') || ideal.includes('llamadas') || ideal.includes('básico')
+        // Celulares y Tablets
+        'fotografo':   () => {
+            const camP = parseInt(getSpec(item, 'camppal') || getSpec(item, 'cam_ppal') || getSpec(item, 'camara')) || 0;
+            const camS = parseInt(getSpec(item, 'camselfie') || getSpec(item, 'cam_selfie')) || 0;
+            return ideal.includes('edición') || camP >= 50 || camS >= 32;
+        },
+        'gamer_cel':   () => ideal.includes('gamer') || ideal.includes('gaming') || ideal.includes('alto rendimiento'),
+        'bateria':     () => {
+            const bat = parseInt(getSpec(item, 'bateria') || getSpec(item, 'capacidad_bateria')) || 0;
+            return bat >= 5000;
+        },
+        'pro_cel':     () => ideal.includes('flagship') || ideal.includes('máximo nivel') || (gama === 'alta'),
+        'equilibrado': () => ideal.includes('multitarea') || ideal.includes('fluido') || ideal.includes('estudio') || ideal.includes('multimedia'),
+        'basico_cel':  () => ideal.includes('whatsapp') || ideal.includes('básico') || ideal.includes('tareas simples')
     };
     return mapas[perfilId] ? mapas[perfilId]() : true;
 }
