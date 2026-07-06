@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando catálogo...</title>
+    <script>
+        const path = window.location.pathname;
+        let cat = path.split('/').filter(Boolean).pop().replace('.html', '');
+        sessionStorage.setItem('redirect_cat', cat);
+        window.location.replace('/');
+    </script>
+</head>
+<body></body>
+</html>
