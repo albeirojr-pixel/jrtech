@@ -791,9 +791,59 @@ nav.hidden-scroll {
     pointer-events: none;
 }
 
+/* ── DROPDOWN COMPUTADORES (nav y CTA) ─────────────────────── */
+.nav-dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-accent);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    min-width: 200px;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: var(--sombra-premium);
+    z-index: 2000;
+    animation: dropSlideIn 0.25s ease;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: var(--text-main);
+    padding: 12px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.dropdown-menu a:hover {
+    background: rgba(255, 140, 50, 0.15);
+    color: var(--primary);
+}
+
+@keyframes dropSlideIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 .menu-catalog.visible {
     opacity: 1;
-    max-height: 100px;
+    max-height: 200px; /* Aumentado para no recortar dropdown */
+    overflow: visible;  /* Permite que el dropdown salga hacia abajo */
     transform: translateY(0);
     pointer-events: auto;
     margin-top: 5px;
@@ -1536,6 +1586,7 @@ footer p {
         gap: 4px;
         flex-wrap: nowrap;
         overflow-x: auto;
+        overflow-y: visible; /* Permite que el dropdown salga hacia abajo */
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         box-sizing: border-box;
@@ -1553,6 +1604,7 @@ footer p {
         background: transparent;
         backdrop-filter: none;
         border-bottom: none;
+        overflow: visible; /* Permite que el dropdown salga hacia abajo en móvil */
     }
 
     .menu-catalog .hub-btn {
