@@ -189,7 +189,7 @@
       "marca": "BROTHER",
       "modelo": "DCP-T230",
       "especificaciones_texto": "MULTIFUNCIONAL - AMPLIA Y REDUCE - USB - TINTA CONTINUA",
-      "precio": 629990,
+      "precio": 609990,
       "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEaj-YUTxdAo3V-KcfRlpkfiSX-sw0epOBMw&s"
     },
     {
@@ -205,7 +205,7 @@
       "marca": "BROTHER",
       "modelo": "DCP-T430W",
       "especificaciones_texto": "MULTIFUNCIONAL - WIFI - AMPLIA Y REDUCE - USB - TINTA CONTINUA",
-      "precio": 779990,
+      "precio": 774990,
       "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRayYOU9EzxeTvmiD7SlhflSRklfNZ5-w-dWw&s"
     },
     {
@@ -237,7 +237,7 @@
       "marca": "BROTHER",
       "modelo": "DCP-T830DW",
       "especificaciones_texto": "MULTIFUNCIONAL - DUPLEX - WIFI - ADF - RED ETHERNET - PUERTO USB - 2 BANDEJAS + OBSEQUIO DE ROTULADORA ELEC",
-      "precio": 1254990,
+      "precio": 1229990,
       "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2026/04/images-2.jpg"
     },
     {
@@ -323,22 +323,6 @@
     {
       "id": "IMP20",
       "specs": {
-        "tipo": "Multifuncional",
-        "tecnologia": "Tinta Continua",
-        "color": "A Color",
-        "duplex": "Sí",
-        "conectividad": "Wi-Fi + Ethernet (Red)",
-        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
-      },
-      "marca": "EPSON",
-      "modelo": "L6270",
-      "especificaciones_texto": "MULTIFUNCIONAL - RECARGA CONTINUA - WIFI - ADF - DUPLEX - ETHERNET",
-      "precio": 2264990,
-      "foto": "https://mediaserver.goepson.com/ImConvServlet/imconv/7c57ee8b128be15a56b1c0b248c3e24a0203c361/515Wx515H?use=productpictures&hybriIFd=B2C&assetDescr=L6270_SPT_C11CJ61301_384x286"
-    },
-    {
-      "id": "IMP21",
-      "specs": {
         "tipo": "Solo Impresión",
         "tecnologia": "Tinta Continua",
         "color": "A Color",
@@ -351,6 +335,102 @@
       "especificaciones_texto": "FOTOGRAFICA - RECARGA CONTINUA - WIFI - IMPRIME SOBRE CD",
       "precio": 2514990,
       "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTRAKvKR3WaT6FvkTNU6qASZ9QGvh0reVRA&s"
+    },
+    {
+      "id": "IMP21",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASERJET M111W",
+      "especificaciones_texto": "MONOCROMATICA - WIFI - 7MD68A#BGJ",
+      "precio": 654990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUdEZG5ifJbY6lXUvSnNE_e-bNd_iT3bJ7Mw&s"
+    },
+    {
+      "id": "IMP22",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "Sí",
+        "conectividad": "Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASERJET M408DN",
+      "especificaciones_texto": "MONOCROMATICA - IMPRESION DUPLEX - ETHERNET - HASTA 42PPM - 7UQ75A#BGJ",
+      "precio": 1174990,
+      "foto": "#N/A"
+    },
+    {
+      "id": "IMP23",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASERJET PRO 3003DW",
+      "especificaciones_texto": "MONOCROMATICA - WIFI - IMPRESION DUPLEX - ETHERNET - HASTA 35PPM - 3G654A#BGJ",
+      "precio": 1219990,
+      "foto": "#N/A"
+    },
+    {
+      "id": "IMP24",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASERJET PRO MFP 4103DW",
+      "especificaciones_texto": "MONOCROMATICA - MULTIFUNCIONAL - IMPRESION DUPLEX - WIFI - ETHERNET - HASTA 42PPM - 2Z627A#BGJ",
+      "precio": 1789990,
+      "foto": "#N/A"
+    },
+    {
+      "id": "IMP25",
+      "specs": {
+        "tipo": "Multifuncional",
+        "tecnologia": "Láser",
+        "color": "Monocromática",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red)",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/250px-HP_logo_2012.svg.png"
+      },
+      "marca": "HP",
+      "modelo": "LASERJET PRO MFP 4103FDW",
+      "especificaciones_texto": "MONOCROMATICA - MULTIFUNCIONAL - IMPRESION DUPLEX - WIFI - ETHERNET - FAX - HASTA 42PPM - 2Z629A#BGJ",
+      "precio": 2074990,
+      "foto": "#N/A"
+    },
+    {
+      "id": "IMP26",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Wi-Fi",
+        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/330px-Epson_logo.svg.png"
+      },
+      "marca": "EPSON",
+      "modelo": "L1250",
+      "especificaciones_texto": "RECARGA CONTINUA - WIFI",
+      "precio": 759990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrbajH16aSNccW8eYc995xFeg8J06EHkVgzg&s"
     }
   ],
   "filters": {
