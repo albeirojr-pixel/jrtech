@@ -25,7 +25,7 @@
       "precio": 682990,
       "foto": "#N/A",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
-      "proveedor": "RACE",
+      "proveedor": "RACEFO",
       "uso_recomendado": "#N/A",
       "fullText": "lenovo idea tab 11 4 128 #n/a",
       "peso": "#N/A",
@@ -342,10 +342,10 @@
       "litografia": "6",
       "jack": "SI",
       "antutu": "455000",
-      "precio": 740990,
+      "precio": 648990,
       "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/12/Xiaomi-Redmi-Pad-2-11-2.5K-25040RP0AL-Mint-Green.jpg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
-      "proveedor": "RACE",
+      "proveedor": "RABYCE",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
       "fullText": "xiaomi redmi pad 2 4 128 helio g100",
       "peso": "7.4",
@@ -566,7 +566,7 @@
       "litografia": "#N/A",
       "jack": "#N/A",
       "antutu": "#N/A",
-      "precio": 912990,
+      "precio": 67990,
       "foto": "#N/A",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
       "proveedor": "RAFO",
@@ -817,7 +817,7 @@
   },
   "rangos": {
     "Precio": {
-      "min": 533990,
+      "min": 67990,
       "max": 2085990
     },
     "Batería": {
