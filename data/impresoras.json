@@ -366,7 +366,7 @@
       "modelo": "LASERJET M408DN",
       "especificaciones_texto": "MONOCROMATICA - IMPRESION DUPLEX - ETHERNET - HASTA 42PPM - 7UQ75A#BGJ",
       "precio": 1174990,
-      "foto": "#N/A"
+      "foto": "https://www.castordata.com.co/web/image/product.product/2505/image_1920?unique=c1193ef"
     },
     {
       "id": "IMP23",
@@ -382,7 +382,7 @@
       "modelo": "LASERJET PRO 3003DW",
       "especificaciones_texto": "MONOCROMATICA - WIFI - IMPRESION DUPLEX - ETHERNET - HASTA 35PPM - 3G654A#BGJ",
       "precio": 1219990,
-      "foto": "#N/A"
+      "foto": "https://http2.mlstatic.com/D_NQ_NP_666448-MLU74219532151_012024-O.webp"
     },
     {
       "id": "IMP24",
@@ -398,7 +398,7 @@
       "modelo": "LASERJET PRO MFP 4103DW",
       "especificaciones_texto": "MONOCROMATICA - MULTIFUNCIONAL - IMPRESION DUPLEX - WIFI - ETHERNET - HASTA 42PPM - 2Z627A#BGJ",
       "precio": 1789990,
-      "foto": "#N/A"
+      "foto": "https://exitocol.vtexassets.com/arquivos/ids/33324234/impresora-multifuncional-laser-hp-laserjet-pro-mfp-4103dw-blanco-y-negro-wi-fi-duplex.jpg?v=639138710040500000"
     },
     {
       "id": "IMP25",
@@ -414,7 +414,7 @@
       "modelo": "LASERJET PRO MFP 4103FDW",
       "especificaciones_texto": "MONOCROMATICA - MULTIFUNCIONAL - IMPRESION DUPLEX - WIFI - ETHERNET - FAX - HASTA 42PPM - 2Z629A#BGJ",
       "precio": 2074990,
-      "foto": "#N/A"
+      "foto": "https://co-media.hptiendaenlinea.com/catalog/product/2/Z/2Z629A-1_T1685390707.png"
     },
     {
       "id": "IMP26",
@@ -431,86 +431,6 @@
       "especificaciones_texto": "RECARGA CONTINUA - WIFI",
       "precio": 759990,
       "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrbajH16aSNccW8eYc995xFeg8J06EHkVgzg&s"
-    },
-    {
-      "id": "IMP27",
-      "specs": {
-        "tipo": "Solo Impresión",
-        "tecnologia": "Tinta Continua",
-        "color": "A Color",
-        "duplex": "Sí",
-        "conectividad": "USB",
-        "enlace_logo": ""
-      },
-      "marca": "HP",
-      "modelo": "SCANJET PRO 2000 S2",
-      "especificaciones_texto": "35 PPM - 70 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 50 PAGINAS - 6FW06A#BGJ",
-      "precio": 0,
-      "foto": ""
-    },
-    {
-      "id": "IMP28",
-      "specs": {
-        "tipo": "Solo Impresión",
-        "tecnologia": "Tinta Continua",
-        "color": "A Color",
-        "duplex": "Sí",
-        "conectividad": "USB",
-        "enlace_logo": ""
-      },
-      "marca": "BROTHER",
-      "modelo": "ADS3100",
-      "especificaciones_texto": "40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 60 PAGINAS",
-      "precio": 0,
-      "foto": ""
-    },
-    {
-      "id": "IMP29",
-      "specs": {
-        "tipo": "Solo Impresión",
-        "tecnologia": "Tinta Continua",
-        "color": "A Color",
-        "duplex": "Sí",
-        "conectividad": "Ethernet (Red) + USB",
-        "enlace_logo": ""
-      },
-      "marca": "BROTHER",
-      "modelo": "ADS-4300N",
-      "especificaciones_texto": "40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 80 PAGINAS - ETHERNET",
-      "precio": 0,
-      "foto": ""
-    },
-    {
-      "id": "IMP30",
-      "specs": {
-        "tipo": "Solo Impresión",
-        "tecnologia": "Tinta Continua",
-        "color": "A Color",
-        "duplex": "Sí",
-        "conectividad": "Wi-Fi + Ethernet (Red) + USB",
-        "enlace_logo": ""
-      },
-      "marca": "BROTHER",
-      "modelo": "ADS-3350W",
-      "especificaciones_texto": "40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 60 PAGINAS - WIFI - ETHERNET",
-      "precio": 0,
-      "foto": ""
-    },
-    {
-      "id": "IMP31",
-      "specs": {
-        "tipo": "Solo Impresión",
-        "tecnologia": "Tinta Continua",
-        "color": "A Color",
-        "duplex": "Sí",
-        "conectividad": "USB",
-        "enlace_logo": ""
-      },
-      "marca": "EPSON",
-      "modelo": "WORKFORCE DS-530 ||",
-      "especificaciones_texto": "35PPM - 70 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 50 PAGINAS",
-      "precio": 0,
-      "foto": ""
     }
   ],
   "filters": {
