@@ -358,7 +358,8 @@ h3 {
 }
 
 .brand-logo-img {
-    max-width: 120px;
+    width: 100%;
+    max-width: 600px;
     height: auto;
     filter: drop-shadow(0 0 20px rgba(255, 140, 50, 0.4));
 }
