@@ -3,7 +3,7 @@
     {
       "id": "TAB0",
       "marca": "LENOVO",
-      "modelo": "IDEA TAB 11 + TECLADO 5G",
+      "modelo": "IDEA TAB 11 + FOLIO + PEN",
       "procesador": "Dimensity 6300",
       "ram": "8",
       "rom": "128",
@@ -23,11 +23,11 @@
       "jack": "SI",
       "antutu": "247500",
       "precio": 854990,
-      "foto": "https://media.falabella.com/falabellaCO/147394157_01/w=800,h=800,fit=pad",
+      "foto": "https://http2.mlstatic.com/D_Q_NP_816586-MLA100671513459_122025-F.webp",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
       "proveedor": "RAFO",
       "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "lenovo idea tab 11 + teclado 5g 8 128 dimensity 6300",
+      "fullText": "lenovo idea tab 11 + folio + pen 8 128 dimensity 6300",
       "peso": "7",
       "grosor": "480",
       "wlan": "802,11 a/b/g/n/ac"
@@ -35,37 +35,69 @@
     {
       "id": "TAB1",
       "marca": "LENOVO",
-      "modelo": "TAB M8",
-      "procesador": "Helio A22",
-      "ram": "3",
-      "rom": "32",
-      "pantalla": "8",
+      "modelo": "IDEA TAB 11 +TECLADO + PEN + 4G",
+      "procesador": "Dimensity 6300",
+      "ram": "6",
+      "rom": "128",
+      "pantalla": "11",
       "tipo_panel": "IPS LCD",
-      "resolucion": "800x1280",
-      "refresco": "60",
-      "bateria": "5100",
-      "carga": "10",
+      "resolucion": "2560x1600",
+      "refresco": "90",
+      "bateria": "7040",
+      "carga": "20",
       "cam_ppal": "8",
-      "cam_selfie": "2",
-      "red_5g": "NO",
+      "cam_selfie": "5",
+      "red_5g": "SI",
       "nfc": "NO",
-      "android": "12",
-      "bluetooth": "5",
-      "litografia": "12",
+      "android": "6",
+      "bluetooth": "5.2",
+      "litografia": "6",
       "jack": "SI",
-      "antutu": "95000",
-      "precio": 545990,
-      "foto": "https://http2.mlstatic.com/D_NQ_NP_874751-MCO43005859880_082020-O.webp",
+      "antutu": "247500",
+      "precio": 1298990,
+      "foto": "https://panamericana.vtexassets.com/arquivos/ids/662643-1200-auto?v=639184439375030000&width=1200&height=auto&aspect=true",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
       "proveedor": "RAFO",
-      "uso_recomendado": "Uso básico: Redes, WhatsApp y tareas simples",
-      "fullText": "lenovo tab m8 3 32 helio a22",
-      "peso": "9",
-      "grosor": "320",
+      "uso_recomendado": "Excelente para multitarea y uso diario fluido",
+      "fullText": "lenovo idea tab 11 +teclado + pen + 4g 6 128 dimensity 6300",
+      "peso": "7",
+      "grosor": "480",
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
       "id": "TAB2",
+      "marca": "LENOVO",
+      "modelo": "IDEA TAB 11 + TECLADO + PEN",
+      "procesador": "Dimensity 6300",
+      "ram": "8",
+      "rom": "128",
+      "pantalla": "11",
+      "tipo_panel": "IPS LCD",
+      "resolucion": "2560x1600",
+      "refresco": "90",
+      "bateria": "7040",
+      "carga": "20",
+      "cam_ppal": "8",
+      "cam_selfie": "5",
+      "red_5g": "SI",
+      "nfc": "NO",
+      "android": "6",
+      "bluetooth": "5.2",
+      "litografia": "6",
+      "jack": "SI",
+      "antutu": "247500",
+      "precio": 992990,
+      "foto": "https://panamericana.vtexassets.com/arquivos/ids/662643-1200-auto?v=639184439375030000&width=1200&height=auto&aspect=true",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
+      "proveedor": "RAFO",
+      "uso_recomendado": "Excelente para multitarea y uso diario fluido",
+      "fullText": "lenovo idea tab 11 + teclado + pen 8 128 dimensity 6300",
+      "peso": "7",
+      "grosor": "480",
+      "wlan": "802,11 a/b/g/n/ac"
+    },
+    {
+      "id": "TAB3",
       "marca": "LENOVO",
       "modelo": "TAB M9",
       "procesador": "Helio G80",
@@ -97,7 +129,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB3",
+      "id": "TAB4",
       "marca": "SAMSUNG",
       "modelo": "TAB A11 8,7\"",
       "procesador": "Helio G99",
@@ -129,7 +161,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB4",
+      "id": "TAB5",
       "marca": "SAMSUNG",
       "modelo": "TAB S10 FE 5G",
       "procesador": "Exynos 1580",
@@ -161,7 +193,7 @@
       "wlan": "802,11 a/b/g/n/ac/6e"
     },
     {
-      "id": "TAB5",
+      "id": "TAB6",
       "marca": "SAMSUNG",
       "modelo": "TAB S6 LITE",
       "procesador": "Exynos 1280",
@@ -193,7 +225,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB6",
+      "id": "TAB7",
       "marca": "HONOR",
       "modelo": "PAD X8B 11\"",
       "procesador": "Snapdragon 680",
@@ -225,7 +257,7 @@
       "wlan": "802.11 a/b/g/n/ac"
     },
     {
-      "id": "TAB7",
+      "id": "TAB8",
       "marca": "XIAOMI",
       "modelo": "REDMI PAD 2",
       "procesador": "Helio G100",
@@ -257,7 +289,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB8",
+      "id": "TAB9",
       "marca": "XIAOMI",
       "modelo": "REDMI PAD 2",
       "procesador": "Helio G100",
@@ -289,7 +321,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB9",
+      "id": "TAB10",
       "marca": "XIAOMI",
       "modelo": "REDMI PAD 2",
       "procesador": "Helio G100",
@@ -321,7 +353,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB10",
+      "id": "TAB11",
       "marca": "XIAOMI",
       "modelo": "REDMI PAD 2 LTE",
       "procesador": "Helio G100",
@@ -353,7 +385,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB11",
+      "id": "TAB12",
       "marca": "HUAWEI",
       "modelo": "MATE PAD 11.5\"",
       "procesador": "Snapdragon 7 Gen 1",
@@ -385,7 +417,7 @@
       "wlan": "802.11 a/b/g/n/ac/6"
     },
     {
-      "id": "TAB12",
+      "id": "TAB13",
       "marca": "XIAOMI",
       "modelo": "PAD 8 11\" WIFI",
       "procesador": "Snapdragon 8s Gen 4",
@@ -417,7 +449,7 @@
       "wlan": "802.11 a/b/g/n/ac/6/7"
     },
     {
-      "id": "TAB13",
+      "id": "TAB14",
       "marca": "XIAOMI",
       "modelo": "PAD 8 11\" WIFI",
       "procesador": "Snapdragon 8s Gen 4",
@@ -449,7 +481,7 @@
       "wlan": "802.11 a/b/g/n/ac/6/7"
     },
     {
-      "id": "TAB14",
+      "id": "TAB15",
       "marca": "INFINIX",
       "modelo": "XPAD 30E 11\" 4G",
       "procesador": "Helio G80",
@@ -481,7 +513,7 @@
       "wlan": "802,11 a/b/g/n/ac"
     },
     {
-      "id": "TAB15",
+      "id": "TAB16",
       "marca": "SAMSUNG",
       "modelo": "S10 FE 5G",
       "procesador": "Exynos 1580",
@@ -513,7 +545,7 @@
       "wlan": "802.11 a/b/g/n/ac/6e"
     },
     {
-      "id": "TAB16",
+      "id": "TAB17",
       "marca": "SAMSUNG",
       "modelo": "S10 LITE 5G",
       "procesador": "Exynos 1380",
@@ -545,7 +577,7 @@
       "wlan": "802.11 a/b/g/n/ac/6"
     },
     {
-      "id": "TAB17",
+      "id": "TAB18",
       "marca": "SAMSUNG",
       "modelo": "A11",
       "procesador": "Helio G99",
@@ -566,10 +598,10 @@
       "litografia": "6",
       "jack": "SI",
       "antutu": "430000",
-      "precio": 533990,
+      "precio": 510990,
       "foto": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTuYmqIGmD66oKPHDBur98s_p-zDQn5Afls93fIlzMnEcd8Vl4i3mvJq5A0XqYdGTsi1p7KyZ9mgdC7HncIgWkaSBa-cM-KV2l6Dr63EgLrxFQTq5LRXV7idAoICOaBAGApyzdC9sA&usqp=CAc",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
-      "proveedor": "RACEFO",
+      "proveedor": "RAFOCE",
       "uso_recomendado": "Redes sociales, estudio y multimedia",
       "fullText": "samsung a11 8 128 helio g99",
       "peso": "8",
@@ -577,7 +609,7 @@
       "wlan": "802.11 a/b/g/n/ac"
     },
     {
-      "id": "TAB18",
+      "id": "TAB19",
       "marca": "SAMSUNG",
       "modelo": "A11 PLUS 5G",
       "procesador": "Dimensity 7300",
@@ -601,7 +633,7 @@
       "precio": 728990,
       "foto": "https://celularesimportados.com.co/wp-content/uploads/2026/03/original.jpeg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
-      "proveedor": "RACEFO",
+      "proveedor": "RACE",
       "uso_recomendado": "Gaming casual, edición ligera y trabajo exigente",
       "fullText": "samsung a11 plus 5g 6 128 dimensity 7300",
       "peso": "6.9",
@@ -609,7 +641,7 @@
       "wlan": "802.11 a/b/g/n/ac"
     },
     {
-      "id": "TAB19",
+      "id": "TAB20",
       "marca": "SAMSUNG",
       "modelo": "A11 PLUS 5G",
       "procesador": "Dimensity 7300",
@@ -630,7 +662,7 @@
       "litografia": "4",
       "jack": "No",
       "antutu": "610000",
-      "precio": 877990,
+      "precio": 831990,
       "foto": "https://celularesimportados.com.co/wp-content/uploads/2026/03/original.jpeg",
       "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/samsung-Photoroom.png",
       "proveedor": "RAFOCE",
@@ -638,38 +670,6 @@
       "fullText": "samsung a11 plus 5g 8 256 dimensity 7300",
       "peso": "6.9",
       "grosor": "477",
-      "wlan": "802.11 a/b/g/n/ac"
-    },
-    {
-      "id": "TAB20",
-      "marca": "XIAOMI",
-      "modelo": "REDMI PAD 2 9.7\"",
-      "procesador": "Snapdragon 6s Gen 2",
-      "ram": "4",
-      "rom": "128",
-      "pantalla": "9.7",
-      "tipo_panel": "IPS LCD",
-      "resolucion": "1280x2048",
-      "refresco": "120",
-      "bateria": "7600",
-      "carga": "18",
-      "cam_ppal": "8",
-      "cam_selfie": "5",
-      "red_5g": "NO",
-      "nfc": "No",
-      "android": "6",
-      "bluetooth": "5.0",
-      "litografia": "6",
-      "jack": "Yes",
-      "antutu": "410000",
-      "precio": 556990,
-      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuVo2Hbz_CRwtuJTO9s_qIg68WehiJNs82fDJA3clPVg&s=10",
-      "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
-      "proveedor": "RAFOCEBY",
-      "uso_recomendado": "Redes sociales, estudio y multimedia",
-      "fullText": "xiaomi redmi pad 2 9.7\" 4 128 snapdragon 6s gen 2",
-      "peso": "7.4",
-      "grosor": "406",
       "wlan": "802.11 a/b/g/n/ac"
     },
     {
@@ -735,6 +735,38 @@
       "peso": "7.5",
       "grosor": "610",
       "wlan": "802,11 a/b/g/n/a/b"
+    },
+    {
+      "id": "TAB23",
+      "marca": "XIAOMI",
+      "modelo": "REDMI PAD 2 9.7\"",
+      "procesador": "Snapdragon 6s Gen 2",
+      "ram": "4",
+      "rom": "128",
+      "pantalla": "9.7",
+      "tipo_panel": "IPS LCD",
+      "resolucion": "1280x2048",
+      "refresco": "120",
+      "bateria": "7600",
+      "carga": "18",
+      "cam_ppal": "8",
+      "cam_selfie": "5",
+      "red_5g": "NO",
+      "nfc": "No",
+      "android": "6",
+      "bluetooth": "5.0",
+      "litografia": "6",
+      "jack": "Yes",
+      "antutu": "410000",
+      "precio": 556990,
+      "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuVo2Hbz_CRwtuJTO9s_qIg68WehiJNs82fDJA3clPVg&s=10",
+      "logo": "https://file.garden/Z8ITBPHZSzW2yH0y/LOGOS/XIAOMI%20RECORTADO-Photoroom.png",
+      "proveedor": "RAFOCEBY",
+      "uso_recomendado": "Redes sociales, estudio y multimedia",
+      "fullText": "xiaomi redmi pad 2 9.7\" 4 128 snapdragon 6s gen 2",
+      "peso": "7.4",
+      "grosor": "406",
+      "wlan": "802.11 a/b/g/n/ac"
     }
   ],
   "filters": {
@@ -752,7 +784,6 @@
       "Exynos 1280",
       "Exynos 1380",
       "Exynos 1580",
-      "Helio A22",
       "Helio G100",
       "Helio G80",
       "Helio G99",
@@ -763,15 +794,13 @@
       "Snapdragon 8s Gen 4"
     ],
     "RAM": [
-      "3",
       "4",
       "6",
       "8"
     ],
     "Almacenamiento": [
       "128",
-      "256",
-      "32"
+      "256"
     ],
     "Pantalla": [
       "10.4",
@@ -780,7 +809,6 @@
       "11.2",
       "11.5",
       "12.1",
-      "8",
       "8.7",
       "9",
       "9.7"
@@ -836,15 +864,15 @@
       "max": 12000
     },
     "RAM": {
-      "min": 3,
+      "min": 4,
       "max": 8
     },
     "Almacenamiento": {
-      "min": 32,
+      "min": 128,
       "max": 256
     },
     "AnTuTu": {
-      "min": 95000,
+      "min": 201500,
       "max": 1420000
     },
     "Cámara principal": {
