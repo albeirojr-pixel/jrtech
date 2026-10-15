@@ -109,7 +109,7 @@
       "marca": "CANON",
       "modelo": "G2170",
       "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - USB - AMPLIA Y REDUCE - PANEL LCD",
-      "precio": 649990,
+      "precio": 609990,
       "foto": "https://www.computadoresenbogota.com/market/wp-content/uploads/2025/11/CnP_28112025_053222.png"
     },
     {
@@ -157,7 +157,7 @@
       "marca": "CANON",
       "modelo": "G4170",
       "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - WIFI - ADF - FAX - AMPLIA Y REDUCE - PANEL LCD",
-      "precio": 994990,
+      "precio": 919990,
       "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbSoozdM7BbgLFXCeqBApfNbPbamInPY9TgjV2bVGiUQ&s=10"
     },
     {
@@ -205,7 +205,7 @@
       "marca": "EPSON",
       "modelo": "L4360",
       "especificaciones_texto": "RECARGA CONTINUA - MULTIFUNCIONAL - WIFI - IMPRESION DUPLEX",
-      "precio": 1194990,
+      "precio": 1189990,
       "foto": "https://http2.mlstatic.com/D_NQ_NP_611907-MEC93719140633_092025-O.webp"
     },
     {
@@ -221,7 +221,7 @@
       "marca": "EPSON",
       "modelo": "L5590",
       "especificaciones_texto": "MULTIFUNCIONAL - TINTA CONTINUA - WIFI - ADF - PUERTO LAN",
-      "precio": 1374990,
+      "precio": 1339990,
       "foto": "https://http2.mlstatic.com/D_Q_NP_696469-MLA99990155389_112025-F.webp"
     },
     {
@@ -396,7 +396,7 @@
   "rangos": {
     "Precio": {
       "min": 604990,
-      "max": 1374990
+      "max": 1339990
     }
   }
 }
