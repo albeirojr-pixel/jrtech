@@ -643,34 +643,34 @@
     {
       "id": "TAB20",
       "marca": "LENOVO",
-      "modelo": "IDEA TAB 11 +TECLADO + PEN + 4G",
-      "procesador": "Dimensity 6300",
+      "modelo": "IDEA TAB 11 +TECLADO + PEN +4G",
+      "procesador": "#N/A",
       "ram": "6",
       "rom": "128",
-      "pantalla": "11",
-      "tipo_panel": "IPS LCD",
-      "resolucion": "2560x1600",
-      "refresco": "90",
-      "bateria": "7040",
-      "carga": "20",
-      "cam_ppal": "8",
-      "cam_selfie": "5",
-      "red_5g": "SI",
-      "nfc": "NO",
-      "android": "6",
-      "bluetooth": "5.2",
-      "litografia": "6",
-      "jack": "SI",
-      "antutu": "247500",
-      "precio": 1298990,
-      "foto": "https://panamericana.vtexassets.com/arquivos/ids/662643-1200-auto?v=639184439375030000&width=1200&height=auto&aspect=true",
+      "pantalla": "#N/A",
+      "tipo_panel": "#N/A",
+      "resolucion": "#N/A",
+      "refresco": "#N/A",
+      "bateria": "#N/A",
+      "carga": "#N/A",
+      "cam_ppal": "#N/A",
+      "cam_selfie": "#N/A",
+      "red_5g": "#N/A",
+      "nfc": "#N/A",
+      "android": "#N/A",
+      "bluetooth": "#N/A",
+      "litografia": "#N/A",
+      "jack": "#N/A",
+      "antutu": "#N/A",
+      "precio": 992990,
+      "foto": "#N/A",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lenovo_logo_2015.svg/960px-Lenovo_logo_2015.svg.png",
-      "proveedor": "RAFO",
-      "uso_recomendado": "Excelente para multitarea y uso diario fluido",
-      "fullText": "lenovo idea tab 11 +teclado + pen + 4g 6 128 dimensity 6300",
-      "peso": "7",
-      "grosor": "480",
-      "wlan": "802,11 a/b/g/n/ac"
+      "proveedor": "RACE",
+      "uso_recomendado": "#N/A",
+      "fullText": "lenovo idea tab 11 +teclado + pen +4g 6 128 #n/a",
+      "peso": "#N/A",
+      "grosor": "#N/A",
+      "wlan": "#N/A"
     }
   ],
   "filters": {
@@ -682,7 +682,7 @@
       "XIAOMI"
     ],
     "Procesador": [
-      "Dimensity 6300",
+      "#N/A",
       "Dimensity 7300",
       "Exynos 1380",
       "Exynos 1580",
@@ -705,6 +705,7 @@
       "256"
     ],
     "Pantalla": [
+      "#N/A",
       "10.9",
       "11",
       "11.2",
@@ -715,10 +716,12 @@
       "9.7"
     ],
     "Tipo Panel": [
+      "#N/A",
       "IPS LCD",
       "TFT LCD"
     ],
     "Batería": [
+      "#N/A",
       "12000",
       "5100",
       "7000",
@@ -731,24 +734,27 @@
       "9200"
     ],
     "5G": [
+      "#N/A",
       "NO",
       "SI"
     ],
     "NFC": [
+      "#N/A",
       "NO",
       "No"
     ],
     "Android": [
+      "#N/A",
       "12",
       "4",
       "5",
       "6"
     ],
     "Carga": [
+      "#N/A",
       "10",
       "15",
       "18",
-      "20",
       "22.5",
       "25",
       "33",
