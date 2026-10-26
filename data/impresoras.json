@@ -445,7 +445,7 @@
       "marca": "HP",
       "modelo": "LASERJET PRO COLOR MFP 4303FDW",
       "especificaciones_texto": "LASER COLOR - MULTIFUNCIONAL - DUPLEX - WIFI - ETHERNET - FAX - HASTA 35PPM",
-      "precio": 2704990,
+      "precio": 3794990,
       "foto": "https://puntoscolombia.vtexassets.com/arquivos/ids/27385514-1200-auto?v=638542542072330000&width=1200&height=auto&aspect=true"
     },
     {
@@ -492,7 +492,7 @@
   "rangos": {
     "Precio": {
       "min": 604990,
-      "max": 3634990
+      "max": 3794990
     }
   }
 }
