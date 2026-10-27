@@ -221,7 +221,7 @@
       "marca": "BROTHER",
       "modelo": "DCP-T730DW",
       "especificaciones_texto": "MULTIFUNCIONAL - DUPLEX - WIFI - ADF - AMPLIA Y REDUCE - USB - PANTALLA LCD - TINTA CONTINUA",
-      "precio": 899990,
+      "precio": 984990,
       "foto": "https://http2.mlstatic.com/D_Q_NP_976209-MCO92282990146_092025-F.webp"
     },
     {
@@ -463,6 +463,102 @@
       "especificaciones_texto": "LASER COLOR - MULTIFUNCIONAL - DUPLEX - WIFI - ETHERNET - FAX - HASTA 35PPM",
       "precio": 3794990,
       "foto": "https://puntoscolombia.vtexassets.com/arquivos/ids/27385514-1200-auto?v=638542542072330000&width=1200&height=auto&aspect=true"
+    },
+    {
+      "id": "IMP29",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Ethernet (Red) + USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "DS-640",
+      "especificaciones_texto": "PORTATIL - 15 PPM - USB 3,0 - BLANCO NEGRO Y COLOR",
+      "precio": 639990,
+      "foto": ""
+    },
+    {
+      "id": "IMP30",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "DS-740D",
+      "especificaciones_texto": "PORTATIL - 16 PPM - 30 IPM - DUPLEX A COLOR - USB 3,0",
+      "precio": 769990,
+      "foto": ""
+    },
+    {
+      "id": "IMP31",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "ADS3100",
+      "especificaciones_texto": "40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 60 PAGINAS",
+      "precio": 1814990,
+      "foto": ""
+    },
+    {
+      "id": "IMP32",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Ethernet (Red) + USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "ADS-4300N",
+      "especificaciones_texto": "40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 80 PAGINAS - ETHERNET",
+      "precio": 2184990,
+      "foto": ""
+    },
+    {
+      "id": "IMP33",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red) + USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "ADS-3350W",
+      "especificaciones_texto": "40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 60 PAGINAS - WIFI - ETHERNET",
+      "precio": 2244990,
+      "foto": ""
+    },
+    {
+      "id": "IMP34",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "USB",
+        "enlace_logo": ""
+      },
+      "marca": "EPSON",
+      "modelo": "DS-530 II",
+      "especificaciones_texto": "35PPM - 70 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 50 PAGINAS",
+      "precio": 1824990,
+      "foto": ""
     }
   ],
   "filters": {
