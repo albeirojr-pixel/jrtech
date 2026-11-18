@@ -417,22 +417,6 @@
       "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTRAKvKR3WaT6FvkTNU6qASZ9QGvh0reVRA&s"
     },
     {
-      "id": "IMP26",
-      "specs": {
-        "tipo": "Multifuncional",
-        "tecnologia": "Tinta Continua",
-        "color": "A Color",
-        "duplex": "Sí",
-        "conectividad": "Wi-Fi + Ethernet (Red) + USB",
-        "enlace_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Brother_logo.svg/250px-Brother_logo.svg.png?_=20120913042823"
-      },
-      "marca": "BROTHER",
-      "modelo": "MFCT4500DW",
-      "especificaciones_texto": "MULTIFUNCIONAL EN A3 - DUPLEX - WIFI - ADF - ETHERNET - AMPLIA Y REDUCE - USB FRONTAL - TINTA CONTINUA",
-      "precio": 3634990,
-      "foto": "https://http2.mlstatic.com/D_Q_NP_700339-MLA99943904573_112025-F.webp"
-    },
-    {
       "id": "IMP27",
       "specs": {
         "tipo": "Multifuncional",
@@ -447,6 +431,86 @@
       "especificaciones_texto": "LASER COLOR - MULTIFUNCIONAL - DUPLEX - WIFI - ETHERNET - FAX - HASTA 35PPM",
       "precio": 3794990,
       "foto": "https://puntoscolombia.vtexassets.com/arquivos/ids/27385514-1200-auto?v=638542542072330000&width=1200&height=auto&aspect=true"
+    },
+    {
+      "id": "IMP28",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "No",
+        "conectividad": "Ethernet (Red) + USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "DS-640",
+      "especificaciones_texto": "ESCANER BROTHER DS-640 - PORTATIL - 15 PPM - USB 3,0 - BLANCO NEGRO Y COLOR",
+      "precio": 639990,
+      "foto": ""
+    },
+    {
+      "id": "IMP29",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "DS-740D",
+      "especificaciones_texto": "ESCANER BROTHER DS-740D - PORTATIL - 16 PPM - 30 IPM - DUPLEX A COLOR - USB 3,0",
+      "precio": 769990,
+      "foto": ""
+    },
+    {
+      "id": "IMP30",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "ADS3100",
+      "especificaciones_texto": "ESCANER BROTHER ADS3100 - 40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 60 PAGINAS",
+      "precio": 1814990,
+      "foto": ""
+    },
+    {
+      "id": "IMP31",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Ethernet (Red) + USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "ADS-4300N",
+      "especificaciones_texto": "ESCANER BROTHER ADS-4300N - 40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 80 PAGINAS - ETHERNET",
+      "precio": 2184990,
+      "foto": ""
+    },
+    {
+      "id": "IMP32",
+      "specs": {
+        "tipo": "Solo Impresión",
+        "tecnologia": "Tinta Continua",
+        "color": "A Color",
+        "duplex": "Sí",
+        "conectividad": "Wi-Fi + Ethernet (Red) + USB",
+        "enlace_logo": ""
+      },
+      "marca": "BROTHER",
+      "modelo": "ADS-3350W",
+      "especificaciones_texto": "ESCANER BROTHER ADS-3350W - 40 PPM - 80 IPM - DUPLEX A COLOR - USB 3,0 - CAPACIDAD ADF 60 PAGINAS - WIFI - ETHERNET",
+      "precio": 2244990,
+      "foto": ""
     }
   ],
   "filters": {
